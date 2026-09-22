@@ -4162,226 +4162,64 @@ function createAsteroidBelt(){
 
 var asteroidBelt=
   createAsteroidBelt();
-
-
-createOrbitRing(
-  36.5,
-  .075,
-  .025,
-  .08
-);
-
-createOrbitRing(
-  42,
-  .09,
-  -.035,
-  -.04
-);
-
-createOrbitRing(
-  46,
-  .075,
-  .025,
-  .06
-);
-
-
-/* =========================================================
-   SKILLS
-========================================================= */
-
-var skills=[
-
-  {
-    name:'Graphic Design',
-    distance:42,
-    y:9,
-    modal:'modal-design'
-  },
-
-  {
-    name:'Leadership',
-    distance:46,
-    y:-7,
-    modal:'modal-leadership'
-  }
-
-];
-
-skills.forEach(
-  function(
-    skill,
-    index
-  ){
-
-    var angle=
-      index===0
-      ?
-      .55
-      :
-      3.4;
-
-    var mesh=
-      new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-          .55,
-          32,
-          32
-        ),
-
-        new THREE.MeshBasicMaterial({
-
-          color:0xb8edff
-
-        })
-
-      );
-
-    mesh.position.set(
-
-      Math.cos(angle)*
-      skill.distance,
-
-      skill.y,
-
-      Math.sin(angle)*
-      skill.distance
-
-    );
-
-    scene.add(
-      mesh
-    );
-
-    var skillGlow=
-      new THREE.Sprite(
-
-        new THREE.SpriteMaterial({
-
-          map:
-            createGlowTexture(),
-
-          transparent:true,
-
-          opacity:.14,
-
-          depthWrite:false,
-
-          blending:
-            THREE.AdditiveBlending
-
-        })
-
-      );
-
-    skillGlow.scale.set(
-      3,
-      3,
-      1
-    );
-
-    mesh.add(
-      skillGlow
-    );
-
-    skill.mesh=
-      mesh;
-
-    skill.group={
-      position:
-        mesh.position
-    };
-
-    skill.isStatic=
-      true;
-
-    interactive.push({
-
-      mesh:mesh,
-
-      obj:skill
-
-    });
-
-  }
-);
-
-
 /* =========================================================
    AGRO-01 NASA SATELLITE
 ========================================================= */
 
-/*
-  NASA Satellite Kit
-  Files required:
-
-  /models/satellite-body.glb
-  /models/satellite-radio.glb
-  /models/satellite-wings.glb
-
-  NASA provides the Satellite Kit as interchangeable
-  body, radio and solar-panel components.
-*/
-
-var agroSatellite=
+var agroSatellite =
   new THREE.Group();
 
-agroSatellite.name=
+agroSatellite.name =
   'AGRO-01';
+
+agroSatellite.userData = {
+  name: 'AGRO-01',
+  type: 'AGRICULTURAL INTELLIGENCE SATELLITE'
+};
 
 scene.add(
   agroSatellite
 );
 
 
-/*
-  Satellite orbital configuration.
+/* =========================================================
+   AGRO ORBIT
+========================================================= */
 
-  It sits beyond RECLUSE but before the
-  skill constellation.
-*/
+var agroOrbit = {
 
-var agroOrbit=
-  {
+  distance: 36.5,
 
-    distance:36.5,
+  angle: 1.15,
 
-    angle:1.15,
+  speed: .018,
 
-    speed:.018,
+  inclination:
+    THREE.MathUtils.degToRad(16)
 
-    inclination:
-      THREE.MathUtils.degToRad(
-        16
-      )
-
-  };
-
-
-agroSatellite.userData={
-  name:'AGRO-01'
 };
 
 
 /* =========================================================
-   SATELLITE MODEL LOADER
+   GLTF LOADER
 ========================================================= */
 
-var gltfLoader=
+var gltfLoader =
   new THREE.GLTFLoader();
 
 
+/* =========================================================
+   LOAD SATELLITE COMPONENT
+========================================================= */
+
 function loadSatellitePart(
   path,
-  partName,
+  name,
   scale
 ){
 
   return new Promise(
-    function(
-      resolve
-    ){
+    function(resolve){
 
       gltfLoader.load(
 
@@ -4389,11 +4227,11 @@ function loadSatellitePart(
 
         function(gltf){
 
-          var model=
+          var model =
             gltf.scene;
 
-          model.name=
-            partName;
+          model.name =
+            name;
 
           model.scale.set(
             scale,
@@ -4408,41 +4246,36 @@ function loadSatellitePart(
                 child.isMesh
               ){
 
-                child.castShadow=
+                child.castShadow =
                   false;
 
-                child.receiveShadow=
+                child.receiveShadow =
                   false;
 
                 /*
-                  Slight cyan integration
-                  without destroying the NASA
-                  model's original materials.
+                  Keep the original NASA
+                  materials intact.
                 */
 
                 if(
                   child.material
                 ){
 
-                  child.material
-                    .roughness=
+                  child.material.roughness =
                     Math.min(
-                      child.material
-                        .roughness||.75,
+                      child.material.roughness || .7,
                       .85
                     );
 
-                  child.material
-                    .metalness=
+                  child.material.metalness =
                     Math.max(
-                      child.material
-                        .metalness||0,
+                      child.material.metalness || 0,
                       .15
                     );
 
-                  child.material
-                    .needsUpdate=
+                  child.material.needsUpdate =
                     true;
+
                 }
 
               }
@@ -4450,9 +4283,7 @@ function loadSatellitePart(
             }
           );
 
-          resolve(
-            model
-          );
+          resolve(model);
 
         },
 
@@ -4461,14 +4292,12 @@ function loadSatellitePart(
         function(error){
 
           console.warn(
-            'NASA satellite part failed:',
+            'AGRO-01 model failed to load:',
             path,
             error
           );
 
-          resolve(
-            null
-          );
+          resolve(null);
 
         }
 
@@ -4476,13 +4305,213 @@ function loadSatellitePart(
 
     }
   );
+
 }
 
 
-/*
-  These are deliberately loaded independently.
-  This makes the NASA Satellite Kit modular.
-*/
+/* =========================================================
+   LOAD ALL THREE NASA COMPONENTS
+========================================================= */
+
+Promise.all([
+
+  loadSatellitePart(
+    'models/satellite-body.glb',
+    'AGRO-01 BODY',
+    2.2
+  ),
+
+  loadSatellitePart(
+    'models/satellite-radio.glb',
+    'AGRO-01 RADIO',
+    2.2
+  ),
+
+  loadSatellitePart(
+    'models/satellite-wings.glb',
+    'AGRO-01 SOLAR WINGS',
+    2.2
+  )
+
+]).then(
+
+  function(parts){
+
+    /*
+      Assemble the spacecraft.
+    */
+
+    parts.forEach(
+      function(part){
+
+        if(part){
+
+          agroSatellite.add(
+            part
+          );
+
+        }
+
+      }
+    );
+
+
+    /*
+      Make sure the complete
+      spacecraft is centered.
+    */
+
+    var box =
+      new THREE.Box3()
+        .setFromObject(
+          agroSatellite
+        );
+
+    if(
+      !box.isEmpty()
+    ){
+
+      var center =
+        new THREE.Vector3();
+
+      box.getCenter(
+        center
+      );
+
+      agroSatellite.children.forEach(
+        function(child){
+
+          child.position.sub(
+            center
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       SATELLITE GLOW
+    ===================================================== */
+
+    var satelliteGlow =
+      new THREE.Sprite(
+
+        new THREE.SpriteMaterial({
+
+          map:
+            createGlowTexture(),
+
+          transparent:true,
+
+          opacity:.09,
+
+          depthWrite:false,
+
+          blending:
+            THREE.AdditiveBlending
+
+        })
+
+      );
+
+    satelliteGlow.scale.set(
+      5.8,
+      5.8,
+      1
+    );
+
+    agroSatellite.add(
+      satelliteGlow
+    );
+
+
+    /* =====================================================
+       NAVIGATION BEACON
+    ===================================================== */
+
+    var beacon =
+      new THREE.PointLight(
+        0x53dfff,
+        .65,
+        7
+      );
+
+    beacon.position.set(
+      0,
+      .5,
+      0
+    );
+
+    agroSatellite.add(
+      beacon
+    );
+
+
+    /*
+      Register the COMPLETE GROUP
+      as one interactive object.
+    */
+
+    interactive.push({
+
+      mesh:
+        agroSatellite,
+
+      obj:
+        agroObj
+
+    });
+
+
+    /*
+      Update HUD object count
+      after satellite finishes loading.
+    */
+
+    hudObjects.textContent =
+      String(
+        interactive.length
+      ).padStart(
+        2,
+        '0'
+      );
+
+  }
+
+);
+
+
+/* =========================================================
+   AGRO OBJECT
+========================================================= */
+
+var agroObj = {
+
+  name:
+    'AGRO-01',
+
+  modal:
+    'modal-agro',
+
+  radius:
+    2.4,
+
+  isSpacecraft:
+    true,
+
+  group: {
+
+    position:
+      agroSatellite.position
+
+  },
+
+  type:
+    'AGRICULTURAL INTELLIGENCE SATELLITE'
+
+};
 
 Promise.all([
 
