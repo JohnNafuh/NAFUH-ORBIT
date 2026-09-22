@@ -1,5 +1,3 @@
-bash
-cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,22 +20,57 @@ cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
     --text-dim: #9aa0b4;
     --line: rgba(237,239,245,0.14);
   }
+
   *{ box-sizing: border-box; }
-  html,body{ height:100%; margin:0; padding:0; }
+
+  html,body{
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+
   body{
     background: var(--bg);
     color: var(--text);
     font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     overflow: hidden;
   }
-  h1,h2,h3,.display{ font-family:'Fraunces', Georgia, serif; font-weight:500; letter-spacing:-0.01em; margin:0; }
-  button{ font-family: inherit; }
-  a{ color: inherit; }
 
-  #scene-canvas{ position:fixed; inset:0; z-index:0; display:block; touch-action:none; cursor:grab; }
-  #scene-canvas.dragging{ cursor:grabbing; }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
 
-  #labels{ position:fixed; inset:0; z-index:1; pointer-events:none; }
+  button{
+    font-family: inherit;
+  }
+
+  a{
+    color: inherit;
+  }
+
+  #scene-canvas{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    display:block;
+    touch-action:none;
+    cursor:grab;
+  }
+
+  #scene-canvas.dragging{
+    cursor:grabbing;
+  }
+
+  #labels{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+  }
+
   .label3d{
     position:absolute;
     transform: translate(-50%, 14px);
@@ -47,114 +80,308 @@ cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
     text-shadow: 0 0 8px rgba(0,0,0,0.8);
     transition: opacity .2s ease;
   }
-  .label3d.sun-label{ font-size: 17px; color: var(--text); font-family:'Fraunces',Georgia,serif; }
+
+  .label3d.sun-label{
+    font-size: 17px;
+    color: var(--text);
+    font-family:'Fraunces',Georgia,serif;
+  }
 
   #loading{
-    position:fixed; inset:0; z-index:20;
+    position:fixed;
+    inset:0;
+    z-index:20;
     background: var(--bg);
-    display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:14px;
-    color: var(--text-dim); font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:14px;
+    color: var(--text-dim);
+    font-size:14px;
     transition: opacity .5s ease;
   }
+
   #loading .dot{
-    width:8px; height:8px; border-radius:50%; background: var(--sun);
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background: var(--sun);
     animation: pulse-dot 1.1s ease-in-out infinite;
   }
-  @keyframes pulse-dot{ 0%,100%{ opacity:.25; transform:scale(.8);} 50%{ opacity:1; transform:scale(1.15);} }
+
+  @keyframes pulse-dot{
+    0%,100%{
+      opacity:.25;
+      transform:scale(.8);
+    }
+    50%{
+      opacity:1;
+      transform:scale(1.15);
+    }
+  }
 
   #nav{
-    position: fixed; top: 22px; left: 22px; z-index: 5;
-    display:flex; gap: 6px;
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 5;
+    display:flex;
+    gap: 6px;
     background: rgba(9,10,20,0.5);
     border: 1px solid var(--line);
     backdrop-filter: blur(10px);
-    border-radius: 999px; padding: 6px;
+    border-radius: 999px;
+    padding: 6px;
   }
+
   #nav button{
-    background:none; border:none; color: var(--text-dim);
-    font-size: 14px; padding: 9px 16px; border-radius: 999px; cursor:pointer;
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor:pointer;
     transition: color .2s ease, background .2s ease;
   }
-  #nav button:hover, #nav button:focus-visible{ color: var(--text); background: rgba(255,255,255,0.07); }
+
+  #nav button:hover,
+  #nav button:focus-visible{
+    color: var(--text);
+    background: rgba(255,255,255,0.07);
+  }
 
   #hint{
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 5;
-    font-size: 12.5px; color: var(--text-dim);
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    font-size: 12.5px;
+    color: var(--text-dim);
     background: rgba(9,10,20,0.45);
     border: 1px solid var(--line);
-    padding: 8px 14px; border-radius: 999px;
-    pointer-events:none; transition: opacity .6s ease;
+    padding: 8px 14px;
+    border-radius: 999px;
+    pointer-events:none;
+    transition: opacity .6s ease;
   }
+
   #reset-view{
-    position: fixed; top: 22px; right: 22px; z-index: 5;
-    background: rgba(9,10,20,0.5); border: 1px solid var(--line);
-    color: var(--text-dim); font-size: 13px; padding: 9px 16px; border-radius: 999px;
-    cursor:pointer; backdrop-filter: blur(10px);
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    z-index: 5;
+    background: rgba(9,10,20,0.5);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor:pointer;
+    backdrop-filter: blur(10px);
   }
-  #reset-view:hover{ color: var(--text); }
+
+  #reset-view:hover{
+    color: var(--text);
+  }
 
   .comet{
-    position: fixed; top: 14%; left: -60px; width: 10px; height: 10px; border-radius: 50%;
-    background: #fff; box-shadow: 0 0 14px 5px rgba(255,255,255,0.85);
-    z-index: 3; cursor: pointer;
-    animation: comet-fly 15s linear infinite; animation-delay: 3s;
+    position: fixed;
+    top: 14%;
+    left: -60px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 14px 5px rgba(255,255,255,0.85);
+    z-index: 3;
+    cursor: pointer;
+    animation: comet-fly 15s linear infinite;
+    animation-delay: 3s;
   }
+
   .comet::before{
-    content:''; position:absolute; right: 8px; top: 3px; width: 100px; height: 2px;
-    background: linear-gradient(to left, rgba(255,255,255,0.9), rgba(255,255,255,0));
-    transform: rotate(18deg); transform-origin: right center;
+    content:'';
+    position:absolute;
+    right: 8px;
+    top: 3px;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(
+      to left,
+      rgba(255,255,255,0.9),
+      rgba(255,255,255,0)
+    );
+    transform: rotate(18deg);
+    transform-origin: right center;
   }
+
   @keyframes comet-fly{
-    0%{ transform: translate(0,0); opacity:0; }
-    4%{ opacity:1; }
-    45%{ transform: translate(70vw, 30vh); opacity:1; }
-    52%{ opacity:0; }
-    100%{ transform: translate(70vw, 30vh); opacity:0; }
+    0%{
+      transform: translate(0,0);
+      opacity:0;
+    }
+    4%{
+      opacity:1;
+    }
+    45%{
+      transform: translate(70vw, 30vh);
+      opacity:1;
+    }
+    52%{
+      opacity:0;
+    }
+    100%{
+      transform: translate(70vw, 30vh);
+      opacity:0;
+    }
   }
 
   .modal-backdrop{
-    position: fixed; inset:0; background: rgba(2,3,7,0.65); backdrop-filter: blur(4px);
-    z-index: 10; display:none; align-items:center; justify-content:center; padding: 24px;
+    position: fixed;
+    inset:0;
+    background: rgba(2,3,7,0.65);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
   }
-  .modal-backdrop.open{ display:flex; }
+
+  .modal-backdrop.open{
+    display:flex;
+  }
+
   .modal{
-    width: 100%; max-width: 560px; max-height: 82vh; overflow-y: auto;
-    background: linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
-    border: 1px solid var(--line); border-radius: 18px; padding: 34px 34px 30px;
-    position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 560px;
+    max-height: 82vh;
+    overflow-y: auto;
+    background: linear-gradient(
+      180deg,
+      var(--bg-panel-2),
+      var(--bg-panel)
+    );
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 34px 34px 30px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
   }
+
   .modal-close{
-    position:absolute; top: 18px; right: 18px; background:none; border:none;
-    color: var(--text-dim); font-size: 20px; cursor:pointer; line-height:1; padding: 6px;
+    position:absolute;
+    top: 18px;
+    right: 18px;
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor:pointer;
+    line-height:1;
+    padding: 6px;
   }
-  .modal-close:hover{ color: var(--text); }
-  .modal .eyebrow{ font-size: 13px; color: var(--text-dim); margin-bottom: 10px; }
-  .modal h2{ font-size: 30px; margin-bottom: 14px; }
-  .modal p{ color: var(--text-dim); line-height: 1.65; font-size: 15px; margin: 0 0 14px; }
-  .modal p.lead{ color: var(--text); font-size: 16px; }
-  .modal .links{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 20px; }
+
+  .modal-close:hover{
+    color: var(--text);
+  }
+
+  .modal .eyebrow{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .modal h2{
+    font-size: 30px;
+    margin-bottom: 14px;
+  }
+
+  .modal p{
+    color: var(--text-dim);
+    line-height: 1.65;
+    font-size: 15px;
+    margin: 0 0 14px;
+  }
+
+  .modal p.lead{
+    color: var(--text);
+    font-size: 16px;
+  }
+
+  .modal .links{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top: 20px;
+  }
+
   .btn{
-    display:inline-block; padding: 11px 20px; border-radius: 999px; font-size: 14px;
-    text-decoration:none; border: 1px solid var(--line); color: var(--text);
+    display:inline-block;
+    padding: 11px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    text-decoration:none;
+    border: 1px solid var(--line);
+    color: var(--text);
     transition: background .2s ease, border-color .2s ease;
   }
-  .btn:hover{ background: rgba(255,255,255,0.07); }
-  .btn.primary{ background: var(--accent, var(--sun)); color: #10121e; border-color: transparent; font-weight:500; }
-  .btn.primary:hover{ filter: brightness(1.08); }
-  .skill-line{ color: var(--text-dim); font-size: 14.5px; line-height: 1.8; }
-  .const-modal ul{ list-style:none; margin:0; padding:0; color: var(--text-dim); font-size: 14.5px; line-height: 1.9; }
+
+  .btn:hover{
+    background: rgba(255,255,255,0.07);
+  }
+
+  .btn.primary{
+    background: var(--accent, var(--sun));
+    color: #10121e;
+    border-color: transparent;
+    font-weight:500;
+  }
+
+  .btn.primary:hover{
+    filter: brightness(1.08);
+  }
+
+  .skill-line{
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+
+  .const-modal ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.9;
+  }
 
   @media (max-width: 640px){
-    #hint{ display:none; }
-    .modal{ padding: 26px 22px 24px; }
-    .modal h2{ font-size: 24px; }
+    #hint{
+      display:none;
+    }
+
+    .modal{
+      padding: 26px 22px 24px;
+    }
+
+    .modal h2{
+      font-size: 24px;
+    }
   }
 </style>
 </head>
+
 <body>
 
-<div id="loading"><div class="dot"></div><div>Loading the system…</div></div>
+<div id="loading">
+  <div class="dot"></div>
+  <div>Loading the system…</div>
+</div>
 
 <canvas id="scene-canvas"></canvas>
 <div id="labels"></div>
@@ -164,138 +391,382 @@ cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
   <button data-nav="projects">Projects</button>
   <button data-nav="contact">Contact</button>
 </div>
-<button id="reset-view">Reset view</button>
-<div id="hint">Drag to orbit · scroll or pinch to zoom · click a planet or star</div>
-<div class="comet" id="comet" title="Say hello" aria-label="Contact"></div>
 
-<!-- MODALS -->
+<button id="reset-view">Reset view</button>
+
+<div id="hint">
+  Drag to orbit · scroll or pinch to zoom · click a planet or star
+</div>
+
+<div
+  class="comet"
+  id="comet"
+  title="Say hello"
+  aria-label="Contact">
+</div>
+
+<!-- ABOUT -->
 <div class="modal-backdrop" id="modal-about">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Abuja, Nigeria</div>
+
     <h2>John Nafuh</h2>
-    <p class="lead">Computer scientist and creative — working across code, interface, and image.</p>
-    <p>A creative workspace more than a single title: I move between web design and development, UI/UX, and graphic design, and I lead creative teams along the way. Outside of client and personal builds, I run RECLUSE, my own fashion brand — same instinct, different material.</p>
-    <p>Most of what's here started small: a rough idea pushed further than it needed to be, until it turned into something whole. That's the pattern behind every planet in this system.</p>
-    <div class="skill-line">UI/UX design · Web design &amp; development · Graphic design · Art · Leadership</div>
+
+    <p class="lead">
+      Computer scientist and creative — working across code,
+      interface, and image.
+    </p>
+
+    <p>
+      A creative workspace more than a single title: I move between
+      web design and development, UI/UX, and graphic design, and I
+      lead creative teams along the way. Outside of client and
+      personal builds, I run RECLUSE, my own fashion brand —
+      same instinct, different material.
+    </p>
+
+    <p>
+      Most of what's here started small: a rough idea pushed further
+      than it needed to be, until it turned into something whole.
+      That's the pattern behind every planet in this system.
+    </p>
+
+    <div class="skill-line">
+      UI/UX design · Web design &amp; development · Graphic design ·
+      Art · Leadership
+    </div>
   </div>
 </div>
 
+<!-- CROWN CAPITAL -->
 <div class="modal-backdrop" id="modal-crown">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Project</div>
+
     <h2>Crown Capital</h2>
-    <p class="lead">A digital investment platform.</p>
-    <p>Built to help users organize and monitor their investment portfolios through a streamlined online experience. Intuitive navigation and structured investment data make it easy to review holdings, track portfolio activity, and manage investment information in one place.</p>
+
+    <p class="lead">
+      A digital investment platform.
+    </p>
+
+    <p>
+      Built to help users organize and monitor their investment
+      portfolios through a streamlined online experience. Intuitive
+      navigation and structured investment data make it easy to
+      review holdings, track portfolio activity, and manage
+      investment information in one place.
+    </p>
+
     <div class="links">
-      <a class="btn primary" style="--accent: var(--crown);" href="https://johnnafuh.github.io/CrownCapital/index.html" target="_blank" rel="noopener">Visit site</a>
+      <a
+        class="btn primary"
+        style="--accent: var(--crown);"
+        href="https://johnnafuh.github.io/CrownCapital/index.html"
+        target="_blank"
+        rel="noopener">
+        Visit site
+      </a>
     </div>
   </div>
 </div>
 
+<!-- FIN-DASH -->
 <div class="modal-backdrop" id="modal-findash">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Project</div>
+
     <h2>Fin-Dash</h2>
-    <p class="lead">A personal finance management platform.</p>
-    <p>Built to help users organize, analyze, and understand their financial activity. A centralized dashboard tracks transactions, expenses, balances, and financial trends — turning raw financial data into clear, actionable insight.</p>
+
+    <p class="lead">
+      A personal finance management platform.
+    </p>
+
+    <p>
+      Built to help users organize, analyze, and understand their
+      financial activity. A centralized dashboard tracks
+      transactions, expenses, balances, and financial trends —
+      turning raw financial data into clear, actionable insight.
+    </p>
+
     <div class="links">
-      <a class="btn primary" style="--accent: var(--findash);" href="https://johnnafuh.github.io/Fin-dash/" target="_blank" rel="noopener">Visit site</a>
+      <a
+        class="btn primary"
+        style="--accent: var(--findash);"
+        href="https://johnnafuh.github.io/Fin-dash/"
+        target="_blank"
+        rel="noopener">
+        Visit site
+      </a>
     </div>
   </div>
 </div>
 
+<!-- RECLUSE -->
 <div class="modal-backdrop" id="modal-recluse">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Project · Brand</div>
+
     <h2>RECLUSE</h2>
-    <p class="lead">A bold streetwear brand.</p>
-    <p>Built on dark minimalism, sharp visuals, and unapologetic attitude. The site brings each collection to life through refined product presentation and a seamless shopping experience, made for those who move differently.</p>
+
+    <p class="lead">
+      A bold streetwear brand.
+    </p>
+
+    <p>
+      Built on dark minimalism, sharp visuals, and unapologetic
+      attitude. The site brings each collection to life through
+      refined product presentation and a seamless shopping
+      experience, made for those who move differently.
+    </p>
+
     <div class="links">
-      <a class="btn primary" style="--accent: var(--recluse);" href="https://johnnafuh.github.io/recluse52-site/index.html" target="_blank" rel="noopener">Visit site</a>
+      <a
+        class="btn primary"
+        style="--accent: var(--recluse);"
+        href="https://johnnafuh.github.io/recluse52-site/index.html"
+        target="_blank"
+        rel="noopener">
+        Visit site
+      </a>
     </div>
   </div>
 </div>
 
+<!-- PROJECTS -->
 <div class="modal-backdrop" id="modal-projects">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Projects</div>
+
     <h2>Three worlds, three builds</h2>
-    <p>Each planet in the system is a live project. Click through here, or find them orbiting the sun.</p>
+
+    <p>
+      Each planet in the system is a live project. Click through
+      here, or find them orbiting the sun.
+    </p>
+
     <div class="links">
-      <a class="btn" href="https://johnnafuh.github.io/CrownCapital/index.html" target="_blank" rel="noopener">Crown Capital</a>
-      <a class="btn" href="https://johnnafuh.github.io/Fin-dash/" target="_blank" rel="noopener">Fin-Dash</a>
-      <a class="btn" href="https://johnnafuh.github.io/recluse52-site/index.html" target="_blank" rel="noopener">RECLUSE</a>
+      <a
+        class="btn"
+        href="https://johnnafuh.github.io/CrownCapital/index.html"
+        target="_blank"
+        rel="noopener">
+        Crown Capital
+      </a>
+
+      <a
+        class="btn"
+        href="https://johnnafuh.github.io/Fin-dash/"
+        target="_blank"
+        rel="noopener">
+        Fin-Dash
+      </a>
+
+      <a
+        class="btn"
+        href="https://johnnafuh.github.io/recluse52-site/index.html"
+        target="_blank"
+        rel="noopener">
+        RECLUSE
+      </a>
     </div>
   </div>
 </div>
 
+<!-- CONTACT -->
 <div class="modal-backdrop" id="modal-contact">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Get in touch</div>
+
     <h2>Say hello</h2>
-    <p>Open to new projects, collaborations, and conversations.</p>
+
+    <p>
+      Open to new projects, collaborations, and conversations.
+    </p>
+
     <div class="links">
-      <a class="btn primary" href="mailto:johnnafuh@gmail.com">Email me</a>
-      <a class="btn" href="tel:+2347038547668">Call / WhatsApp</a>
-      <a class="btn" href="https://github.com/JohnNafuh" target="_blank" rel="noopener">GitHub</a>
+      <a
+        class="btn primary"
+        href="mailto:johnnafuh@gmail.com">
+        Email me
+      </a>
+
+      <a
+        class="btn"
+        href="tel:+2347038547668">
+        Call / WhatsApp
+      </a>
+
+      <a
+        class="btn"
+        href="https://github.com/JohnNafuh"
+        target="_blank"
+        rel="noopener">
+        GitHub
+      </a>
     </div>
   </div>
 </div>
 
+<!-- GRAPHIC DESIGN -->
 <div class="modal-backdrop const-modal" id="modal-graphic">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Constellation</div>
+
     <h2>Graphic Design</h2>
-    <p>Visual identity, branding, illustration, and print-to-digital design work — the layer underneath most of the projects here.</p>
-    <ul><li>Brand identity &amp; visual systems</li><li>Illustration &amp; layout</li><li>Packaging &amp; print-to-digital design</li></ul>
+
+    <p>
+      Visual identity, branding, illustration, and print-to-digital
+      design work — the layer underneath most of the projects here.
+    </p>
+
+    <ul>
+      <li>Brand identity &amp; visual systems</li>
+      <li>Illustration &amp; layout</li>
+      <li>Packaging &amp; print-to-digital design</li>
+    </ul>
   </div>
 </div>
 
+<!-- LEADERSHIP -->
 <div class="modal-backdrop const-modal" id="modal-leadership">
   <div class="modal">
-    <button class="modal-close" data-close aria-label="Close">&times;</button>
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Close">
+      &times;
+    </button>
+
     <div class="eyebrow">Constellation</div>
+
     <h2>Leadership</h2>
-    <p>Leading creative teams and shaping direction on brand and product work — steering ideas from rough sketch to shipped result.</p>
-    <ul><li>Creative direction</li><li>Team leadership</li><li>Project ownership, start to finish</li></ul>
+
+    <p>
+      Leading creative teams and shaping direction on brand and
+      product work — steering ideas from rough sketch to shipped
+      result.
+    </p>
+
+    <ul>
+      <li>Creative direction</li>
+      <li>Team leadership</li>
+      <li>Project ownership, start to finish</li>
+    </ul>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
 <script>
 (function(){
   "use strict";
 
-  function ready(){ return window.THREE && THREE.OrbitControls; }
+  function ready(){
+    return window.THREE && THREE.OrbitControls;
+  }
+
   function boot(){
-    if(!ready()){ 
-      document.getElementById('loading').innerHTML = '<div style="max-width:320px;text-align:center;">Couldn\'t load the 3D engine. Check your internet connection and reload.</div>';
+    if(!ready()){
+      document.getElementById('loading').innerHTML =
+        '<div style="max-width:320px;text-align:center;">' +
+        'Couldn\'t load the 3D engine. Check your internet connection and reload.' +
+        '</div>';
       return;
     }
+
     init();
   }
-  window.addEventListener('load', function(){ setTimeout(boot, 60); });
+
+  window.addEventListener('load', function(){
+    setTimeout(boot, 60);
+  });
 
   function init(){
+
     /* ---------- renderer / scene / camera ---------- */
+
     var canvas = document.getElementById('scene-canvas');
-    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true
+    });
+
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio, 2)
+    );
+
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 2000);
+
+    var camera = new THREE.PerspectiveCamera(
+      50,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      2000
+    );
+
     camera.position.set(0, 20, 46);
 
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    var controls = new THREE.OrbitControls(
+      camera,
+      renderer.domElement
+    );
+
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.minDistance = 11;
@@ -306,33 +777,82 @@ cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
     controls.target.set(0,0,0);
 
     /* ---------- lighting ---------- */
-    scene.add(new THREE.AmbientLight(0x30364a, 0.55));
-    var sunLight = new THREE.PointLight(0xfff2d0, 2.4, 0, 1.6);
+
+    scene.add(
+      new THREE.AmbientLight(0x30364a, 0.55)
+    );
+
+    var sunLight = new THREE.PointLight(
+      0xfff2d0,
+      2.4,
+      0,
+      1.6
+    );
+
     sunLight.position.set(0,0,0);
     scene.add(sunLight);
 
     /* ---------- helpers: canvas textures ---------- */
+
     function canvasTex(size, drawFn){
       var c = document.createElement('canvas');
-      c.width = size*2; c.height = size;
+
+      c.width = size * 2;
+      c.height = size;
+
       var ctx = c.getContext('2d');
+
       drawFn(ctx, c.width, c.height);
+
       var tex = new THREE.CanvasTexture(c);
-      tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
+
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.ClampToEdgeWrapping;
+
       return tex;
     }
-    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    function rand(a,b){
+      return a + Math.random() * (b-a);
+    }
 
     function sunTexture(){
       return canvasTex(256, function(ctx,w,h){
-        var g = ctx.createLinearGradient(0,0,0,h);
-        g.addColorStop(0,'#fff2b8'); g.addColorStop(0.5,'#ffcf5e'); g.addColorStop(1,'#ff9d2e');
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createLinearGradient(
+          0,0,0,h
+        );
+
+        g.addColorStop(0,'#fff2b8');
+        g.addColorStop(0.5,'#ffcf5e');
+        g.addColorStop(1,'#ff9d2e');
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
+
         for(var i=0;i<420;i++){
+
           var r = rand(4,20);
+
           ctx.beginPath();
-          ctx.fillStyle = 'rgba(255,'+Math.floor(rand(150,230))+','+Math.floor(rand(60,140))+','+rand(0.08,0.22)+')';
-          ctx.arc(rand(0,w), rand(0,h), r, 0, Math.PI*2);
+
+          ctx.fillStyle =
+            'rgba(255,' +
+            Math.floor(rand(150,230)) +
+            ',' +
+            Math.floor(rand(60,140)) +
+            ',' +
+            rand(0.08,0.22) +
+            ')';
+
+          ctx.arc(
+            rand(0,w),
+            rand(0,h),
+            r,
+            0,
+            Math.PI*2
+          );
+
           ctx.fill();
         }
       });
@@ -340,383 +860,1278 @@ cat > /mnt/user-data/outputs/nafuh-orbit.html << 'HTMLEOF'
 
     function bandedTexture(base1, base2, accent){
       return canvasTex(256, function(ctx,w,h){
+
         for(var y=0;y<h;y++){
+
           var t = y/h;
           var band = Math.sin(t*22) * 0.5 + 0.5;
           var mix = band*0.5 + t*0.5;
-          ctx.fillStyle = lerpColor(base1, base2, mix);
+
+          ctx.fillStyle =
+            lerpColor(base1, base2, mix);
+
           ctx.fillRect(0,y,w,2);
         }
+
         for(var i=0;i<26;i++){
+
           ctx.beginPath();
+
           ctx.fillStyle = accent;
           ctx.globalAlpha = rand(0.08,0.22);
-          ctx.ellipse(rand(0,w), rand(0,h), rand(20,60), rand(6,16), 0, 0, Math.PI*2);
+
+          ctx.ellipse(
+            rand(0,w),
+            rand(0,h),
+            rand(20,60),
+            rand(6,16),
+            0,
+            0,
+            Math.PI*2
+          );
+
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
       });
     }
 
     function oceanTexture(base1, base2, land){
       return canvasTex(256, function(ctx,w,h){
-        var g = ctx.createLinearGradient(0,0,0,h);
-        g.addColorStop(0, base1); g.addColorStop(1, base2);
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createLinearGradient(
+          0,0,0,h
+        );
+
+        g.addColorStop(0, base1);
+        g.addColorStop(1, base2);
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
+
         for(var i=0;i<60;i++){
-          var cx = rand(0,w), cy = rand(0,h), rr = rand(10,34);
+
+          var cx = rand(0,w);
+          var cy = rand(0,h);
+          var rr = rand(10,34);
+
           ctx.beginPath();
+
           ctx.fillStyle = land;
           ctx.globalAlpha = rand(0.12,0.3);
+
           for(var k=0;k<6;k++){
-            ctx.ellipse(cx+rand(-14,14), cy+rand(-10,10), rr*rand(0.4,1), rr*rand(0.25,0.6), rand(0,3), 0, Math.PI*2);
+
+            ctx.ellipse(
+              cx + rand(-14,14),
+              cy + rand(-10,10),
+              rr * rand(0.4,1),
+              rr * rand(0.25,0.6),
+              rand(0,3),
+              0,
+              Math.PI*2
+            );
           }
+
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
       });
     }
 
     function volcanicTexture(base1, base2, glow){
       return canvasTex(256, function(ctx,w,h){
-        var g = ctx.createLinearGradient(0,0,w,h);
-        g.addColorStop(0, base1); g.addColorStop(1, base2);
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createLinearGradient(
+          0,0,w,h
+        );
+
+        g.addColorStop(0, base1);
+        g.addColorStop(1, base2);
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
+
         for(var i=0;i<40;i++){
+
           var r = rand(4,14);
+
           ctx.beginPath();
-          ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+
+          ctx.strokeStyle =
+            'rgba(0,0,0,0.35)';
+
           ctx.lineWidth = 2;
-          ctx.arc(rand(0,w), rand(0,h), r, 0, Math.PI*2);
+
+          ctx.arc(
+            rand(0,w),
+            rand(0,h),
+            r,
+            0,
+            Math.PI*2
+          );
+
           ctx.stroke();
         }
+
         for(var j=0;j<16;j++){
+
           ctx.beginPath();
+
           ctx.strokeStyle = glow;
           ctx.globalAlpha = rand(0.35,0.7);
           ctx.lineWidth = rand(1,2.4);
-          var sx = rand(0,w), sy = rand(0,h);
+
+          var sx = rand(0,w);
+          var sy = rand(0,h);
+
           ctx.moveTo(sx,sy);
-          for(var seg=0; seg<4; seg++){ sx += rand(-24,24); sy += rand(-14,14); ctx.lineTo(sx,sy); }
+
+          for(
+            var seg=0;
+            seg<4;
+            seg++
+          ){
+            sx += rand(-24,24);
+            sy += rand(-14,14);
+            ctx.lineTo(sx,sy);
+          }
+
           ctx.stroke();
         }
+
         ctx.globalAlpha = 1;
       });
     }
 
     function lerpColor(c1,c2,t){
-      var a = hexToRgb(c1), b = hexToRgb(c2);
-      var r = Math.round(a.r + (b.r-a.r)*t);
-      var g = Math.round(a.g + (b.g-a.g)*t);
-      var bl = Math.round(a.b + (b.b-a.b)*t);
-      return 'rgb('+r+','+g+','+bl+')';
+
+      var a = hexToRgb(c1);
+      var b = hexToRgb(c2);
+
+      var r = Math.round(
+        a.r + (b.r-a.r)*t
+      );
+
+      var g = Math.round(
+        a.g + (b.g-a.g)*t
+      );
+
+      var bl = Math.round(
+        a.b + (b.b-a.b)*t
+      );
+
+      return 'rgb(' + r + ',' + g + ',' + bl + ')';
     }
+
     function hexToRgb(hex){
+
       var v = hex.replace('#','');
-      return { r: parseInt(v.substring(0,2),16), g: parseInt(v.substring(2,4),16), b: parseInt(v.substring(4,6),16) };
+
+      return {
+        r: parseInt(v.substring(0,2),16),
+        g: parseInt(v.substring(2,4),16),
+        b: parseInt(v.substring(4,6),16)
+      };
     }
 
     function glowSprite(color, size){
+
       var tex = canvasTex(128, function(ctx,w,h){
-        var g = ctx.createRadialGradient(w/2,h/2,0, w/2,h/2, w/2);
-        g.addColorStop(0, color); g.addColorStop(0.4, color); g.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createRadialGradient(
+          w/2,
+          h/2,
+          0,
+          w/2,
+          h/2,
+          w/2
+        );
+
+        g.addColorStop(0, color);
+        g.addColorStop(0.4, color);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
       });
-      var mat = new THREE.SpriteMaterial({ map: tex, transparent:true, blending: THREE.AdditiveBlending, depthWrite:false });
+
+      var mat = new THREE.SpriteMaterial({
+        map: tex,
+        transparent:true,
+        blending: THREE.AdditiveBlending,
+        depthWrite:false
+      });
+
       var sprite = new THREE.Sprite(mat);
-      sprite.scale.set(size,size,1);
+
+      sprite.scale.set(
+        size,
+        size,
+        1
+      );
+
       return sprite;
     }
 
     /* ---------- background: starfield + nebula skybox ---------- */
+
     function buildStars(count, spread, size){
-      var positions = new Float32Array(count*3);
+
+      var positions = new Float32Array(
+        count * 3
+      );
+
       for(var i=0;i<count;i++){
-        var r = spread * (0.6 + Math.random()*0.4);
-        var theta = Math.random()*Math.PI*2;
-        var phi = Math.acos((Math.random()*2)-1);
-        positions[i*3] = r*Math.sin(phi)*Math.cos(theta);
-        positions[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
-        positions[i*3+2] = r*Math.cos(phi);
+
+        var r =
+          spread * (0.6 + Math.random()*0.4);
+
+        var theta =
+          Math.random()*Math.PI*2;
+
+        var phi =
+          Math.acos(
+            (Math.random()*2)-1
+          );
+
+        positions[i*3] =
+          r*Math.sin(phi)*Math.cos(theta);
+
+        positions[i*3+1] =
+          r*Math.sin(phi)*Math.sin(theta);
+
+        positions[i*3+2] =
+          r*Math.cos(phi);
       }
+
       var geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+
+      geo.setAttribute(
+        'position',
+        new THREE.BufferAttribute(
+          positions,
+          3
+        )
+      );
+
       var dotTex = canvasTex(32, function(ctx,w,h){
-        var g = ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2);
-        g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(1,'rgba(255,255,255,0)');
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createRadialGradient(
+          w/2,
+          h/2,
+          0,
+          w/2,
+          h/2,
+          w/2
+        );
+
+        g.addColorStop(
+          0,
+          'rgba(255,255,255,1)'
+        );
+
+        g.addColorStop(
+          1,
+          'rgba(255,255,255,0)'
+        );
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
       });
-      var mat = new THREE.PointsMaterial({ size:size, map:dotTex, transparent:true, depthWrite:false, sizeAttenuation:true, opacity:0.9 });
-      return new THREE.Points(geo, mat);
+
+      var mat = new THREE.PointsMaterial({
+        size:size,
+        map:dotTex,
+        transparent:true,
+        depthWrite:false,
+        sizeAttenuation:true,
+        opacity:0.9
+      });
+
+      return new THREE.Points(
+        geo,
+        mat
+      );
     }
-    scene.add(buildStars(4500, 420, 1.6));
-    scene.add(buildStars(2200, 700, 2.6));
+
+    scene.add(
+      buildStars(4500, 420, 1.6)
+    );
+
+    scene.add(
+      buildStars(2200, 700, 2.6)
+    );
 
     var nebulaTex = canvasTex(256, function(ctx,w,h){
-      ctx.fillStyle = '#000103'; ctx.fillRect(0,0,w,h);
+
+      ctx.fillStyle = '#000103';
+      ctx.fillRect(0,0,w,h);
+
       var blobs = [
-        {x:0.18,y:0.3,r:0.28,c:'rgba(70,50,140,0.5)'},
-        {x:0.75,y:0.65,r:0.24,c:'rgba(20,70,90,0.45)'},
-        {x:0.55,y:0.15,r:0.2,c:'rgba(90,20,60,0.4)'},
-        {x:0.35,y:0.8,r:0.22,c:'rgba(40,30,90,0.35)'}
+        {
+          x:0.18,
+          y:0.3,
+          r:0.28,
+          c:'rgba(70,50,140,0.5)'
+        },
+        {
+          x:0.75,
+          y:0.65,
+          r:0.24,
+          c:'rgba(20,70,90,0.45)'
+        },
+        {
+          x:0.55,
+          y:0.15,
+          r:0.2,
+          c:'rgba(90,20,60,0.4)'
+        },
+        {
+          x:0.35,
+          y:0.8,
+          r:0.22,
+          c:'rgba(40,30,90,0.35)'
+        }
       ];
+
       blobs.forEach(function(b){
-        var g = ctx.createRadialGradient(b.x*w,b.y*h,0, b.x*w,b.y*h, b.r*w);
-        g.addColorStop(0,b.c); g.addColorStop(1,'rgba(0,0,0,0)');
-        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+        var g = ctx.createRadialGradient(
+          b.x*w,
+          b.y*h,
+          0,
+          b.x*w,
+          b.y*h,
+          b.r*w
+        );
+
+        g.addColorStop(
+          0,
+          b.c
+        );
+
+        g.addColorStop(
+          1,
+          'rgba(0,0,0,0)'
+        );
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,w,h);
       });
     });
-    var skyGeo = new THREE.SphereGeometry(900, 32, 32);
-    var skyMat = new THREE.MeshBasicMaterial({ map: nebulaTex, side: THREE.BackSide, fog:false });
-    scene.add(new THREE.Mesh(skyGeo, skyMat));
+
+    var skyGeo =
+      new THREE.SphereGeometry(
+        900,
+        32,
+        32
+      );
+
+    var skyMat =
+      new THREE.MeshBasicMaterial({
+        map: nebulaTex,
+        side: THREE.BackSide,
+        fog:false
+      });
+
+    scene.add(
+      new THREE.Mesh(
+        skyGeo,
+        skyMat
+      )
+    );
 
     /* ---------- sun ---------- */
-    var sunMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(5, 48, 48),
-      new THREE.MeshBasicMaterial({ map: sunTexture() })
-    );
-    scene.add(sunMesh);
-    scene.add(glowSprite('rgba(255,205,120,0.9)', 26));
 
-    /* ---------- orbit rings (static) ---------- */
+    var sunMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(
+        5,
+        48,
+        48
+      ),
+      new THREE.MeshBasicMaterial({
+        map: sunTexture()
+      })
+    );
+
+    scene.add(sunMesh);
+
+    scene.add(
+      glowSprite(
+        'rgba(255,205,120,0.9)',
+        26
+      )
+    );
+
+    /* ---------- orbit rings ---------- */
+
     function orbitRing(radius){
+
       var pts = [];
+
       for(var i=0;i<=128;i++){
-        var a = (i/128)*Math.PI*2;
-        pts.push(new THREE.Vector3(Math.cos(a)*radius, 0, Math.sin(a)*radius));
+
+        var a =
+          (i/128)*Math.PI*2;
+
+        pts.push(
+          new THREE.Vector3(
+            Math.cos(a)*radius,
+            0,
+            Math.sin(a)*radius
+          )
+        );
       }
-      var geo = new THREE.BufferGeometry().setFromPoints(pts);
-      var mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent:true, opacity:0.12 });
-      return new THREE.LineLoop(geo, mat);
+
+      var geo =
+        new THREE.BufferGeometry()
+          .setFromPoints(pts);
+
+      var mat =
+        new THREE.LineBasicMaterial({
+          color: 0xffffff,
+          transparent:true,
+          opacity:0.12
+        });
+
+      return new THREE.LineLoop(
+        geo,
+        mat
+      );
     }
-    [14,22,30].forEach(function(r){ scene.add(orbitRing(r)); });
+
+    [14,22,30].forEach(function(r){
+      scene.add(
+        orbitRing(r)
+      );
+    });
 
     /* ---------- planets ---------- */
+
     var interactive = [];
     var planets = [];
 
     function makePlanet(opts){
-      var geo = new THREE.SphereGeometry(opts.radius, 48, 48);
+
+      var geo =
+        new THREE.SphereGeometry(
+          opts.radius,
+          48,
+          48
+        );
+
       var tex = opts.texture;
-      var mat = new THREE.MeshPhongMaterial({ map: tex, bumpMap: tex, bumpScale: 0.35, shininess: opts.shine||6, specular: 0x222233 });
-      var mesh = new THREE.Mesh(geo, mat);
-      var group = new THREE.Group();
+
+      var mat =
+        new THREE.MeshPhongMaterial({
+          map: tex,
+          bumpMap: tex,
+          bumpScale: 0.35,
+          shininess: opts.shine || 6,
+          specular: 0x222233
+        });
+
+      var mesh =
+        new THREE.Mesh(
+          geo,
+          mat
+        );
+
+      var group =
+        new THREE.Group();
+
       group.add(mesh);
 
-      var atmo = new THREE.Mesh(
-        new THREE.SphereGeometry(opts.radius*1.14, 32, 32),
-        new THREE.MeshBasicMaterial({ color: opts.glowColor, transparent:true, opacity:0.12, side: THREE.BackSide })
-      );
+      var atmo =
+        new THREE.Mesh(
+          new THREE.SphereGeometry(
+            opts.radius*1.14,
+            32,
+            32
+          ),
+          new THREE.MeshBasicMaterial({
+            color: opts.glowColor,
+            transparent:true,
+            opacity:0.12,
+            side: THREE.BackSide
+          })
+        );
+
       group.add(atmo);
 
       if(opts.ring){
-        var ringTex = canvasTex(64, function(ctx,w,h){
-          var g = ctx.createLinearGradient(0,0,w,0);
-          g.addColorStop(0,'rgba(217,178,58,0)');
-          g.addColorStop(0.5,'rgba(217,178,58,0.55)');
-          g.addColorStop(1,'rgba(217,178,58,0)');
-          ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-        });
-        var ringGeo = new THREE.RingGeometry(opts.radius*1.5, opts.radius*2.3, 64);
-        var ringMat = new THREE.MeshBasicMaterial({ map: ringTex, side: THREE.DoubleSide, transparent:true });
-        var ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = Math.PI/2 - 0.35;
+
+        var ringTex =
+          canvasTex(64, function(ctx,w,h){
+
+            var g =
+              ctx.createLinearGradient(
+                0,0,w,0
+              );
+
+            g.addColorStop(
+              0,
+              'rgba(217,178,58,0)'
+            );
+
+            g.addColorStop(
+              0.5,
+              'rgba(217,178,58,0.55)'
+            );
+
+            g.addColorStop(
+              1,
+              'rgba(217,178,58,0)'
+            );
+
+            ctx.fillStyle = g;
+            ctx.fillRect(0,0,w,h);
+          });
+
+        var ringGeo =
+          new THREE.RingGeometry(
+            opts.radius*1.5,
+            opts.radius*2.3,
+            64
+          );
+
+        var ringMat =
+          new THREE.MeshBasicMaterial({
+            map: ringTex,
+            side: THREE.DoubleSide,
+            transparent:true
+          });
+
+        var ring =
+          new THREE.Mesh(
+            ringGeo,
+            ringMat
+          );
+
+        ring.rotation.x =
+          Math.PI/2 - 0.35;
+
         group.add(ring);
       }
 
       scene.add(group);
+
       var p = {
-        group: group, mesh: mesh, distance: opts.distance, angle: opts.angle,
-        speed: opts.speed, radius: opts.radius, name: opts.name, modal: opts.modal
+        group: group,
+        mesh: mesh,
+        distance: opts.distance,
+        angle: opts.angle,
+        speed: opts.speed,
+        radius: opts.radius,
+        name: opts.name,
+        modal: opts.modal
       };
+
       planets.push(p);
-      interactive.push({ mesh: mesh, obj: p, isSun:false });
+
+      interactive.push({
+        mesh: mesh,
+        obj: p,
+        isSun:false
+      });
+
       return p;
     }
 
     makePlanet({
-      name:'Fin-Dash', modal:'modal-findash', distance:14, angle: 3.6, speed:0.085, radius:1.9,
-      texture: oceanTexture('#0e3a52','#3aa8d8','#bfeaf2'), glowColor: 0x46a3e0, shine: 42
-    });
-    makePlanet({
-      name:'Crown Capital', modal:'modal-crown', distance:22, angle: -0.9, speed:0.055, radius:2.3,
-      texture: bandedTexture('#3d2f0c','#e6c463','#fff4cf'), glowColor: 0xd9b23a, ring:true
-    });
-    makePlanet({
-      name:'RECLUSE', modal:'modal-recluse', distance:30, angle: 1.9, speed:0.04, radius:2.5,
-      texture: volcanicTexture('#1a0508','#3a0a10','#ff5a4a'), glowColor: 0xd1414d, shine: 4
+      name:'Fin-Dash',
+      modal:'modal-findash',
+      distance:14,
+      angle:3.6,
+      speed:0.085,
+      radius:1.9,
+      texture:
+        oceanTexture(
+          '#0e3a52',
+          '#3aa8d8',
+          '#bfeaf2'
+        ),
+      glowColor:0x46a3e0,
+      shine:42
     });
 
-    interactive.push({ mesh: sunMesh, obj: { name:'John Nafuh', modal:'modal-about' }, isSun:true });
+    makePlanet({
+      name:'Crown Capital',
+      modal:'modal-crown',
+      distance:22,
+      angle:-0.9,
+      speed:0.055,
+      radius:2.3,
+      texture:
+        bandedTexture(
+          '#3d2f0c',
+          '#e6c463',
+          '#fff4cf'
+        ),
+      glowColor:0xd9b23a,
+      ring:true
+    });
+
+    makePlanet({
+      name:'RECLUSE',
+      modal:'modal-recluse',
+      distance:30,
+      angle:1.9,
+      speed:0.04,
+      radius:2.5,
+      texture:
+        volcanicTexture(
+          '#1a0508',
+          '#3a0a10',
+          '#ff5a4a'
+        ),
+      glowColor:0xd1414d,
+      shine:4
+    });
+
+    interactive.push({
+      mesh: sunMesh,
+      obj: {
+        name:'John Nafuh',
+        modal:'modal-about'
+      },
+      isSun:true
+    });
 
     /* ---------- skill stars ---------- */
-    function makeSkillStar(name, modal, distance, angle, y, color){
-      var mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.55, 16, 16),
-        new THREE.MeshBasicMaterial({ color: color })
+
+    function makeSkillStar(
+      name,
+      modal,
+      distance,
+      angle,
+      y,
+      color
+    ){
+
+      var mesh =
+        new THREE.Mesh(
+          new THREE.SphereGeometry(
+            0.55,
+            16,
+            16
+          ),
+          new THREE.MeshBasicMaterial({
+            color: color
+          })
+        );
+
+      mesh.position.set(
+        Math.cos(angle)*distance,
+        y,
+        Math.sin(angle)*distance
       );
-      mesh.position.set(Math.cos(angle)*distance, y, Math.sin(angle)*distance);
-      var glow = glowSprite(color, 6);
-      glow.position.copy(mesh.position);
-      scene.add(mesh); scene.add(glow);
-      var p = { group: { position: mesh.position }, name: name, modal: modal, isStatic:true };
-      interactive.push({ mesh: mesh, obj: p, isSun:false });
+
+      var glow =
+        glowSprite(
+          color,
+          6
+        );
+
+      glow.position.copy(
+        mesh.position
+      );
+
+      scene.add(mesh);
+      scene.add(glow);
+
+      var p = {
+        group: {
+          position: mesh.position
+        },
+        name: name,
+        modal: modal,
+        isStatic:true
+      };
+
+      interactive.push({
+        mesh: mesh,
+        obj: p,
+        isSun:false
+      });
+
       return p;
     }
-    makeSkillStar('Graphic Design','modal-graphic', 42, -0.7, 9, '#e9c9ff');
-    makeSkillStar('Leadership','modal-leadership', 46, 2.4, -7, '#c9e9ff');
+
+    makeSkillStar(
+      'Graphic Design',
+      'modal-graphic',
+      42,
+      -0.7,
+      9,
+      '#e9c9ff'
+    );
+
+    makeSkillStar(
+      'Leadership',
+      'modal-leadership',
+      46,
+      2.4,
+      -7,
+      '#c9e9ff'
+    );
 
     /* ---------- labels ---------- */
-    var labelHost = document.getElementById('labels');
+
+    var labelHost =
+      document.getElementById('labels');
+
     var labelEls = {};
-    function ensureLabel(id, text, isSun){
-      var el = document.createElement('div');
-      el.className = 'label3d' + (isSun ? ' sun-label' : '');
+
+    function ensureLabel(
+      id,
+      text,
+      isSun
+    ){
+
+      var el =
+        document.createElement('div');
+
+      el.className =
+        'label3d' +
+        (isSun ? ' sun-label' : '');
+
       el.textContent = text;
+
       labelHost.appendChild(el);
+
       labelEls[id] = el;
     }
-    ensureLabel('sun', 'John Nafuh', true);
-    planets.forEach(function(p,i){ ensureLabel('planet'+i, p.name, false); p._labelId='planet'+i; });
-    interactive.filter(function(o){ return o.obj.isStatic; }).forEach(function(o,i){ ensureLabel('star'+i, o.obj.name, false); o.obj._labelId='star'+i; });
 
-    var v = new THREE.Vector3();
-    function updateLabel(id, worldPos){
-      v.copy(worldPos).project(camera);
-      var el = labelEls[id];
+    ensureLabel(
+      'sun',
+      'John Nafuh',
+      true
+    );
+
+    planets.forEach(function(p,i){
+
+      ensureLabel(
+        'planet'+i,
+        p.name,
+        false
+      );
+
+      p._labelId =
+        'planet'+i;
+    });
+
+    interactive
+      .filter(function(o){
+        return o.obj.isStatic;
+      })
+      .forEach(function(o,i){
+
+        ensureLabel(
+          'star'+i,
+          o.obj.name,
+          false
+        );
+
+        o.obj._labelId =
+          'star'+i;
+      });
+
+    var v =
+      new THREE.Vector3();
+
+    function updateLabel(
+      id,
+      worldPos
+    ){
+
+      v.copy(worldPos)
+        .project(camera);
+
+      var el =
+        labelEls[id];
+
       if(!el) return;
-      if(v.z > 1){ el.style.opacity = '0'; return; }
-      var x = (v.x*0.5+0.5)*window.innerWidth;
-      var y = (-v.y*0.5+0.5)*window.innerHeight;
-      el.style.left = x+'px'; el.style.top = y+'px';
+
+      if(v.z > 1){
+        el.style.opacity = '0';
+        return;
+      }
+
+      var x =
+        (v.x*0.5+0.5) *
+        window.innerWidth;
+
+      var y =
+        (-v.y*0.5+0.5) *
+        window.innerHeight;
+
+      el.style.left =
+        x+'px';
+
+      el.style.top =
+        y+'px';
+
       el.style.opacity = '1';
     }
 
     /* ---------- camera tween ---------- */
+
     var tweening = false;
-    function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
-    function tweenCamera(targetPos, lookAt, duration, onDone){
+
+    function easeInOutCubic(t){
+
+      return t < 0.5
+        ? 4*t*t*t
+        : 1-Math.pow(-2*t+2,3)/2;
+    }
+
+    function tweenCamera(
+      targetPos,
+      lookAt,
+      duration,
+      onDone
+    ){
+
       tweening = true;
       controls.enabled = false;
-      var startPos = camera.position.clone();
-      var startTarget = controls.target.clone();
-      var t0 = performance.now();
+
+      var startPos =
+        camera.position.clone();
+
+      var startTarget =
+        controls.target.clone();
+
+      var t0 =
+        performance.now();
+
       function step(now){
-        var t = Math.min(1, (now-t0)/duration);
-        var e = easeInOutCubic(t);
-        camera.position.lerpVectors(startPos, targetPos, e);
-        controls.target.lerpVectors(startTarget, lookAt, e);
+
+        var t =
+          Math.min(
+            1,
+            (now-t0)/duration
+          );
+
+        var e =
+          easeInOutCubic(t);
+
+        camera.position.lerpVectors(
+          startPos,
+          targetPos,
+          e
+        );
+
+        controls.target.lerpVectors(
+          startTarget,
+          lookAt,
+          e
+        );
+
         controls.update();
-        if(t < 1){ requestAnimationFrame(step); }
-        else{ tweening = false; controls.enabled = true; if(onDone) onDone(); }
+
+        if(t < 1){
+          requestAnimationFrame(step);
+        }else{
+          tweening = false;
+          controls.enabled = true;
+
+          if(onDone){
+            onDone();
+          }
+        }
       }
+
       requestAnimationFrame(step);
     }
 
     function flyTo(obj){
-      var pos = obj.group.position.clone();
-      var camDist = obj.isStatic ? 10 : (obj===sunRef ? 16 : (obj.radius*4.4+7));
-      var dir = pos.clone();
-      if(dir.length() < 0.01) dir.set(0,0.2,1);
+
+      var pos =
+        obj.group.position.clone();
+
+      var camDist =
+        obj.isStatic
+          ? 10
+          : (
+              obj===sunRef
+                ? 16
+                : (obj.radius*4.4+7)
+            );
+
+      var dir =
+        pos.clone();
+
+      if(dir.length() < 0.01){
+        dir.set(0,0.2,1);
+      }
+
       dir.normalize();
-      var newPos = pos.clone().add(dir.multiplyScalar(camDist)).add(new THREE.Vector3(0, camDist*0.26, 0));
-      tweenCamera(newPos, pos, 1000, function(){ openModal(obj.modal); });
+
+      var newPos =
+        pos.clone()
+          .add(
+            dir.multiplyScalar(camDist)
+          )
+          .add(
+            new THREE.Vector3(
+              0,
+              camDist*0.26,
+              0
+            )
+          );
+
+      tweenCamera(
+        newPos,
+        pos,
+        1000,
+        function(){
+          openModal(obj.modal);
+        }
+      );
     }
-    var sunRef = { group: { position: new THREE.Vector3(0,0,0) }, modal:'modal-about', radius:5 };
+
+    var sunRef = {
+      group: {
+        position:
+          new THREE.Vector3(0,0,0)
+      },
+      modal:'modal-about',
+      radius:5
+    };
 
     function resetView(){
-      tweenCamera(new THREE.Vector3(0,20,46), new THREE.Vector3(0,0,0), 900);
+
+      tweenCamera(
+        new THREE.Vector3(0,20,46),
+        new THREE.Vector3(0,0,0),
+        900
+      );
     }
 
     /* ---------- interaction: click vs drag ---------- */
-    var raycaster = new THREE.Raycaster();
+
+    var raycaster =
+      new THREE.Raycaster();
+
     var pointerDown = null;
-    canvas.addEventListener('pointerdown', function(e){ pointerDown = {x:e.clientX, y:e.clientY}; canvas.classList.add('dragging'); });
-    canvas.addEventListener('pointerup', function(e){
-      canvas.classList.remove('dragging');
-      if(!pointerDown) return;
-      var dx = e.clientX - pointerDown.x, dy = e.clientY - pointerDown.y;
-      pointerDown = null;
-      if(Math.sqrt(dx*dx+dy*dy) > 6) return; // was a drag
-      var mouse = new THREE.Vector2(
-        (e.clientX/window.innerWidth)*2-1,
-        -(e.clientY/window.innerHeight)*2+1
-      );
-      raycaster.setFromCamera(mouse, camera);
-      var meshes = interactive.map(function(o){ return o.mesh; });
-      var hits = raycaster.intersectObjects(meshes);
-      if(hits.length){
-        var hitMesh = hits[0].object;
-        var found = interactive.find(function(o){ return o.mesh === hitMesh; });
-        if(found){
-          if(found.isSun){ flyTo(sunRef); }
-          else{ flyTo(found.obj); }
+
+    canvas.addEventListener(
+      'pointerdown',
+      function(e){
+
+        pointerDown = {
+          x:e.clientX,
+          y:e.clientY
+        };
+
+        canvas.classList.add(
+          'dragging'
+        );
+      }
+    );
+
+    canvas.addEventListener(
+      'pointerup',
+      function(e){
+
+        canvas.classList.remove(
+          'dragging'
+        );
+
+        if(!pointerDown){
+          return;
+        }
+
+        var dx =
+          e.clientX-pointerDown.x;
+
+        var dy =
+          e.clientY-pointerDown.y;
+
+        pointerDown = null;
+
+        if(
+          Math.sqrt(dx*dx+dy*dy) > 6
+        ){
+          return;
+        }
+
+        var mouse =
+          new THREE.Vector2(
+            (e.clientX/window.innerWidth)*2-1,
+            -(e.clientY/window.innerHeight)*2+1
+          );
+
+        raycaster.setFromCamera(
+          mouse,
+          camera
+        );
+
+        var meshes =
+          interactive.map(function(o){
+            return o.mesh;
+          });
+
+        var hits =
+          raycaster.intersectObjects(
+            meshes
+          );
+
+        if(hits.length){
+
+          var hitMesh =
+            hits[0].object;
+
+          var found =
+            interactive.find(function(o){
+              return o.mesh === hitMesh;
+            });
+
+          if(found){
+
+            if(found.isSun){
+              flyTo(sunRef);
+            }else{
+              flyTo(found.obj);
+            }
+          }
         }
       }
-    });
+    );
 
     /* ---------- modal helpers ---------- */
-    function openModal(id){ var m = document.getElementById(id); if(m) m.classList.add('open'); }
-    function closeAllModals(){ document.querySelectorAll('.modal-backdrop').forEach(function(m){ m.classList.remove('open'); }); }
-    document.querySelectorAll('[data-close]').forEach(function(btn){ btn.addEventListener('click', closeAllModals); });
-    document.querySelectorAll('.modal-backdrop').forEach(function(m){ m.addEventListener('click', function(e){ if(e.target===m) closeAllModals(); }); });
-    window.addEventListener('keydown', function(e){ if(e.key==='Escape') closeAllModals(); });
 
-    document.getElementById('comet').addEventListener('click', function(){ openModal('modal-contact'); });
-    document.getElementById('reset-view').addEventListener('click', resetView);
-    document.querySelectorAll('#nav button').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var target = btn.dataset.nav;
-        if(target === 'about'){ flyTo(sunRef); }
-        else if(target === 'projects'){ resetView(); openModal('modal-projects'); }
-        else if(target === 'contact'){ openModal('modal-contact'); }
+    function openModal(id){
+
+      var m =
+        document.getElementById(id);
+
+      if(m){
+        m.classList.add('open');
+      }
+    }
+
+    function closeAllModals(){
+
+      document
+        .querySelectorAll('.modal-backdrop')
+        .forEach(function(m){
+          m.classList.remove('open');
+        });
+    }
+
+    document
+      .querySelectorAll('[data-close]')
+      .forEach(function(btn){
+
+        btn.addEventListener(
+          'click',
+          closeAllModals
+        );
       });
-    });
+
+    document
+      .querySelectorAll('.modal-backdrop')
+      .forEach(function(m){
+
+        m.addEventListener(
+          'click',
+          function(e){
+
+            if(e.target===m){
+              closeAllModals();
+            }
+          }
+        );
+      });
+
+    window.addEventListener(
+      'keydown',
+      function(e){
+
+        if(e.key==='Escape'){
+          closeAllModals();
+        }
+      }
+    );
+
+    document
+      .getElementById('comet')
+      .addEventListener(
+        'click',
+        function(){
+          openModal('modal-contact');
+        }
+      );
+
+    document
+      .getElementById('reset-view')
+      .addEventListener(
+        'click',
+        resetView
+      );
+
+    document
+      .querySelectorAll('#nav button')
+      .forEach(function(btn){
+
+        btn.addEventListener(
+          'click',
+          function(){
+
+            var target =
+              btn.dataset.nav;
+
+            if(target === 'about'){
+              flyTo(sunRef);
+
+            }else if(target === 'projects'){
+
+              resetView();
+              openModal('modal-projects');
+
+            }else if(target === 'contact'){
+
+              openModal('modal-contact');
+            }
+          }
+        );
+      });
 
     /* ---------- resize ---------- */
-    window.addEventListener('resize', function(){
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+
+    window.addEventListener(
+      'resize',
+      function(){
+
+        camera.aspect =
+          window.innerWidth /
+          window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+          window.innerWidth,
+          window.innerHeight
+        );
+      }
+    );
 
     /* ---------- animate ---------- */
-    var clock = new THREE.Clock();
+
+    var clock =
+      new THREE.Clock();
+
     function animate(){
-      requestAnimationFrame(animate);
-      var dt = Math.min(0.05, clock.getDelta());
-      if(!tweening) controls.update();
 
-      planets.forEach(function(p){
-        p.angle += p.speed*dt;
-        var x = Math.cos(p.angle)*p.distance;
-        var z = Math.sin(p.angle)*p.distance;
-        var y = Math.sin(p.angle*1.7)*p.distance*0.02;
-        p.group.position.set(x,y,z);
-        p.mesh.rotation.y += 0.25*dt;
-        updateLabel(p._labelId, p.group.position);
-      });
+      requestAnimationFrame(
+        animate
+      );
 
-      updateLabel('sun', sunMesh.position);
-      interactive.filter(function(o){ return o.obj.isStatic; }).forEach(function(o){
-        updateLabel(o.obj._labelId, o.obj.group.position);
-      });
+      var dt =
+        Math.min(
+          0.05,
+          clock.getDelta()
+        );
 
-      renderer.render(scene, camera);
+      if(!tweening){
+        controls.update();
+      }
+
+      planets.forEach(
+        function(p){
+
+          p.angle +=
+            p.speed*dt;
+
+          var x =
+            Math.cos(p.angle) *
+            p.distance;
+
+          var z =
+            Math.sin(p.angle) *
+            p.distance;
+
+          var y =
+            Math.sin(p.angle*1.7) *
+            p.distance*0.02;
+
+          p.group.position.set(
+            x,
+            y,
+            z
+          );
+
+          p.mesh.rotation.y +=
+            0.25*dt;
+
+          updateLabel(
+            p._labelId,
+            p.group.position
+          );
+        }
+      );
+
+      updateLabel(
+        'sun',
+        sunMesh.position
+      );
+
+      interactive
+        .filter(function(o){
+          return o.obj.isStatic;
+        })
+        .forEach(function(o){
+
+          updateLabel(
+            o.obj._labelId,
+            o.obj.group.position
+          );
+        });
+
+      renderer.render(
+        scene,
+        camera
+      );
     }
+
     animate();
 
-    document.getElementById('loading').style.opacity = '0';
-    setTimeout(function(){ document.getElementById('loading').style.display = 'none'; }, 500);
-    setTimeout(function(){ var h = document.getElementById('hint'); if(h) h.style.opacity = '0'; }, 7000);
+    document
+      .getElementById('loading')
+      .style.opacity = '0';
+
+    setTimeout(
+      function(){
+
+        document
+          .getElementById('loading')
+          .style.display = 'none';
+
+      },
+      500
+    );
+
+    setTimeout(
+      function(){
+
+        var h =
+          document.getElementById('hint');
+
+        if(h){
+          h.style.opacity = '0';
+        }
+
+      },
+      7000
+    );
   }
 })();
 </script>
+
 </body>
 </html>
-HTMLEOF
-echo "written"
-wc -l /mnt/user-data/outputs/nafuh-orbit.html
-Output
-written
-714 /mnt/user-data/outputs/nafuh-orbit.html
