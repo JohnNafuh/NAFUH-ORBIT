@@ -53,36 +53,18 @@ a{
   cursor:grabbing;
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
 #loading-screen{
   position:fixed;
   inset:0;
   z-index:1000;
-
   background:
-    radial-gradient(
-      circle at 50% 42%,
-      rgba(47,110,170,.20),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 75% 65%,
-      rgba(75,55,180,.10),
-      transparent 32%
-    ),
+    radial-gradient(circle at 50% 42%,rgba(47,110,170,.20),transparent 30%),
+    radial-gradient(circle at 75% 65%,rgba(75,55,180,.10),transparent 32%),
     #020712;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
-  transition:
-    opacity .8s ease,
-    visibility .8s ease;
+  transition:opacity .8s ease,visibility .8s ease;
 }
 
 #loading-screen.hidden{
@@ -149,11 +131,6 @@ a{
   text-transform:uppercase;
 }
 
-
-/* =========================================================
-   MAIN HUD
-========================================================= */
-
 #mission-hud{
   position:fixed;
   inset:0;
@@ -167,26 +144,14 @@ a{
 
 .hud-panel{
   background:
-    linear-gradient(
-      145deg,
-      rgba(5,17,29,.72),
-      rgba(3,10,20,.56)
-    );
-
+    linear-gradient(145deg,rgba(5,17,29,.72),rgba(3,10,20,.56));
   border:1px solid rgba(112,190,230,.15);
-
   box-shadow:
     0 12px 40px rgba(0,0,0,.28),
     inset 0 1px 0 rgba(180,230,255,.025);
-
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
-
-
-/* =========================================================
-   SYSTEM IDENTIFICATION
-========================================================= */
 
 #system-id{
   position:absolute;
@@ -230,11 +195,6 @@ a{
   box-shadow:0 0 10px rgba(115,231,178,.7);
 }
 
-
-/* =========================================================
-   SYSTEM DATA
-========================================================= */
-
 #system-data{
   position:absolute;
   top:22px;
@@ -262,11 +222,6 @@ a{
 .data-value{
   color:rgba(191,228,247,.76);
 }
-
-
-/* =========================================================
-   NAV
-========================================================= */
 
 #main-nav{
   position:absolute;
@@ -301,11 +256,6 @@ a{
   background:rgba(76,176,224,.10);
 }
 
-
-/* =========================================================
-   RESET
-========================================================= */
-
 #reset-view{
   position:absolute;
   top:82px;
@@ -328,11 +278,6 @@ a{
   border-color:rgba(102,203,244,.45);
   background:rgba(55,144,190,.10);
 }
-
-
-/* =========================================================
-   TARGET RETICLE
-========================================================= */
 
 #target-reticle{
   position:absolute;
@@ -404,11 +349,6 @@ a{
   top:26px;
 }
 
-
-/* =========================================================
-   TARGET READOUT
-========================================================= */
-
 #target-readout{
   position:absolute;
   left:22px;
@@ -452,11 +392,6 @@ a{
   text-transform:uppercase;
 }
 
-
-/* =========================================================
-   CAMERA READOUT
-========================================================= */
-
 #camera-readout{
   position:absolute;
   right:22px;
@@ -480,11 +415,6 @@ a{
   margin-top:4px;
   text-transform:uppercase;
 }
-
-
-/* =========================================================
-   BOTTOM HUD
-========================================================= */
 
 #bottom-hud{
   position:absolute;
@@ -534,11 +464,6 @@ a{
   transition:opacity 1s ease;
 }
 
-
-/* =========================================================
-   AXIS MARKER
-========================================================= */
-
 #axis-marker{
   position:absolute;
   left:50%;
@@ -571,11 +496,6 @@ a{
   background:rgba(106,196,235,.32);
 }
 
-
-/* =========================================================
-   MODALS
-========================================================= */
-
 .modal{
   position:fixed;
   inset:0;
@@ -603,11 +523,7 @@ a{
   max-height:88vh;
   overflow:auto;
   background:
-    linear-gradient(
-      145deg,
-      rgba(7,18,31,.96),
-      rgba(3,10,19,.96)
-    );
+    linear-gradient(145deg,rgba(7,18,31,.96),rgba(3,10,19,.96));
   border:1px solid rgba(102,186,225,.17);
   box-shadow:
     0 30px 100px rgba(0,0,0,.70),
@@ -766,11 +682,6 @@ a{
   font-size:16px;
 }
 
-
-/* =========================================================
-   SOLAR CORE INFORMATION
-========================================================= */
-
 .sun-stat{
   position:relative;
   overflow:hidden;
@@ -785,27 +696,14 @@ a{
   height:80px;
   border-radius:50%;
   background:
-    radial-gradient(
-      circle,
-      rgba(255,185,70,.20),
-      rgba(255,130,30,0)
-    );
+    radial-gradient(circle,rgba(255,185,70,.20),rgba(255,130,30,0));
 }
 
 .sun-highlight{
   border-color:rgba(241,174,65,.16);
   background:
-    linear-gradient(
-      145deg,
-      rgba(255,170,45,.055),
-      rgba(45,85,110,.025)
-    );
+    linear-gradient(145deg,rgba(255,170,45,.055),rgba(45,85,110,.025));
 }
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
 
 @media(max-width:700px){
 
@@ -936,21 +834,13 @@ a{
 
 <body>
 
-
-<!-- =========================================================
-     LOADING
-========================================================= -->
-
 <div id="loading-screen">
 
   <div class="loading-wrap">
 
     <div class="loading-top">
       <span>NAFUH ORBIT</span>
-
-      <span id="loading-percent">
-        00%
-      </span>
+      <span id="loading-percent">00%</span>
     </div>
 
     <div class="loading-title">
@@ -962,33 +852,18 @@ a{
     </div>
 
     <div class="loading-line">
-
-      <div
-        class="loading-progress"
-        id="loading-progress">
-      </div>
-
+      <div class="loading-progress" id="loading-progress"></div>
     </div>
 
-    <div
-      class="loading-status"
-      id="loading-status">
-
+    <div class="loading-status" id="loading-status">
       Establishing navigation system...
-
     </div>
 
   </div>
 
 </div>
 
-
 <canvas id="scene-canvas"></canvas>
-
-
-<!-- =========================================================
-     MISSION HUD
-========================================================= -->
 
 <div id="mission-hud">
 
@@ -1003,108 +878,55 @@ a{
     </div>
 
     <div class="system-status">
-
       <span class="status-dot"></span>
-
-      <span>
-        SYSTEM STATUS: ONLINE
-      </span>
-
+      <span>SYSTEM STATUS: ONLINE</span>
     </div>
 
   </div>
-
 
   <div id="system-data" class="hud-panel">
 
     <div class="data-row">
-
-      <span>
-        Objects
-      </span>
-
-      <span
-        class="data-value"
-        id="hud-objects">
-
-        06
-
-      </span>
-
+      <span>Objects</span>
+      <span class="data-value" id="hud-objects">06</span>
     </div>
 
     <div class="data-row">
-
-      <span>
-        Projects
-      </span>
-
-      <span class="data-value">
-        03
-      </span>
-
+      <span>Projects</span>
+      <span class="data-value">03</span>
     </div>
 
     <div class="data-row">
-
-      <span>
-        Sector
-      </span>
-
-      <span class="data-value">
-        ORBITAL-01
-      </span>
-
+      <span>Sector</span>
+      <span class="data-value">ORBITAL-01</span>
     </div>
 
     <div class="data-row">
-
-      <span>
-        System
-      </span>
-
-      <span class="data-value">
-        NFO-2026
-      </span>
-
+      <span>System</span>
+      <span class="data-value">NFO-2026</span>
     </div>
 
   </div>
 
-
   <nav id="main-nav">
 
-    <button
-      class="nav-btn"
-      id="nav-about">
-
+    <button class="nav-btn" id="nav-about">
       About
-
     </button>
 
-    <button
-      class="nav-btn"
-      id="nav-projects">
-
+    <button class="nav-btn" id="nav-projects">
       Projects
-
     </button>
 
-    <button
-      class="nav-btn"
-      id="nav-contact">
-
+    <button class="nav-btn" id="nav-contact">
       Contact
-
     </button>
 
   </nav>
 
-
   <button id="reset-view">
     Reset View
   </button>
-
 
   <div id="target-reticle">
 
@@ -1118,37 +940,23 @@ a{
 
   </div>
 
-
-  <div
-    id="target-readout"
-    class="hud-panel">
+  <div id="target-readout" class="hud-panel">
 
     <div class="target-header">
       Target Acquired
     </div>
 
-    <div
-      class="target-name"
-      id="target-name">
-
+    <div class="target-name" id="target-name">
       —
-
     </div>
 
-    <div
-      class="target-meta"
-      id="target-meta">
-
+    <div class="target-meta" id="target-meta">
       Awaiting object data...
-
     </div>
 
   </div>
 
-
-  <div
-    id="camera-readout"
-    class="hud-panel">
+  <div id="camera-readout" class="hud-panel">
 
     <div class="camera-label">
       Navigation Mode
@@ -1160,14 +968,11 @@ a{
 
   </div>
 
-
   <div id="axis-marker"></div>
-
 
   <div id="hint">
     Drag to orbit · scroll or pinch to zoom · click the Sun or a project planet
   </div>
-
 
   <div id="bottom-hud">
 
@@ -1190,31 +995,16 @@ a{
 
     </div>
 
-
     <div class="bottom-group">
 
       <div class="hud-stat">
-
-        <strong>
-          FPS
-        </strong>
-
-        <span id="fps-value">
-          60
-        </span>
-
+        <strong>FPS</strong>
+        <span id="fps-value">60</span>
       </div>
 
       <div class="hud-stat">
-
-        <strong>
-          RANGE
-        </strong>
-
-        <span id="range-value">
-          —
-        </span>
-
+        <strong>RANGE</strong>
+        <span id="range-value">—</span>
       </div>
 
     </div>
@@ -1223,20 +1013,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     ABOUT
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-about">
+<div class="modal" id="modal-about">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       About / Creator
@@ -1248,12 +1029,12 @@ a{
 
     <div class="modal-copy">
 
-      I’m John Nafuh, a computer scientist and creative professional based in Abuja, Nigeria. 
+      I’m John Nafuh, a computer scientist and creative professional based in Abuja, Nigeria.
       I work across coding, web design, and graphic design, combining technology and creativity to turn ideas into meaningful digital experiences.
 
       <br><br>
 
-      I’m also the Founder of RECLUSE, a fashion brand built around creativity, visual identity, and self-expression. 
+      I’m also the Founder of RECLUSE, a fashion brand built around creativity, visual identity, and self-expression.
       I’m driven by the desire to push my creative limits, experiment with new ideas, and transform simple concepts into something profound.
 
     </div>
@@ -1272,9 +1053,7 @@ a{
 
       </div>
 
-      <div class="info-box">
-
-      </div>
+      <div class="info-box"></div>
 
       <div class="info-box">
 
@@ -1316,14 +1095,11 @@ a{
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         GitHub
-
       </a>
 
       <button class="modal-btn close-action">
@@ -1336,20 +1112,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     CROWN CAPITAL
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-crown">
+<div class="modal" id="modal-crown">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Financial Intelligence
@@ -1373,75 +1140,41 @@ a{
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Investment
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Investment</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Platform
-        </div>
-
-        <div class="info-value">
-          Digital Investment
-        </div>
-
+        <div class="info-label">Platform</div>
+        <div class="info-value">Digital Investment</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Core
-        </div>
-
-        <div class="info-value">
-          Portfolio Management
-        </div>
-
+        <div class="info-label">Core</div>
+        <div class="info-value">Portfolio Management</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Interface
-        </div>
-
-        <div class="info-value">
-          Financial Platform
-        </div>
-
+        <div class="info-label">Interface</div>
+        <div class="info-value">Financial Platform</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/CrownCapital/index.html"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/CrownCapital/index.html"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
-
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
-
       </a>
 
     </div>
@@ -1450,20 +1183,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     FIN-DASH
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-fin">
+<div class="modal" id="modal-fin">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Personal Finance
@@ -1486,75 +1210,41 @@ a{
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Personal Finance
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Personal Finance</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Core
-        </div>
-
-        <div class="info-value">
-          Financial Management
-        </div>
-
+        <div class="info-label">Core</div>
+        <div class="info-value">Financial Management</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Dashboard
-        </div>
-
-        <div class="info-value">
-          Transactions / Expenses / Balances
-        </div>
-
+        <div class="info-label">Dashboard</div>
+        <div class="info-value">Transactions / Expenses / Balances</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Output
-        </div>
-
-        <div class="info-value">
-          Financial Insights
-        </div>
-
+        <div class="info-label">Output</div>
+        <div class="info-value">Financial Insights</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/Fin-dash/"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/Fin-dash/"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
-
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
-
       </a>
 
     </div>
@@ -1563,20 +1253,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     RECLUSE
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-recluse">
+<div class="modal" id="modal-recluse">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Streetwear
@@ -1598,75 +1279,41 @@ a{
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Streetwear
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Streetwear</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Identity
-        </div>
-
-        <div class="info-value">
-          Dark Minimalism
-        </div>
-
+        <div class="info-label">Identity</div>
+        <div class="info-value">Dark Minimalism</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Visuals
-        </div>
-
-        <div class="info-value">
-          Sharp / Unapologetic
-        </div>
-
+        <div class="info-label">Visuals</div>
+        <div class="info-value">Sharp / Unapologetic</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Experience
-        </div>
-
-        <div class="info-value">
-          Digital Commerce
-        </div>
-
+        <div class="info-label">Experience</div>
+        <div class="info-value">Digital Commerce</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/recluse52-site/index.html"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/recluse52-site/index.html"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
-
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
-
       </a>
 
     </div>
@@ -1675,20 +1322,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     PROJECTS
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-projects">
+<div class="modal" id="modal-projects">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Orbital Registry
@@ -1707,12 +1345,9 @@ a{
 
     <div class="project-list">
 
-      <div
-        class="project-item"
-        data-fly="fin">
+      <div class="project-item" data-fly="fin">
 
         <div>
-
           <div class="project-item-name">
             Fin-Dash
           </div>
@@ -1720,22 +1355,15 @@ a{
           <div class="project-item-type">
             Personal Finance / Dashboard
           </div>
-
         </div>
 
-        <div class="project-arrow">
-          →
-        </div>
+        <div class="project-arrow">→</div>
 
       </div>
 
-
-      <div
-        class="project-item"
-        data-fly="crown">
+      <div class="project-item" data-fly="crown">
 
         <div>
-
           <div class="project-item-name">
             Crown Capital
           </div>
@@ -1743,22 +1371,15 @@ a{
           <div class="project-item-type">
             Finance / Investment
           </div>
-
         </div>
 
-        <div class="project-arrow">
-          →
-        </div>
+        <div class="project-arrow">→</div>
 
       </div>
 
-
-      <div
-        class="project-item"
-        data-fly="recluse">
+      <div class="project-item" data-fly="recluse">
 
         <div>
-
           <div class="project-item-name">
             RECLUSE
           </div>
@@ -1766,12 +1387,9 @@ a{
           <div class="project-item-type">
             Streetwear / Digital Commerce
           </div>
-
         </div>
 
-        <div class="project-arrow">
-          →
-        </div>
+        <div class="project-arrow">→</div>
 
       </div>
 
@@ -1781,20 +1399,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     CONTACT
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-contact">
+<div class="modal" id="modal-contact">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Communication Node
@@ -1813,32 +1422,23 @@ a{
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="mailto:johnnafuh@gmail.com">
-
+      <a class="modal-btn"
+         href="mailto:johnnafuh@gmail.com">
         Email
-
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://wa.me/2347038547668"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://wa.me/2347038547668"
+         target="_blank"
+         rel="noopener noreferrer">
         WhatsApp
-
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         GitHub
-
       </a>
 
     </div>
@@ -1847,20 +1447,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     GRAPHIC DESIGN
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-design">
+<div class="modal" id="modal-design">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Skill Constellation
@@ -1882,20 +1473,11 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     LEADERSHIP
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal-leadership">
+<div class="modal" id="modal-leadership">
 
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Skill Constellation
@@ -1917,15 +1499,8 @@ a{
 
 </div>
 
-
-<!-- =========================================================
-     THREE.JS
-========================================================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
 
 <script>
 
@@ -1934,56 +1509,22 @@ a{
 'use strict';
 
 
-/* =========================================================
-   DOM
-========================================================= */
-
-var canvas =
-  document.getElementById('scene-canvas');
-
-var loadingScreen =
-  document.getElementById('loading-screen');
-
-var loadingProgress =
-  document.getElementById('loading-progress');
-
-var loadingPercent =
-  document.getElementById('loading-percent');
-
-var loadingStatus =
-  document.getElementById('loading-status');
-
-var targetReticle =
-  document.getElementById('target-reticle');
-
-var targetReadout =
-  document.getElementById('target-readout');
-
-var targetName =
-  document.getElementById('target-name');
-
-var targetMeta =
-  document.getElementById('target-meta');
-
-var cameraMode =
-  document.getElementById('camera-mode');
-
-var rangeValue =
-  document.getElementById('range-value');
-
-var fpsValue =
-  document.getElementById('fps-value');
-
-var hudObjects =
-  document.getElementById('hud-objects');
+var canvas=document.getElementById('scene-canvas');
+var loadingScreen=document.getElementById('loading-screen');
+var loadingProgress=document.getElementById('loading-progress');
+var loadingPercent=document.getElementById('loading-percent');
+var loadingStatus=document.getElementById('loading-status');
+var targetReticle=document.getElementById('target-reticle');
+var targetReadout=document.getElementById('target-readout');
+var targetName=document.getElementById('target-name');
+var targetMeta=document.getElementById('target-meta');
+var cameraMode=document.getElementById('camera-mode');
+var rangeValue=document.getElementById('range-value');
+var fpsValue=document.getElementById('fps-value');
+var hudObjects=document.getElementById('hud-objects');
 
 
-/* =========================================================
-   LOADING
-========================================================= */
-
-var loadSteps = [
-
+var loadSteps=[
   [12,'Booting navigation core...'],
   [27,'Generating stellar field...'],
   [43,'Constructing planetary bodies...'],
@@ -1991,7 +1532,6 @@ var loadSteps = [
   [78,'Calibrating camera system...'],
   [91,'Activating mission HUD...'],
   [100,'SYSTEM READY']
-
 ];
 
 var loadIndex=0;
@@ -2001,77 +1541,45 @@ function updateLoading(){
   if(loadIndex>=loadSteps.length){
 
     setTimeout(function(){
-
-      loadingScreen.classList.add(
-        'hidden'
-      );
-
+      loadingScreen.classList.add('hidden');
     },500);
 
     return;
   }
 
-  var step =
-    loadSteps[loadIndex];
+  var step=loadSteps[loadIndex];
 
-  loadingProgress.style.width =
-    step[0]+'%';
-
-  loadingPercent.textContent =
-    String(step[0]).padStart(2,'0')+'%';
-
-  loadingStatus.textContent =
-    step[1];
+  loadingProgress.style.width=step[0]+'%';
+  loadingPercent.textContent=String(step[0]).padStart(2,'0')+'%';
+  loadingStatus.textContent=step[1];
 
   loadIndex++;
 
-  setTimeout(
-    updateLoading,
-    170
-  );
+  setTimeout(updateLoading,170);
 }
 
 updateLoading();
 
 
-/* =========================================================
-   THREE SETUP
-========================================================= */
+var scene=new THREE.Scene();
 
-var scene =
-  new THREE.Scene();
-
-var camera =
-  new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth/
-    window.innerHeight,
-    .1,
-    1000
-  );
-
-camera.position.set(
-  0,
-  20,
-  46
+var camera=new THREE.PerspectiveCamera(
+  50,
+  window.innerWidth/window.innerHeight,
+  .1,
+  1000
 );
 
-var renderer =
-  new THREE.WebGLRenderer({
+camera.position.set(0,20,46);
 
-    canvas:canvas,
-
-    antialias:true,
-
-    alpha:false
-
-  });
+var renderer=new THREE.WebGLRenderer({
+  canvas:canvas,
+  antialias:true,
+  alpha:false
+});
 
 renderer.setPixelRatio(
-  Math.min(
-    window.devicePixelRatio||1,
-    2
-  )
+  Math.min(window.devicePixelRatio||1,2)
 );
 
 renderer.setSize(
@@ -2079,26 +1587,17 @@ renderer.setSize(
   window.innerHeight
 );
 
-renderer.setClearColor(
-  0x000208,
-  1
+renderer.setClearColor(0x000208,1);
+
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.12;
+
+
+var controls=new THREE.OrbitControls(
+  camera,
+  renderer.domElement
 );
-
-renderer.outputEncoding =
-  THREE.sRGBEncoding;
-
-renderer.toneMapping =
-  THREE.ACESFilmicToneMapping;
-
-renderer.toneMappingExposure =
-  1.12;
-
-
-var controls =
-  new THREE.OrbitControls(
-    camera,
-    renderer.domElement
-  );
 
 controls.enableDamping=true;
 controls.dampingFactor=.055;
@@ -2109,552 +1608,450 @@ controls.rotateSpeed=.5;
 controls.zoomSpeed=.7;
 
 
-/* =========================================================
-   LIGHTING
-========================================================= */
-
-var ambientLight =
-  new THREE.AmbientLight(
-    0x9fcfff,
-    .20
-  );
-
-scene.add(
-  ambientLight
+var ambientLight=new THREE.AmbientLight(
+  0x9fcfff,
+  .20
 );
 
+scene.add(ambientLight);
 
-var hemisphereLight =
-  new THREE.HemisphereLight(
-    0x6fa9d8,
-    0x02040a,
-    .18
-  );
 
-scene.add(
-  hemisphereLight
+var hemisphereLight=new THREE.HemisphereLight(
+  0x6fa9d8,
+  0x02040a,
+  .18
 );
 
+scene.add(hemisphereLight);
 
-var sunLight =
-  new THREE.PointLight(
-    0xffdf9b,
-    3.5,
-    190
-  );
 
-sunLight.position.set(
-  0,
-  0,
-  0
+var sunLight=new THREE.PointLight(
+  0xffdf9b,
+  3.5,
+  190
 );
 
-scene.add(
-  sunLight
-);
+sunLight.position.set(0,0,0);
+
+scene.add(sunLight);
 
 
-/* =========================================================
-   TEXTURE CANVAS
-========================================================= */
-
-var textureCanvas =
-  document.createElement(
-    'canvas'
-  );
+var textureCanvas=document.createElement('canvas');
 
 textureCanvas.width=512;
 textureCanvas.height=512;
 
-var textureCtx =
-  textureCanvas.getContext(
-    '2d'
-  );
+var textureCtx=textureCanvas.getContext('2d');
 
-
-/* =========================================================
-   TEXTURE GENERATOR
-========================================================= */
 
 function makeTexture(type){
 
   var ctx=textureCtx;
-
   var w=textureCanvas.width;
   var h=textureCanvas.height;
 
-  ctx.clearRect(
-    0,
-    0,
-    w,
-    h
-  );
+  ctx.clearRect(0,0,w,h);
 
+
+  /* =====================================================
+     SUN
+  ===================================================== */
 
   if(type==='sun'){
 
-    var sunGradient =
-      ctx.createRadialGradient(
-        256,
-        256,
-        20,
-        256,
-        256,
-        270
-      );
-
-    sunGradient.addColorStop(
-      0,
-      '#fffde8'
+    var sunGradient=ctx.createRadialGradient(
+      256,256,20,
+      256,256,270
     );
 
-    sunGradient.addColorStop(
-      .20,
-      '#fff1a6'
-    );
+    sunGradient.addColorStop(0,'#fffde8');
+    sunGradient.addColorStop(.20,'#fff1a6');
+    sunGradient.addColorStop(.48,'#ffc94d');
+    sunGradient.addColorStop(.75,'#ef861f');
+    sunGradient.addColorStop(1,'#7e2905');
 
-    sunGradient.addColorStop(
-      .48,
-      '#ffc94d'
-    );
+    ctx.fillStyle=sunGradient;
+    ctx.fillRect(0,0,w,h);
 
-    sunGradient.addColorStop(
-      .75,
-      '#ef861f'
-    );
+    for(var s=0;s<900;s++){
 
-    sunGradient.addColorStop(
-      1,
-      '#7e2905'
-    );
+      var sx=Math.random()*w;
+      var sy=Math.random()*h;
+      var sr=Math.random()*7+.5;
 
-    ctx.fillStyle=
-      sunGradient;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-
-    for(
-      var s=0;
-      s<900;
-      s++
-    ){
-
-      var sx=
-        Math.random()*w;
-
-      var sy=
-        Math.random()*h;
-
-      var sr=
-        Math.random()*7+.5;
-
-      ctx.fillStyle =
+      ctx.fillStyle=
         Math.random()>.48
-
         ?'rgba(255,250,195,.18)'
-
         :'rgba(100,35,0,.14)';
 
       ctx.beginPath();
-
-      ctx.arc(
-        sx,
-        sy,
-        sr,
-        0,
-        Math.PI*2
-      );
-
+      ctx.arc(sx,sy,sr,0,Math.PI*2);
       ctx.fill();
-
     }
 
 
-  }else if(type==='ocean'){
+  /* =====================================================
+     EARTH — RECLUSE
+  ===================================================== */
 
-    var oceanGradient=
-      ctx.createRadialGradient(
-        180,
-        140,
-        20,
-        300,
-        300,
-        400
+  }else if(type==='earth'){
+
+    var earthGradient=ctx.createRadialGradient(
+      175,145,20,
+      290,290,390
+    );
+
+    earthGradient.addColorStop(0,'#438fc0');
+    earthGradient.addColorStop(.30,'#17618d');
+    earthGradient.addColorStop(.58,'#0b3c62');
+    earthGradient.addColorStop(.82,'#062541');
+    earthGradient.addColorStop(1,'#010b18');
+
+    ctx.fillStyle=earthGradient;
+    ctx.fillRect(0,0,w,h);
+
+
+    /* Ocean variation */
+
+    for(var e=0;e<700;e++){
+
+      var ex=Math.random()*w;
+      var ey=Math.random()*h;
+      var er=Math.random()*20+3;
+
+      ctx.fillStyle=
+        Math.random()>.5
+        ?'rgba(18,101,137,.32)'
+        :'rgba(2,31,55,.32)';
+
+      ctx.beginPath();
+      ctx.ellipse(
+        ex,
+        ey,
+        er*2.2,
+        er*.55,
+        Math.random()*Math.PI,
+        0,
+        Math.PI*2
+      );
+      ctx.fill();
+    }
+
+
+    /* Continents */
+
+    for(var land=0;land<55;land++){
+
+      var lx=Math.random()*w;
+      var ly=Math.random()*h;
+
+      var landGradient=ctx.createRadialGradient(
+        lx,
+        ly,
+        0,
+        lx,
+        ly,
+        Math.random()*45+20
       );
 
-    oceanGradient.addColorStop(
-      0,
-      '#185d86'
-    );
+      landGradient.addColorStop(
+        0,
+        'rgba(104,139,72,.90)'
+      );
 
-    oceanGradient.addColorStop(
-      .45,
-      '#0a385c'
-    );
+      landGradient.addColorStop(
+        .55,
+        'rgba(67,105,61,.72)'
+      );
 
-    oceanGradient.addColorStop(
-      1,
-      '#03172d'
-    );
+      landGradient.addColorStop(
+        1,
+        'rgba(39,75,53,0)'
+      );
 
-    ctx.fillStyle=
-      oceanGradient;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-
-    for(
-      var o=0;
-      o<1350;
-      o++
-    ){
-
-      var ox=
-        Math.random()*w;
-
-      var oy=
-        Math.random()*h;
-
-      var ow=
-        Math.random()*70+5;
-
-      var oh=
-        Math.random()*12+2;
-
-      ctx.fillStyle =
-        Math.random()>.48
-
-        ?'rgba(72,191,216,.42)'
-
-        :'rgba(8,55,87,.55)';
+      ctx.fillStyle=landGradient;
 
       ctx.beginPath();
 
       ctx.ellipse(
-        ox,
-        oy,
-        ow,
-        oh,
+        lx,
+        ly,
+        Math.random()*35+18,
+        Math.random()*18+8,
         Math.random()*Math.PI,
         0,
         Math.PI*2
       );
 
       ctx.fill();
-
     }
 
 
-    for(
-      var cloud=0;
-      cloud<40;
-      cloud++
-    ){
+    /* Earth cloud bands */
 
-      var cx=
-        Math.random()*w;
+    for(var cloud=0;cloud<115;cloud++){
 
-      var cy=
-        Math.random()*h;
+      var ccx=Math.random()*w;
+      var ccy=Math.random()*h;
+      var cw=Math.random()*75+20;
+      var ch=Math.random()*7+2;
 
-      var cg=
-        ctx.createRadialGradient(
-          cx,
-          cy,
-          0,
-          cx,
-          cy,
-          60
-        );
-
-      cg.addColorStop(
-        0,
-        'rgba(120,220,230,.16)'
-      );
-
-      cg.addColorStop(
-        1,
-        'rgba(0,0,0,0)'
-      );
-
-      ctx.fillStyle=cg;
+      ctx.fillStyle=
+        'rgba(235,247,245,'+
+        (Math.random()*.18+.08)+')';
 
       ctx.beginPath();
 
-      ctx.arc(
-        cx,
-        cy,
-        60,
+      ctx.ellipse(
+        ccx,
+        ccy,
+        cw,
+        ch,
+        Math.random()*Math.PI,
         0,
         Math.PI*2
       );
 
       ctx.fill();
-
     }
 
 
-  }else if(type==='gold'){
+  /* =====================================================
+     JUPITER — CROWN CAPITAL
+  ===================================================== */
 
-    var goldGradient =
-      ctx.createLinearGradient(
-        0,
-        0,
-        w,
-        h
-      );
+  }else if(type==='jupiter'){
 
-    goldGradient.addColorStop(
-      0,
-      '#211103'
+    var jupiterGradient=ctx.createLinearGradient(
+      0,0,w,h
     );
 
-    goldGradient.addColorStop(
-      .25,
-      '#7d500d'
-    );
+    jupiterGradient.addColorStop(0,'#4b2d17');
+    jupiterGradient.addColorStop(.12,'#b77c42');
+    jupiterGradient.addColorStop(.23,'#ead5ad');
+    jupiterGradient.addColorStop(.34,'#9a5d32');
+    jupiterGradient.addColorStop(.45,'#e8c58f');
+    jupiterGradient.addColorStop(.57,'#704126');
+    jupiterGradient.addColorStop(.69,'#d8ae78');
+    jupiterGradient.addColorStop(.82,'#8b5130');
+    jupiterGradient.addColorStop(1,'#29150b');
 
-    goldGradient.addColorStop(
-      .5,
-      '#e6bd54'
-    );
-
-    goldGradient.addColorStop(
-      .72,
-      '#704108'
-    );
-
-    goldGradient.addColorStop(
-      1,
-      '#160902'
-    );
-
-    ctx.fillStyle=
-      goldGradient;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
+    ctx.fillStyle=jupiterGradient;
+    ctx.fillRect(0,0,w,h);
 
 
-    for(
-      var g=0;
-      g<110;
-      g++
-    ){
+    /* Jupiter's atmospheric bands */
 
-      var gy=
-        Math.random()*h;
+    for(var j=0;j<150;j++){
 
-      ctx.strokeStyle =
-        Math.random()>.5
+      var jy=Math.random()*h;
 
-        ?'rgba(255,220,100,.22)'
+      var bandColors=[
+        'rgba(250,225,183,.20)',
+        'rgba(80,37,19,.28)',
+        'rgba(191,126,69,.20)',
+        'rgba(255,236,190,.13)',
+        'rgba(93,46,26,.25)'
+      ];
 
-        :'rgba(30,10,0,.3)';
+      ctx.strokeStyle=
+        bandColors[
+          Math.floor(Math.random()*bandColors.length)
+        ];
 
-      ctx.lineWidth=
-        Math.random()*5+1;
+      ctx.lineWidth=Math.random()*9+2;
 
       ctx.beginPath();
 
-      ctx.moveTo(
-        0,
-        gy
+      ctx.moveTo(0,jy);
+
+      ctx.bezierCurveTo(
+        w*.20,
+        jy+Math.random()*24-12,
+        w*.42,
+        jy+Math.random()*28-14,
+        w*.64,
+        jy+Math.random()*24-12
       );
 
       ctx.bezierCurveTo(
-        w*.25,
-        gy+Math.random()*30-15,
-        w*.7,
-        gy+Math.random()*30-15,
+        w*.78,
+        jy+Math.random()*24-12,
+        w*.90,
+        jy+Math.random()*22-11,
         w,
-        gy+Math.random()*30-15
+        jy+Math.random()*20-10
       );
 
       ctx.stroke();
-
     }
 
 
-  }else if(type==='volcanic'){
+    /* Turbulent atmospheric details */
 
-    ctx.fillStyle=
-      '#0d0909';
+    for(var storm=0;storm<600;storm++){
 
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
+      var stx=Math.random()*w;
+      var sty=Math.random()*h;
 
-
-    var volcanicGlow=
-      ctx.createRadialGradient(
-        250,
-        250,
-        10,
-        250,
-        250,
-        320
-      );
-
-    volcanicGlow.addColorStop(
-      0,
-      '#431712'
-    );
-
-    volcanicGlow.addColorStop(
-      .45,
-      '#21100e'
-    );
-
-    volcanicGlow.addColorStop(
-      1,
-      '#070708'
-    );
-
-    ctx.fillStyle=
-      volcanicGlow;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-
-    for(
-      var r=0;
-      r<1100;
-      r++
-    ){
-
-      var rx=
-        Math.random()*w;
-
-      var ry=
-        Math.random()*h;
-
-      var rr=
-        Math.random()*14+2;
-
-      ctx.fillStyle =
-        Math.random()>.76
-
-        ?'rgba(245,78,32,.72)'
-
-        :'rgba(58,22,18,.82)';
+      ctx.fillStyle=
+        Math.random()>.5
+        ?'rgba(255,225,175,.13)'
+        :'rgba(52,24,13,.14)';
 
       ctx.beginPath();
 
-      ctx.arc(
-        rx,
-        ry,
-        rr,
+      ctx.ellipse(
+        stx,
+        sty,
+        Math.random()*24+5,
+        Math.random()*5+1,
+        Math.random()*Math.PI,
         0,
         Math.PI*2
       );
 
       ctx.fill();
-
     }
 
 
-    for(
-      var crack=0;
-      crack<100;
-      crack++
-    ){
+    /* Great Red Spot inspired storm */
+
+    var spotX=365;
+    var spotY=335;
+
+    var spot=ctx.createRadialGradient(
+      spotX,
+      spotY,
+      4,
+      spotX,
+      spotY,
+      58
+    );
+
+    spot.addColorStop(0,'rgba(137,55,35,.80)');
+    spot.addColorStop(.45,'rgba(168,76,48,.60)');
+    spot.addColorStop(.72,'rgba(103,49,34,.35)');
+    spot.addColorStop(1,'rgba(80,37,24,0)');
+
+    ctx.fillStyle=spot;
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+      spotX,
+      spotY,
+      62,
+      34,
+      -.12,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+
+  /* =====================================================
+     SATURN — FIN-DASH
+  ===================================================== */
+
+  }else if(type==='saturn'){
+
+    var saturnGradient=ctx.createLinearGradient(
+      0,0,w,h
+    );
+
+    saturnGradient.addColorStop(0,'#4c3b27');
+    saturnGradient.addColorStop(.13,'#b79a6d');
+    saturnGradient.addColorStop(.24,'#e3d0a8');
+    saturnGradient.addColorStop(.35,'#9c8058');
+    saturnGradient.addColorStop(.47,'#ead9b2');
+    saturnGradient.addColorStop(.58,'#a8895c');
+    saturnGradient.addColorStop(.70,'#d8c394');
+    saturnGradient.addColorStop(.82,'#8b704c');
+    saturnGradient.addColorStop(1,'#352a1d');
+
+    ctx.fillStyle=saturnGradient;
+    ctx.fillRect(0,0,w,h);
+
+
+    /* Soft Saturn atmospheric bands */
+
+    for(var sb=0;sb<95;sb++){
+
+      var sy=Math.random()*h;
 
       ctx.strokeStyle=
-        'rgba(255,110,50,.24)';
+        Math.random()>.5
+        ?'rgba(255,239,200,.19)'
+        :'rgba(82,62,38,.18)';
 
-      ctx.lineWidth=
-        Math.random()*2+1;
+      ctx.lineWidth=Math.random()*7+1;
 
       ctx.beginPath();
 
-      var cx=
-        Math.random()*w;
+      ctx.moveTo(0,sy);
 
-      var cy=
-        Math.random()*h;
-
-      ctx.moveTo(
-        cx,
-        cy
+      ctx.bezierCurveTo(
+        w*.22,
+        sy+Math.random()*16-8,
+        w*.48,
+        sy+Math.random()*18-9,
+        w*.70,
+        sy+Math.random()*16-8
       );
 
-
-      for(
-        var c=0;
-        c<5;
-        c++
-      ){
-
-        cx +=
-          Math.random()*50-25;
-
-        cy +=
-          Math.random()*50-25;
-
-        ctx.lineTo(
-          cx,
-          cy
-        );
-
-      }
+      ctx.bezierCurveTo(
+        w*.84,
+        sy+Math.random()*14-7,
+        w*.94,
+        sy+Math.random()*14-7,
+        w,
+        sy
+      );
 
       ctx.stroke();
-
     }
 
 
+    /* Fine atmospheric haze */
+
+    for(var sh=0;sh<450;sh++){
+
+      var shx=Math.random()*w;
+      var shy=Math.random()*h;
+
+      ctx.fillStyle=
+        Math.random()>.5
+        ?'rgba(255,239,203,.10)'
+        :'rgba(74,54,34,.10)';
+
+      ctx.beginPath();
+
+      ctx.ellipse(
+        shx,
+        shy,
+        Math.random()*28+5,
+        Math.random()*4+1,
+        Math.random()*Math.PI,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+    }
+
+
+  /* =====================================================
+     DEEP SPACE NEBULA
+  ===================================================== */
+
   }else if(type==='nebula'){
 
-    /*
-      DEEP-SPACE BACKDROP
-
-      The texture is intentionally dark.
-      The stronger spatial depth now comes from:
-      - multiple star layers
-      - galaxy dust
-      - large nebula clouds
-      - the distant stellar sphere
-    */
-
-    ctx.fillStyle=
-      '#000208';
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-
-    /* Large diffuse blue/indigo clouds */
+    ctx.fillStyle='#000208';
+    ctx.fillRect(0,0,w,h);
 
     var nebulaClouds=[
-
       [72,125,190,'rgba(34,91,184,.14)'],
       [175,82,155,'rgba(74,65,188,.12)'],
       [310,132,220,'rgba(24,105,184,.13)'],
@@ -2662,111 +2059,69 @@ function makeTexture(type){
       [115,350,210,'rgba(22,105,176,.10)'],
       [300,390,250,'rgba(45,64,176,.11)'],
       [450,350,190,'rgba(19,111,175,.10)']
-
     ];
 
+    nebulaClouds.forEach(function(cloud){
 
-    nebulaClouds.forEach(
-      function(cloud){
+      var gradient=ctx.createRadialGradient(
+        cloud[0],
+        cloud[1],
+        0,
+        cloud[0],
+        cloud[1],
+        cloud[2]
+      );
 
-        var gradient=
-          ctx.createRadialGradient(
-            cloud[0],
-            cloud[1],
-            0,
-            cloud[0],
-            cloud[1],
-            cloud[2]
-          );
+      gradient.addColorStop(0,cloud[3]);
+      gradient.addColorStop(.35,'rgba(30,80,160,.045)');
+      gradient.addColorStop(1,'rgba(0,0,0,0)');
 
-        gradient.addColorStop(
-          0,
-          cloud[3]
-        );
+      ctx.fillStyle=gradient;
 
-        gradient.addColorStop(
-          .35,
-          'rgba(30,80,160,.045)'
-        );
+      ctx.beginPath();
 
-        gradient.addColorStop(
-          1,
-          'rgba(0,0,0,0)'
-        );
+      ctx.arc(
+        cloud[0],
+        cloud[1],
+        cloud[2],
+        0,
+        Math.PI*2
+      );
 
-        ctx.fillStyle=
-          gradient;
+      ctx.fill();
 
-        ctx.beginPath();
-
-        ctx.arc(
-          cloud[0],
-          cloud[1],
-          cloud[2],
-          0,
-          Math.PI*2
-        );
-
-        ctx.fill();
-
-      }
-    );
+    });
 
 
-    /* Fine nebula dust */
+    for(var n=0;n<900;n++){
 
-    for(
-      var n=0;
-      n<900;
-      n++
-    ){
-
-      var nx=
-        Math.random()*w;
-
-      var ny=
-        Math.random()*h;
-
-      var nr=
-        Math.random()*65+15;
+      var nx=Math.random()*w;
+      var ny=Math.random()*h;
+      var nr=Math.random()*65+15;
 
       var colors=[
-
         'rgba(35,105,195,.065)',
         'rgba(55,76,195,.060)',
         'rgba(70,55,180,.055)',
         'rgba(25,130,190,.055)',
         'rgba(92,76,190,.045)'
-
       ];
 
-      var ng=
-        ctx.createRadialGradient(
-          nx,
-          ny,
-          0,
-          nx,
-          ny,
-          nr
-        );
+      var ng=ctx.createRadialGradient(
+        nx,ny,0,
+        nx,ny,nr
+      );
 
       ng.addColorStop(
         0,
         colors[
-          Math.floor(
-            Math.random()*
-            colors.length
-          )
+          Math.floor(Math.random()*colors.length)
         ]
       );
 
-      ng.addColorStop(
-        1,
-        'rgba(0,0,0,0)'
-      );
+      ng.addColorStop(1,'rgba(0,0,0,0)');
 
-      ctx.fillStyle=
-        ng;
+      ctx.fillStyle=ng;
 
       ctx.beginPath();
 
@@ -2779,77 +2134,32 @@ function makeTexture(type){
       );
 
       ctx.fill();
-
     }
 
 
-    /* Diagonal galactic haze */
-
-    var band=
-      ctx.createLinearGradient(
-        0,
-        h*.18,
-        w,
-        h*.82
-      );
-
-    band.addColorStop(
-      0,
-      'rgba(0,0,0,0)'
+    var band=ctx.createLinearGradient(
+      0,h*.18,
+      w,h*.82
     );
 
-    band.addColorStop(
-      .22,
-      'rgba(40,83,170,.018)'
-    );
+    band.addColorStop(0,'rgba(0,0,0,0)');
+    band.addColorStop(.22,'rgba(40,83,170,.018)');
+    band.addColorStop(.48,'rgba(96,103,205,.075)');
+    band.addColorStop(.56,'rgba(45,104,190,.055)');
+    band.addColorStop(.78,'rgba(25,72,155,.018)');
+    band.addColorStop(1,'rgba(0,0,0,0)');
 
-    band.addColorStop(
-      .48,
-      'rgba(96,103,205,.075)'
-    );
-
-    band.addColorStop(
-      .56,
-      'rgba(45,104,190,.055)'
-    );
-
-    band.addColorStop(
-      .78,
-      'rgba(25,72,155,.018)'
-    );
-
-    band.addColorStop(
-      1,
-      'rgba(0,0,0,0)'
-    );
-
-    ctx.fillStyle=
-      band;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
+    ctx.fillStyle=band;
+    ctx.fillRect(0,0,w,h);
   }
 
-  var texture=
-    new THREE.CanvasTexture(
-      textureCanvas
-    );
+  var texture=new THREE.CanvasTexture(textureCanvas);
 
-  texture.encoding=
-    THREE.sRGBEncoding;
+  texture.encoding=THREE.sRGBEncoding;
 
   return texture;
 }
 
-
-/* =========================================================
-   3D STARFIELD
-========================================================= */
 
 function createStars(
   count,
@@ -2860,241 +2170,117 @@ function createStars(
   maxRadius
 ){
 
-  var geometry=
-    new THREE.BufferGeometry();
+  var geometry=new THREE.BufferGeometry();
 
-  var positions=
-    new Float32Array(
-      count*3
-    );
+  var positions=new Float32Array(count*3);
 
-
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
+  for(var i=0;i<count;i++){
 
     var radius=
       minRadius+
-      Math.random()*
-      (maxRadius-minRadius);
+      Math.random()*(maxRadius-minRadius);
 
-    var theta=
-      Math.random()*
-      Math.PI*2;
+    var theta=Math.random()*Math.PI*2;
 
-    var phi=
-      Math.acos(
-        2*Math.random()-1
-      );
-
+    var phi=Math.acos(2*Math.random()-1);
 
     positions[i*3]=
-      radius*
-      Math.sin(phi)*
-      Math.cos(theta);
+      radius*Math.sin(phi)*Math.cos(theta);
 
     positions[i*3+1]=
-      radius*
-      Math.cos(phi);
+      radius*Math.cos(phi);
 
     positions[i*3+2]=
-      radius*
-      Math.sin(phi)*
-      Math.sin(theta);
-
+      radius*Math.sin(phi)*Math.sin(theta);
   }
-
 
   geometry.setAttribute(
     'position',
-    new THREE.BufferAttribute(
-      positions,
-      3
-    )
+    new THREE.BufferAttribute(positions,3)
   );
 
+  var material=new THREE.PointsMaterial({
+    color:color,
+    size:size,
+    transparent:true,
+    opacity:opacity,
+    sizeAttenuation:true,
+    depthWrite:false
+  });
 
-  var material=
-    new THREE.PointsMaterial({
-
-      color:color,
-
-      size:size,
-
-      transparent:true,
-
-      opacity:opacity,
-
-      sizeAttenuation:true,
-
-      depthWrite:false
-
-    });
-
-
-  var stars=
-    new THREE.Points(
-      geometry,
-      material
-    );
-
-  scene.add(
-    stars
+  var stars=new THREE.Points(
+    geometry,
+    material
   );
+
+  scene.add(stars);
 
   return stars;
 }
 
 
-/* =========================================================
-   DISTANT STAR LAYERS
-========================================================= */
+var starsFar=createStars(
+  9000,.055,.52,0xbfd8e8,180,480
+);
 
-var starsFar=
-  createStars(
-    9000,
-    .055,
-    .52,
-    0xbfd8e8,
-    180,
-    480
-  );
+var starsA=createStars(
+  5200,.105,.78,0xdff5ff,105,360
+);
 
+var starsB=createStars(
+  2600,.20,.55,0xffffff,90,300
+);
 
-var starsA=
-  createStars(
-    5200,
-    .105,
-    .78,
-    0xdff5ff,
-    105,
-    360
-  );
-
-
-var starsB=
-  createStars(
-    2600,
-    .20,
-    .55,
-    0xffffff,
-    90,
-    300
-  );
-
-
-/* =========================================================
-   BRIGHT STAR CLUSTERS
-========================================================= */
 
 function createStarClusters(){
 
-  var clusterGroup=
-    new THREE.Group();
+  var clusterGroup=new THREE.Group();
 
+  for(var c=0;c<24;c++){
 
-  for(
-    var c=0;
-    c<24;
-    c++
-  ){
+    var cluster=new THREE.Group();
 
-    var cluster=
-      new THREE.Group();
+    var cx=(Math.random()-.5)*430;
+    var cy=(Math.random()-.5)*190;
+    var cz=-100-Math.random()*260;
 
+    cluster.position.set(cx,cy,cz);
 
-    var cx=
-      (Math.random()-.5)*
-      430;
+    var count=15+Math.floor(Math.random()*28);
 
-    var cy=
-      (Math.random()-.5)*
-      190;
+    var geometry=new THREE.BufferGeometry();
 
-    var cz=
-      -100-
-      Math.random()*260;
+    var positions=new Float32Array(count*3);
 
+    for(var i=0;i<count;i++){
 
-    cluster.position.set(
-      cx,
-      cy,
-      cz
-    );
-
-
-    var count=
-      15+
-      Math.floor(
-        Math.random()*28
-      );
-
-
-    var geometry=
-      new THREE.BufferGeometry();
-
-    var positions=
-      new Float32Array(
-        count*3
-      );
-
-
-    for(
-      var i=0;
-      i<count;
-      i++
-    ){
-
-      positions[i*3]=
-        (Math.random()-.5)*
-        12;
-
-      positions[i*3+1]=
-        (Math.random()-.5)*
-        12;
-
-      positions[i*3+2]=
-        (Math.random()-.5)*
-        12;
+      positions[i*3]=(Math.random()-.5)*12;
+      positions[i*3+1]=(Math.random()-.5)*12;
+      positions[i*3+2]=(Math.random()-.5)*12;
 
     }
 
-
     geometry.setAttribute(
       'position',
-      new THREE.BufferAttribute(
-        positions,
-        3
-      )
+      new THREE.BufferAttribute(positions,3)
     );
 
+    var material=new THREE.PointsMaterial({
 
-    var material=
-      new THREE.PointsMaterial({
+      color:
+        c%3===0
+        ?0xb7ddff
+        :c%3===1
+        ?0xd9eaff
+        :0x9bc7ed,
 
-        color:
-          c%3===0
-          ?0xb7ddff
-          :c%3===1
-          ?0xd9eaff
-          :0x9bc7ed,
+      size:.12+Math.random()*.08,
+      transparent:true,
+      opacity:.42,
+      sizeAttenuation:true,
+      depthWrite:false
 
-        size:
-          .12+
-          Math.random()*.08,
-
-        transparent:true,
-
-        opacity:.42,
-
-        sizeAttenuation:true,
-
-        depthWrite:false
-
-      });
-
+    });
 
     cluster.add(
       new THREE.Points(
@@ -3103,305 +2289,153 @@ function createStarClusters(){
       )
     );
 
-
-    clusterGroup.add(
-      cluster
-    );
-
+    clusterGroup.add(cluster);
   }
 
-
-  scene.add(
-    clusterGroup
-  );
-
+  scene.add(clusterGroup);
 
   return clusterGroup;
 }
 
 
-var starClusters=
-  createStarClusters();
+var starClusters=createStarClusters();
 
-
-/* =========================================================
-   MILKY-WAY STYLE GALAXY DUST
-========================================================= */
 
 function createGalaxyDust(){
 
-  var geometry=
-    new THREE.BufferGeometry();
-
+  var geometry=new THREE.BufferGeometry();
   var count=6500;
 
-  var positions=
-    new Float32Array(
-      count*3
-    );
+  var positions=new Float32Array(count*3);
 
+  for(var i=0;i<count;i++){
 
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
-
-    var radius=
-      105+
-      Math.random()*280;
-
-
-    var angle=
-      Math.random()*
-      Math.PI*2;
-
-
-    /*
-      The distribution creates a broad,
-      slightly warped stellar disk.
-    */
+    var radius=105+Math.random()*280;
+    var angle=Math.random()*Math.PI*2;
 
     var verticalSpread=
-      7+
-      (radius/280)*24;
+      7+(radius/280)*24;
 
+    var y=(Math.random()-.5)*verticalSpread;
 
-    var y=
-      (Math.random()-.5)*
-      verticalSpread;
+    y+=Math.sin(angle*3+radius*.018)*3;
 
-
-    /*
-      Give the galaxy band a little natural
-      turbulence rather than a perfect disk.
-    */
-
-    y+=
-      Math.sin(
-        angle*3+
-        radius*.018
-      )*
-      3;
-
-
-    positions[i*3]=
-      Math.cos(angle)*
-      radius;
-
-
-    positions[i*3+1]=
-      y;
-
-
-    positions[i*3+2]=
-      Math.sin(angle)*
-      radius;
-
-
+    positions[i*3]=Math.cos(angle)*radius;
+    positions[i*3+1]=y;
+    positions[i*3+2]=Math.sin(angle)*radius;
   }
-
 
   geometry.setAttribute(
     'position',
-    new THREE.BufferAttribute(
-      positions,
-      3
-    )
+    new THREE.BufferAttribute(positions,3)
   );
 
+  var material=new THREE.PointsMaterial({
 
-  var material=
-    new THREE.PointsMaterial({
+    color:0x91bce0,
+    size:.075,
+    transparent:true,
+    opacity:.27,
+    sizeAttenuation:true,
+    depthWrite:false
 
-      color:0x91bce0,
+  });
 
-      size:.075,
-
-      transparent:true,
-
-      opacity:.27,
-
-      sizeAttenuation:true,
-
-      depthWrite:false
-
-    });
-
-
-  var galaxy=
-    new THREE.Points(
-      geometry,
-      material
-    );
-
+  var galaxy=new THREE.Points(
+    geometry,
+    material
+  );
 
   galaxy.rotation.z=
-    THREE.MathUtils.degToRad(
-      -11
-    );
+    THREE.MathUtils.degToRad(-11);
 
-
-  scene.add(
-    galaxy
-  );
-
+  scene.add(galaxy);
 
   return galaxy;
 }
 
 
-var galaxyDust=
-  createGalaxyDust();
+var galaxyDust=createGalaxyDust();
 
-
-/* =========================================================
-   GALAXY CORE DUST
-========================================================= */
 
 function createGalaxyCore(){
 
-  var geometry=
-    new THREE.BufferGeometry();
-
+  var geometry=new THREE.BufferGeometry();
   var count=2600;
 
-  var positions=
-    new Float32Array(
-      count*3
-    );
+  var positions=new Float32Array(count*3);
 
+  for(var i=0;i<count;i++){
 
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
+    var radius=35+Math.random()*130;
+    var angle=Math.random()*Math.PI*2;
+    var y=(Math.random()-.5)*11;
 
-    var radius=
-      35+
-      Math.random()*130;
-
-    var angle=
-      Math.random()*
-      Math.PI*2;
-
-    var y=
-      (Math.random()-.5)*
-      11;
-
-    positions[i*3]=
-      Math.cos(angle)*
-      radius;
-
-    positions[i*3+1]=
-      y;
-
-    positions[i*3+2]=
-      Math.sin(angle)*
-      radius;
-
+    positions[i*3]=Math.cos(angle)*radius;
+    positions[i*3+1]=y;
+    positions[i*3+2]=Math.sin(angle)*radius;
   }
-
 
   geometry.setAttribute(
     'position',
-    new THREE.BufferAttribute(
-      positions,
-      3
-    )
+    new THREE.BufferAttribute(positions,3)
   );
 
+  var material=new THREE.PointsMaterial({
 
-  var material=
-    new THREE.PointsMaterial({
+    color:0x668fd0,
+    size:.045,
+    transparent:true,
+    opacity:.20,
+    sizeAttenuation:true,
+    depthWrite:false
 
-      color:0x668fd0,
+  });
 
-      size:.045,
-
-      transparent:true,
-
-      opacity:.20,
-
-      sizeAttenuation:true,
-
-      depthWrite:false
-
-    });
-
-
-  var core=
-    new THREE.Points(
-      geometry,
-      material
-    );
-
+  var core=new THREE.Points(
+    geometry,
+    material
+  );
 
   core.rotation.z=
-    THREE.MathUtils.degToRad(
-      -11
-    );
+    THREE.MathUtils.degToRad(-11);
 
-
-  scene.add(
-    core
-  );
-
+  scene.add(core);
 
   return core;
 }
 
 
-var galaxyCore=
-  createGalaxyCore();
+var galaxyCore=createGalaxyCore();
 
 
-/* =========================================================
-   DEEP-SPACE NEBULA SPHERE
-========================================================= */
-
-var nebulaGeometry=
-  new THREE.SphereGeometry(
-    310,
-    64,
-    64
-  );
-
-
-var nebulaMaterial=
-  new THREE.MeshBasicMaterial({
-
-    map:
-      makeTexture('nebula'),
-
-    side:
-      THREE.BackSide,
-
-    transparent:true,
-
-    opacity:.82,
-
-    depthWrite:false
-
-  });
-
-
-var nebula=
-  new THREE.Mesh(
-    nebulaGeometry,
-    nebulaMaterial
-  );
-
-
-scene.add(
-  nebula
+var nebulaGeometry=new THREE.SphereGeometry(
+  310,
+  64,
+  64
 );
 
+var nebulaMaterial=new THREE.MeshBasicMaterial({
 
-/* =========================================================
-   LARGE 3D NEBULA CLOUDS
-========================================================= */
+  map:makeTexture('nebula'),
+
+  side:THREE.BackSide,
+
+  transparent:true,
+
+  opacity:.82,
+
+  depthWrite:false
+
+});
+
+var nebula=new THREE.Mesh(
+  nebulaGeometry,
+  nebulaMaterial
+);
+
+scene.add(nebula);
+
 
 function createNebulaCloud(
   position,
@@ -3410,42 +2444,23 @@ function createNebulaCloud(
   color
 ){
 
-  var textureCanvas=
-    document.createElement(
-      'canvas'
-    );
+  var textureCanvas=document.createElement('canvas');
 
   textureCanvas.width=512;
   textureCanvas.height=512;
 
-  var ctx=
-    textureCanvas.getContext(
-      '2d'
-    );
+  var ctx=textureCanvas.getContext('2d');
 
-
-  var gradient=
-    ctx.createRadialGradient(
-      256,
-      256,
-      8,
-      256,
-      256,
-      250
-    );
-
-
-  gradient.addColorStop(
-    0,
-    color
+  var gradient=ctx.createRadialGradient(
+    256,256,8,
+    256,256,250
   );
+
+  gradient.addColorStop(0,color);
 
   gradient.addColorStop(
     .22,
-    color.replace(
-      '0.',
-      '0.45'
-    )
+    color.replace('0.','0.45')
   );
 
   gradient.addColorStop(
@@ -3458,44 +2473,24 @@ function createNebulaCloud(
     'rgba(0,0,0,0)'
   );
 
+  ctx.fillStyle=gradient;
+  ctx.fillRect(0,0,512,512);
 
-  ctx.fillStyle=
-    gradient;
-
-  ctx.fillRect(
-    0,
-    0,
-    512,
-    512
+  var texture=new THREE.CanvasTexture(
+    textureCanvas
   );
 
+  var sprite=new THREE.Sprite(
+    new THREE.SpriteMaterial({
 
-  var texture=
-    new THREE.CanvasTexture(
-      textureCanvas
-    );
+      map:texture,
+      transparent:true,
+      opacity:opacity,
+      depthWrite:false,
+      blending:THREE.AdditiveBlending
 
-
-  var sprite=
-    new THREE.Sprite(
-
-      new THREE.SpriteMaterial({
-
-        map:texture,
-
-        transparent:true,
-
-        opacity:opacity,
-
-        depthWrite:false,
-
-        blending:
-          THREE.AdditiveBlending
-
-      })
-
-    );
-
+    })
+  );
 
   sprite.position.set(
     position.x,
@@ -3503,175 +2498,87 @@ function createNebulaCloud(
     position.z
   );
 
-
   sprite.scale.set(
     scale.x,
     scale.y,
     1
   );
 
-
-  scene.add(
-    sprite
-  );
-
+  scene.add(sprite);
 
   return sprite;
 }
 
 
-/*
-  These are deliberately distant and very subtle.
-  They provide recognizable nebula structure without
-  turning the background into a colored wallpaper.
-*/
-
-var nebulaCloudA=
-  createNebulaCloud(
-    new THREE.Vector3(
-      -135,
-      75,
-      -210
-    ),
-    new THREE.Vector3(
-      230,
-      150,
-      1
-    ),
-    .28,
-    'rgba(35,95,190,.34)'
-  );
-
-
-var nebulaCloudB=
-  createNebulaCloud(
-    new THREE.Vector3(
-      160,
-      -65,
-      -245
-    ),
-    new THREE.Vector3(
-      270,
-      170,
-      1
-    ),
-    .22,
-    'rgba(68,61,190,.30)'
-  );
-
-
-var nebulaCloudC=
-  createNebulaCloud(
-    new THREE.Vector3(
-      45,
-      125,
-      -300
-    ),
-    new THREE.Vector3(
-      190,
-      125,
-      1
-    ),
-    .18,
-    'rgba(25,125,190,.27)'
-  );
-
-
-/* =========================================================
-   SYSTEM BACKDROP
-========================================================= */
-
-/*
-  Removed the previous flat CircleGeometry backdrop.
-
-  That object was essentially a faint blue disk behind
-  the system and made the environment feel like a UI
-  background rather than outer space.
-
-  The real 3D starfield / galaxy / nebula now handles
-  the environment.
-*/
-
-
-/* =========================================================
-   SUN
-========================================================= */
-
-var sunGeometry=
-  new THREE.SphereGeometry(
-    5.2,
-    72,
-    72
-  );
-
-
-var sunTexture=
-  makeTexture('sun');
-
-
-var sunMaterial=
-  new THREE.MeshStandardMaterial({
-
-    map:sunTexture,
-
-    emissive:0xf7a52b,
-
-    emissiveMap:sunTexture,
-
-    emissiveIntensity:1.65,
-
-    roughness:.68,
-
-    metalness:.02
-
-  });
-
-
-var sunMesh=
-  new THREE.Mesh(
-    sunGeometry,
-    sunMaterial
-  );
-
-sunMesh.position.set(
-  0,
-  0,
-  0
+var nebulaCloudA=createNebulaCloud(
+  new THREE.Vector3(-135,75,-210),
+  new THREE.Vector3(230,150,1),
+  .28,
+  'rgba(35,95,190,.34)'
 );
 
-scene.add(
-  sunMesh
+var nebulaCloudB=createNebulaCloud(
+  new THREE.Vector3(160,-65,-245),
+  new THREE.Vector3(270,170,1),
+  .22,
+  'rgba(68,61,190,.30)'
+);
+
+var nebulaCloudC=createNebulaCloud(
+  new THREE.Vector3(45,125,-300),
+  new THREE.Vector3(190,125,1),
+  .18,
+  'rgba(25,125,190,.27)'
 );
 
 
-/* =========================================================
-   SUN CORONA
-========================================================= */
+var sunGeometry=new THREE.SphereGeometry(
+  5.2,
+  72,
+  72
+);
+
+var sunTexture=makeTexture('sun');
+
+var sunMaterial=new THREE.MeshStandardMaterial({
+
+  map:sunTexture,
+
+  emissive:0xf7a52b,
+
+  emissiveMap:sunTexture,
+
+  emissiveIntensity:1.65,
+
+  roughness:.68,
+
+  metalness:.02
+
+});
+
+var sunMesh=new THREE.Mesh(
+  sunGeometry,
+  sunMaterial
+);
+
+sunMesh.position.set(0,0,0);
+
+scene.add(sunMesh);
+
 
 function createGlowTexture(){
 
-  var c=
-    document.createElement(
-      'canvas'
-    );
+  var c=document.createElement('canvas');
 
   c.width=512;
   c.height=512;
 
-  var ctx=
-    c.getContext('2d');
+  var ctx=c.getContext('2d');
 
-
-  var gradient=
-    ctx.createRadialGradient(
-      256,
-      256,
-      5,
-      256,
-      256,
-      256
-    );
-
+  var gradient=ctx.createRadialGradient(
+    256,256,5,
+    256,256,256
+  );
 
   gradient.addColorStop(
     0,
@@ -3703,91 +2610,52 @@ function createGlowTexture(){
     'rgba(255,50,0,0)'
   );
 
+  ctx.fillStyle=gradient;
+  ctx.fillRect(0,0,512,512);
 
-  ctx.fillStyle=
-    gradient;
-
-  ctx.fillRect(
-    0,
-    0,
-    512,
-    512
-  );
-
-
-  return new THREE.CanvasTexture(
-    c
-  );
+  return new THREE.CanvasTexture(c);
 }
 
 
-var glowSprite=
-  new THREE.Sprite(
+var glowSprite=new THREE.Sprite(
+  new THREE.SpriteMaterial({
 
-    new THREE.SpriteMaterial({
+    map:createGlowTexture(),
 
-      map:
-        createGlowTexture(),
+    transparent:true,
 
-      transparent:true,
+    depthWrite:false,
 
-      depthWrite:false,
+    blending:THREE.AdditiveBlending
 
-      blending:
-        THREE.AdditiveBlending
-
-    })
-
-  );
-
-
-glowSprite.scale.set(
-  19,
-  19,
-  1
+  })
 );
 
-sunMesh.add(
-  glowSprite
+glowSprite.scale.set(19,19,1);
+
+sunMesh.add(glowSprite);
+
+
+var outerGlow=new THREE.Sprite(
+  new THREE.SpriteMaterial({
+
+    map:createGlowTexture(),
+
+    transparent:true,
+
+    depthWrite:false,
+
+    opacity:.25,
+
+    blending:THREE.AdditiveBlending
+
+  })
 );
 
+outerGlow.scale.set(30,30,1);
 
-var outerGlow=
-  new THREE.Sprite(
+sunMesh.add(outerGlow);
 
-    new THREE.SpriteMaterial({
-
-      map:
-        createGlowTexture(),
-
-      transparent:true,
-
-      depthWrite:false,
-
-      opacity:.25,
-
-      blending:
-        THREE.AdditiveBlending
-
-    })
-
-  );
-
-
-outerGlow.scale.set(
-  30,
-  30,
-  1
-);
-
-sunMesh.add(
-  outerGlow
-);
-
-
-/* =========================================================
-   PROJECT DATA
-========================================================= */
 
 var projects=[
 
@@ -3796,7 +2664,7 @@ var projects=[
     distance:14,
     radius:1.9,
     speed:.085,
-    texture:'ocean',
+    texture:'saturn',
     modal:'modal-fin',
     type:'PERSONAL FINANCE'
   },
@@ -3806,7 +2674,7 @@ var projects=[
     distance:22,
     radius:2.3,
     speed:.055,
-    texture:'gold',
+    texture:'jupiter',
     modal:'modal-crown',
     type:'FINANCIAL SYSTEM'
   },
@@ -3816,7 +2684,7 @@ var projects=[
     distance:30,
     radius:2.5,
     speed:.04,
-    texture:'volcanic',
+    texture:'earth',
     modal:'modal-recluse',
     type:'STREETWEAR SYSTEM'
   }
@@ -3824,104 +2692,59 @@ var projects=[
 ];
 
 
-/* =========================================================
-   OBJECT REGISTRY
-========================================================= */
-
 var interactive=[];
 
 
-/* =========================================================
-   ORBIT RINGS
-========================================================= */
-
-function createOrbitRing(
-  radius
-){
+function createOrbitRing(radius){
 
   var points=[];
 
+  for(var i=0;i<=192;i++){
 
-  for(
-    var i=0;
-    i<=192;
-    i++
-  ){
-
-    var a=
-      (i/192)*
-      Math.PI*2;
-
+    var a=(i/192)*Math.PI*2;
 
     points.push(
-
       new THREE.Vector3(
-
         Math.cos(a)*radius,
-
         0,
-
         Math.sin(a)*radius
-
       )
-
     );
-
   }
 
+  var geometry=new THREE.BufferGeometry()
+    .setFromPoints(points);
 
-  var geometry=
-    new THREE.BufferGeometry()
-      .setFromPoints(
-        points
-      );
+  var material=new THREE.LineBasicMaterial({
 
+    color:0x65bce9,
 
-  var material=
-    new THREE.LineBasicMaterial({
+    transparent:true,
 
-      color:0x65bce9,
+    opacity:
+      radius===14
+      ?.18
+      :radius===22
+      ?.145
+      :.115
 
-      transparent:true,
+  });
 
-      opacity:
-        radius===14
-        ? .18
-        : radius===22
-        ? .145
-        : .115
-
-    });
-
-
-  var line=
-    new THREE.Line(
-      geometry,
-      material
-    );
-
-
-  scene.add(
-    line
+  var line=new THREE.Line(
+    geometry,
+    material
   );
+
+  scene.add(line);
 
   return line;
 }
 
 
-/* =========================================================
-   PROJECT PLANETS
-========================================================= */
-
 projects.forEach(
-  function(
-    project,
-    index
-  ){
+  function(project,index){
 
-    var group=
-      new THREE.Group();
-
+    var group=new THREE.Group();
 
     group.position.set(
       project.distance,
@@ -3929,154 +2752,151 @@ projects.forEach(
       0
     );
 
+    scene.add(group);
 
-    scene.add(
-      group
+    var geometry=new THREE.SphereGeometry(
+      project.radius,
+      56,
+      56
     );
 
+    var material=new THREE.MeshStandardMaterial({
 
-    var geometry=
-      new THREE.SphereGeometry(
-        project.radius,
-        56,
-        56
-      );
+      map:makeTexture(project.texture),
 
+      roughness:
+        project.texture==='jupiter'
+        ? .72
+        : .84,
 
-    var material=
-      new THREE.MeshStandardMaterial({
+      metalness:.02
 
-        map:
-          makeTexture(
-            project.texture
-          ),
+    });
 
-        roughness:
-          project.texture==='gold'
-          ? .56
-          : .78,
-
-        metalness:
-          project.texture==='gold'
-          ? .45
-          : .05
-
-      });
-
-
-    var mesh=
-      new THREE.Mesh(
-        geometry,
-        material
-      );
-
-
-    group.add(
-      mesh
+    var mesh=new THREE.Mesh(
+      geometry,
+      material
     );
 
-
-    if(
-      project.texture==='ocean'
-    ){
-
-      var atmosphere=
-        new THREE.Mesh(
-
-          new THREE.SphereGeometry(
-            project.radius*1.07,
-            40,
-            40
-          ),
-
-          new THREE.MeshBasicMaterial({
-
-            color:0x45c7ed,
-
-            transparent:true,
-
-            opacity:.055,
-
-            side:
-              THREE.BackSide,
-
-            depthWrite:false
-
-          })
-
-        );
-
-      group.add(
-        atmosphere
-      );
-
-    }
+    group.add(mesh);
 
 
-    if(
-      project.texture==='gold'
-    ){
+    /* ===================================================
+       EARTH ATMOSPHERE — RECLUSE
+    =================================================== */
 
-      var ringGeometry=
-        new THREE.RingGeometry(
-          project.radius*1.45,
-          project.radius*1.55,
-          72
-        );
+    if(project.texture==='earth'){
 
+      var atmosphere=new THREE.Mesh(
 
-      var ringMaterial=
+        new THREE.SphereGeometry(
+          project.radius*1.075,
+          40,
+          40
+        ),
+
         new THREE.MeshBasicMaterial({
 
-          color:0xe0ad42,
+          color:0x72cfff,
 
           transparent:true,
 
-          opacity:.48,
+          opacity:.075,
 
-          side:
-            THREE.DoubleSide
+          side:THREE.BackSide,
 
-        });
+          depthWrite:false
 
+        })
 
-      var ring=
-        new THREE.Mesh(
-          ringGeometry,
-          ringMaterial
-        );
-
-
-      ring.rotation.x=
-        Math.PI/2.3;
-
-
-      group.add(
-        ring
       );
 
+      group.add(atmosphere);
     }
 
 
-    project.group=
-      group;
+    /* ===================================================
+       SATURN RINGS — FIN-DASH
+    =================================================== */
 
-    project.mesh=
-      mesh;
+    if(project.texture==='saturn'){
 
-    project.angle=
-      index*2.1;
+      var ringGroup=new THREE.Group();
+
+      var ringGeometry=new THREE.RingGeometry(
+        project.radius*1.45,
+        project.radius*2.20,
+        96
+      );
+
+      var ringMaterial=new THREE.MeshBasicMaterial({
+
+        color:0xc8ad7b,
+
+        transparent:true,
+
+        opacity:.48,
+
+        side:THREE.DoubleSide,
+
+        depthWrite:false
+
+      });
+
+      var ring=new THREE.Mesh(
+        ringGeometry,
+        ringMaterial
+      );
+
+      ring.rotation.x=Math.PI/2.35;
+
+      ringGroup.add(ring);
 
 
-    createOrbitRing(
-      project.distance
-    );
+      /* Inner darker ring */
 
+      var innerRingGeometry=new THREE.RingGeometry(
+        project.radius*1.18,
+        project.radius*1.40,
+        96
+      );
+
+      var innerRingMaterial=new THREE.MeshBasicMaterial({
+
+        color:0x806c4d,
+
+        transparent:true,
+
+        opacity:.30,
+
+        side:THREE.DoubleSide,
+
+        depthWrite:false
+
+      });
+
+      var innerRing=new THREE.Mesh(
+        innerRingGeometry,
+        innerRingMaterial
+      );
+
+      innerRing.rotation.x=Math.PI/2.35;
+
+      ringGroup.add(innerRing);
+
+      group.add(ringGroup);
+    }
+
+
+    project.group=group;
+    project.mesh=mesh;
+    project.angle=index*2.1;
+
+    createOrbitRing(project.distance);
 
     interactive.push({
 
       mesh:mesh,
-
       obj:project
 
     });
@@ -4085,52 +2905,30 @@ projects.forEach(
 );
 
 
-/* =========================================================
-   ASTEROID BELT
-========================================================= */
-
 var asteroidCount=520;
 
-var asteroidGeometry=
-  new THREE.BufferGeometry();
+var asteroidGeometry=new THREE.BufferGeometry();
 
-var asteroidPositions=
-  new Float32Array(
-    asteroidCount*3
-  );
+var asteroidPositions=new Float32Array(
+  asteroidCount*3
+);
 
+for(var a=0;a<asteroidCount;a++){
 
-for(
-  var a=0;
-  a<asteroidCount;
-  a++
-){
+  var beltRadius=34+Math.random()*5.5;
 
-  var beltRadius=
-    34+
-    Math.random()*5.5;
+  var beltAngle=Math.random()*Math.PI*2;
 
-  var beltAngle=
-    Math.random()*
-    Math.PI*2;
-
-  var beltY=
-    (Math.random()-.5)*
-    1.6;
+  var beltY=(Math.random()-.5)*1.6;
 
   asteroidPositions[a*3]=
-    Math.cos(beltAngle)*
-    beltRadius;
+    Math.cos(beltAngle)*beltRadius;
 
-  asteroidPositions[a*3+1]=
-    beltY;
+  asteroidPositions[a*3+1]=beltY;
 
   asteroidPositions[a*3+2]=
-    Math.sin(beltAngle)*
-    beltRadius;
-
+    Math.sin(beltAngle)*beltRadius;
 }
-
 
 asteroidGeometry.setAttribute(
   'position',
@@ -4140,55 +2938,32 @@ asteroidGeometry.setAttribute(
   )
 );
 
+var asteroidMaterial=new THREE.PointsMaterial({
 
-var asteroidMaterial=
-  new THREE.PointsMaterial({
+  color:0xa4c4d3,
 
-    color:0xa4c4d3,
+  size:.075,
 
-    size:.075,
+  transparent:true,
 
-    transparent:true,
+  opacity:.38,
 
-    opacity:.38,
+  sizeAttenuation:true
 
-    sizeAttenuation:true
+});
 
-  });
-
-
-var asteroidBelt=
-  new THREE.Points(
-    asteroidGeometry,
-    asteroidMaterial
-  );
-
-scene.add(
-  asteroidBelt
+var asteroidBelt=new THREE.Points(
+  asteroidGeometry,
+  asteroidMaterial
 );
 
+scene.add(asteroidBelt);
 
-createOrbitRing(
-  36.5
-);
+createOrbitRing(36.5);
 
+createOrbitRing(42);
+createOrbitRing(46);
 
-/* =========================================================
-   OUTER SYSTEM RING
-========================================================= */
-
-createOrbitRing(
-  42
-);
-
-createOrbitRing(
-  46
-);
-
-
-/* =========================================================
-   SKILL CONSTELLATIONS
-========================================================= */
 
 var skills=[
 
@@ -4210,104 +2985,74 @@ var skills=[
 
 
 skills.forEach(
-  function(
-    skill,
-    index
-  ){
+  function(skill,index){
 
     var angle=
       index===0
-      ? .55
-      : 3.4;
+      ?.55
+      :3.4;
 
+    var mesh=new THREE.Mesh(
 
-    var mesh=
-      new THREE.Mesh(
+      new THREE.SphereGeometry(
+        .55,
+        28,
+        28
+      ),
 
-        new THREE.SphereGeometry(
-          .55,
-          28,
-          28
-        ),
+      new THREE.MeshBasicMaterial({
 
-        new THREE.MeshBasicMaterial({
+        color:0xa9eaff
 
-          color:0xa9eaff
+      })
 
-        })
-
-      );
-
+    );
 
     mesh.position.set(
 
-      Math.cos(angle)*
-      skill.distance,
+      Math.cos(angle)*skill.distance,
 
       skill.y,
 
-      Math.sin(angle)*
-      skill.distance
+      Math.sin(angle)*skill.distance
 
     );
 
+    scene.add(mesh);
 
-    scene.add(
-      mesh
+    var skillGlow=new THREE.Sprite(
+
+      new THREE.SpriteMaterial({
+
+        map:createGlowTexture(),
+
+        transparent:true,
+
+        opacity:.13,
+
+        depthWrite:false,
+
+        blending:THREE.AdditiveBlending
+
+      })
+
     );
 
+    skillGlow.scale.set(3,3,1);
 
-    var skillGlow=
-      new THREE.Sprite(
+    mesh.add(skillGlow);
 
-        new THREE.SpriteMaterial({
-
-          map:
-            createGlowTexture(),
-
-          transparent:true,
-
-          opacity:.13,
-
-          depthWrite:false,
-
-          blending:
-            THREE.AdditiveBlending
-
-        })
-
-      );
-
-
-    skillGlow.scale.set(
-      3,
-      3,
-      1
-    );
-
-    mesh.add(
-      skillGlow
-    );
-
-
-    skill.mesh=
-      mesh;
-
+    skill.mesh=mesh;
 
     skill.group={
-      position:
-        mesh.position
+      position:mesh.position
     };
 
-
-    skill.isStatic=
-      true;
-
+    skill.isStatic=true;
 
     interactive.push({
 
       mesh:mesh,
-
       obj:skill
 
     });
@@ -4315,10 +3060,6 @@ skills.forEach(
   }
 );
 
-
-/* =========================================================
-   SUN OBJECT
-========================================================= */
 
 var sunObj={
 
@@ -4331,8 +3072,7 @@ var sunObj={
   isSun:true,
 
   group:{
-    position:
-      sunMesh.position
+    position:sunMesh.position
   }
 
 };
@@ -4349,123 +3089,67 @@ interactive.push({
 });
 
 
-/* =========================================================
-   HUD COUNT
-========================================================= */
-
 hudObjects.textContent=
-  String(
-    interactive.length
-  ).padStart(
-    2,
-    '0'
-  );
+  String(interactive.length).padStart(2,'0');
 
-
-/* =========================================================
-   TARGET SYSTEM
-========================================================= */
 
 var selectedObject=null;
 
 
-function objectPosition(
-  obj
-){
+function objectPosition(obj){
 
   if(!obj){
-
     return new THREE.Vector3();
-
   }
-
 
   if(obj.isSun){
-
     return sunMesh.position;
-
   }
 
-
-  if(
-    obj.group &&
-    obj.group.position
-  ){
-
+  if(obj.group && obj.group.position){
     return obj.group.position;
-
   }
 
-
-  if(
-    obj.mesh &&
-    obj.mesh.position
-  ){
-
+  if(obj.mesh && obj.mesh.position){
     return obj.mesh.position;
-
   }
-
 
   return new THREE.Vector3();
 }
 
 
-function getObjectType(
-  obj
-){
+function getObjectType(obj){
 
   if(obj.isSun){
-
     return 'CENTRAL STAR / CREATOR';
-
   }
-
 
   if(obj.isStatic){
-
     return 'SKILL CONSTELLATION';
-
   }
-
 
   return 'PROJECT PLANET';
 }
 
 
-function acquireTarget(
-  obj
-){
+function acquireTarget(obj){
 
   if(!obj){
-
     return;
-
   }
 
+  selectedObject=obj;
 
-  selectedObject=
-    obj;
-
-
-  targetReadout.classList.add(
-    'active'
-  );
-
+  targetReadout.classList.add('active');
 
   targetName.textContent=
-    obj.name ||
-    'UNKNOWN OBJECT';
-
+    obj.name||'UNKNOWN OBJECT';
 
   targetMeta.textContent=
     getObjectType(obj)+
     ' · STATUS ACTIVE';
 
-
-  cameraMode.textContent=
-    'TARGET LOCK';
-
+  cameraMode.textContent='TARGET LOCK';
 
   positionTargetReticle();
 }
@@ -4475,25 +3159,17 @@ function clearTarget(){
 
   selectedObject=null;
 
-  targetReadout.classList.remove(
-    'active'
-  );
+  targetReadout.classList.remove('active');
 
-  targetReticle.classList.remove(
-    'active'
-  );
+  targetReticle.classList.remove('active');
 
-  targetName.textContent=
-    '—';
+  targetName.textContent='—';
 
-  targetMeta.textContent=
-    'Awaiting object data...';
+  targetMeta.textContent='Awaiting object data...';
 
-  cameraMode.textContent=
-    'ORBIT';
+  cameraMode.textContent='ORBIT';
 
-  rangeValue.textContent=
-    '—';
+  rangeValue.textContent='—';
 }
 
 
@@ -4501,76 +3177,43 @@ function positionTargetReticle(){
 
   if(!selectedObject){
 
-    targetReticle.classList.remove(
-      'active'
-    );
+    targetReticle.classList.remove('active');
 
     return;
   }
 
+  var pos=objectPosition(selectedObject);
 
-  var pos=
-    objectPosition(
-      selectedObject
-    );
-
-
-  var projected=
-    pos.clone().project(
-      camera
-    );
-
+  var projected=pos.clone().project(camera);
 
   if(
-
     projected.z>1 ||
-
     projected.z<-1 ||
-
     projected.x<-1.2 ||
-
     projected.x>1.2 ||
-
     projected.y<-1.2 ||
-
     projected.y>1.2
-
   ){
 
-    targetReticle.classList.remove(
-      'active'
-    );
+    targetReticle.classList.remove('active');
 
     return;
-
   }
-
 
   var x=
     (projected.x*.5+.5)*
     window.innerWidth;
 
-
   var y=
     (-projected.y*.5+.5)*
     window.innerHeight;
 
+  targetReticle.style.left=x+'px';
+  targetReticle.style.top=y+'px';
 
-  targetReticle.style.left=
-    x+'px';
-
-  targetReticle.style.top=
-    y+'px';
-
-  targetReticle.classList.add(
-    'active'
-  );
+  targetReticle.classList.add('active');
 }
 
-
-/* =========================================================
-   CAMERA
-========================================================= */
 
 var tweening=false;
 
@@ -4578,13 +3221,8 @@ var tweening=false;
 function easeInOutCubic(t){
 
   return t<.5
-
     ?4*t*t*t
-
-    :1-Math.pow(
-      -2*t+2,
-      3
-    )/2;
+    :1-Math.pow(-2*t+2,3)/2;
 }
 
 
@@ -4599,31 +3237,20 @@ function tweenCamera(
 
   controls.enabled=false;
 
+  var startPos=camera.position.clone();
 
-  var startPos=
-    camera.position.clone();
+  var startTarget=controls.target.clone();
 
-  var startTarget=
-    controls.target.clone();
-
-
-  var startTime=
-    performance.now();
-
+  var startTime=performance.now();
 
   function step(now){
 
-    var t=
-      Math.min(
-        1,
-        (now-startTime)/
-        duration
-      );
+    var t=Math.min(
+      1,
+      (now-startTime)/duration
+    );
 
-
-    var e=
-      easeInOutCubic(t);
-
+    var e=easeInOutCubic(t);
 
     camera.position.lerpVectors(
       startPos,
@@ -4631,22 +3258,17 @@ function tweenCamera(
       e
     );
 
-
     controls.target.lerpVectors(
       startTarget,
       lookAt,
       e
     );
 
-
     controls.update();
-
 
     if(t<1){
 
-      requestAnimationFrame(
-        step
-      );
+      requestAnimationFrame(step);
 
     }else{
 
@@ -4656,49 +3278,29 @@ function tweenCamera(
 
       controls.update();
 
-
       if(onDone){
-
         onDone();
-
       }
 
     }
 
   }
 
-
-  requestAnimationFrame(
-    step
-  );
-
+  requestAnimationFrame(step);
 }
 
 
-function flyTo(
-  obj
-){
+function flyTo(obj){
 
   if(!obj){
-
     return;
-
   }
 
+  acquireTarget(obj);
 
-  acquireTarget(
-    obj
-  );
-
-
-  var pos=
-    objectPosition(
-      obj
-    ).clone();
-
+  var pos=objectPosition(obj).clone();
 
   var camDist;
-
 
   if(obj.isSun){
 
@@ -4710,72 +3312,43 @@ function flyTo(
 
   }else{
 
-    camDist=
-      Math.max(
-        9,
-        obj.radius*4.4+7
-      );
-
-  }
-
-
-  var viewDir=
-    camera.position.clone()
-      .sub(pos);
-
-
-  if(
-    viewDir.length()<.01
-  ){
-
-    viewDir.set(
-      0,
-      .25,
-      1
+    camDist=Math.max(
+      9,
+      obj.radius*4.4+7
     );
 
   }
 
+  var viewDir=camera.position.clone().sub(pos);
+
+  if(viewDir.length()<.01){
+
+    viewDir.set(0,.25,1);
+
+  }
 
   viewDir.normalize();
 
+  var newPos=pos.clone().add(
+    viewDir.multiplyScalar(camDist)
+  );
 
-  var newPos=
-    pos.clone()
-      .add(
-        viewDir.multiplyScalar(
-          camDist
-        )
-      );
-
-
-  newPos.y+=
-    camDist*.12;
-
+  newPos.y+=camDist*.12;
 
   tweenCamera(
-
     newPos,
-
     pos,
-
     1100,
-
     function(){
 
-      cameraMode.textContent=
-        'TARGET LOCK';
+      cameraMode.textContent='TARGET LOCK';
 
       positionTargetReticle();
 
-      openModal(
-        obj.modal
-      );
+      openModal(obj.modal);
 
     }
-
   );
-
 }
 
 
@@ -4783,79 +3356,52 @@ function resetView(){
 
   clearTarget();
 
-
-  var homePos=
-    new THREE.Vector3(
-      0,
-      20,
-      46
-    );
-
-
-  var homeTarget=
-    new THREE.Vector3(
-      0,
-      0,
-      0
-    );
-
-
-  tweenCamera(
-
-    homePos,
-
-    homeTarget,
-
-    1000,
-
-    function(){
-
-      cameraMode.textContent=
-        'ORBIT';
-
-    }
-
+  var homePos=new THREE.Vector3(
+    0,
+    20,
+    46
   );
 
+  var homeTarget=new THREE.Vector3(
+    0,
+    0,
+    0
+  );
+
+  tweenCamera(
+    homePos,
+    homeTarget,
+    1000,
+    function(){
+
+      cameraMode.textContent='ORBIT';
+
+    }
+  );
 }
 
 
-/* =========================================================
-   RAYCASTING
-========================================================= */
+var raycaster=new THREE.Raycaster();
 
-var raycaster=
-  new THREE.Raycaster();
-
-var pointer=
-  new THREE.Vector2();
-
+var pointer=new THREE.Vector2();
 
 var pointerDown={
   x:0,
   y:0
 };
 
-
 var dragging=false;
 
 
-function getPointerPosition(
-  event
-){
+function getPointerPosition(event){
 
-  var rect=
-    canvas.getBoundingClientRect();
-
+  var rect=canvas.getBoundingClientRect();
 
   pointer.x=
-    ((event.clientX-rect.left)/
-      rect.width)*2-1;
-
+    ((event.clientX-rect.left)/rect.width)*2-1;
 
   pointer.y=
-    -((event.clientY-rect.top)/
-      rect.height)*2+1;
+    -((event.clientY-rect.top)/rect.height)*2+1;
 }
 
 
@@ -4866,49 +3412,28 @@ function findObject(){
     camera
   );
 
+  var meshes=interactive.map(
+    function(item){
+      return item.mesh;
+    }
+  );
 
-  var meshes=
-    interactive.map(
-      function(item){
-
-        return item.mesh;
-
-      }
-    );
-
-
-  var hits=
-    raycaster.intersectObjects(
-      meshes,
-      true
-    );
-
+  var hits=raycaster.intersectObjects(
+    meshes,
+    true
+  );
 
   if(!hits.length){
-
     return null;
-
   }
 
+  var hit=hits[0].object;
 
-  var hit=
-    hits[0].object;
-
-
-  for(
-    var i=0;
-    i<interactive.length;
-    i++
-  ){
+  for(var i=0;i<interactive.length;i++){
 
     if(
-
       interactive[i].mesh===hit ||
-
-      interactive[i].mesh.children.indexOf(
-        hit
-      )!==-1
-
+      interactive[i].mesh.children.indexOf(hit)!==-1
     ){
 
       return interactive[i];
@@ -4917,53 +3442,32 @@ function findObject(){
 
   }
 
-
   return null;
 }
 
 
-/* =========================================================
-   POINTER EVENTS
-========================================================= */
-
 canvas.addEventListener(
-
   'pointerdown',
-
   function(event){
 
-    pointerDown.x=
-      event.clientX;
-
-    pointerDown.y=
-      event.clientY;
+    pointerDown.x=event.clientX;
+    pointerDown.y=event.clientY;
 
     dragging=false;
 
   }
-
 );
 
 
 canvas.addEventListener(
-
   'pointermove',
-
   function(event){
 
-    var dx=
-      event.clientX-
-      pointerDown.x;
-
-    var dy=
-      event.clientY-
-      pointerDown.y;
-
+    var dx=event.clientX-pointerDown.x;
+    var dy=event.clientY-pointerDown.y;
 
     if(
-      Math.sqrt(
-        dx*dx+dy*dy
-      )>6
+      Math.sqrt(dx*dx+dy*dy)>6
     ){
 
       dragging=true;
@@ -4971,82 +3475,44 @@ canvas.addEventListener(
     }
 
   }
-
 );
 
 
 canvas.addEventListener(
-
   'pointerup',
-
   function(event){
 
-    if(
-      dragging ||
-      tweening
-    ){
-
+    if(dragging||tweening){
       return;
-
     }
 
+    getPointerPosition(event);
 
-    getPointerPosition(
-      event
-    );
-
-
-    var found=
-      findObject();
-
+    var found=findObject();
 
     if(found){
-
-      flyTo(
-        found.obj
-      );
-
+      flyTo(found.obj);
     }
 
   }
-
 );
 
 
-/* =========================================================
-   MODALS
-========================================================= */
-
-var modals=
-  document.querySelectorAll(
-    '.modal'
-  );
+var modals=document.querySelectorAll('.modal');
 
 
 function openModal(id){
 
   if(!id){
-
     return;
-
   }
-
 
   closeAllModals();
 
-
-  var modal=
-    document.getElementById(
-      id
-    );
-
+  var modal=document.getElementById(id);
 
   if(modal){
-
-    modal.classList.add(
-      'active'
-    );
-
+    modal.classList.add('active');
   }
 
 }
@@ -5056,11 +3522,7 @@ function closeAllModals(){
 
   modals.forEach(
     function(modal){
-
-      modal.classList.remove(
-        'active'
-      );
-
+      modal.classList.remove('active');
     }
   );
 
@@ -5073,15 +3535,10 @@ document.querySelectorAll(
   function(button){
 
     button.addEventListener(
-
       'click',
-
       function(){
-
         closeAllModals();
-
       }
-
     );
 
   }
@@ -5092,30 +3549,19 @@ modals.forEach(
   function(modal){
 
     modal.addEventListener(
-
       'click',
-
       function(event){
 
-        if(
-          event.target===modal
-        ){
-
+        if(event.target===modal){
           closeAllModals();
-
         }
 
       }
-
     );
 
   }
 );
 
-
-/* =========================================================
-   PROJECT REGISTRY
-========================================================= */
 
 document.querySelectorAll(
   '.project-item'
@@ -5123,132 +3569,81 @@ document.querySelectorAll(
   function(item){
 
     item.addEventListener(
-
       'click',
-
       function(){
 
-        var target=
-          item.getAttribute(
-            'data-fly'
-          );
-
+        var target=item.getAttribute('data-fly');
 
         closeAllModals();
 
-
         if(target==='fin'){
-
-          flyTo(
-            projects[0]
-          );
-
+          flyTo(projects[0]);
         }
-
 
         if(target==='crown'){
-
-          flyTo(
-            projects[1]
-          );
-
+          flyTo(projects[1]);
         }
 
-
         if(target==='recluse'){
-
-          flyTo(
-            projects[2]
-          );
-
+          flyTo(projects[2]);
         }
 
       }
-
     );
 
   }
 );
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
 document.getElementById(
   'nav-about'
 ).addEventListener(
-
   'click',
-
   function(){
-
-    flyTo(
-      sunObj
-    );
-
+    flyTo(sunObj);
   }
-
 );
 
 
 document.getElementById(
   'nav-projects'
 ).addEventListener(
-
   'click',
-
   function(){
 
     clearTarget();
 
     resetView();
 
-
     setTimeout(
-
       function(){
-
-        openModal(
-          'modal-projects'
-        );
-
+        openModal('modal-projects');
       },
-
       950
-
     );
 
   }
-
 );
 
 
 document.getElementById(
   'nav-contact'
 ).addEventListener(
-
   'click',
-
   function(){
 
     clearTarget();
 
-    openModal(
-      'modal-contact'
-    );
+    openModal('modal-contact');
 
   }
-
 );
 
 
 document.getElementById(
   'reset-view'
 ).addEventListener(
-
   'click',
-
   function(){
 
     closeAllModals();
@@ -5256,131 +3651,75 @@ document.getElementById(
     resetView();
 
   }
-
 );
 
 
-/* =========================================================
-   ESCAPE
-========================================================= */
-
 document.addEventListener(
-
   'keydown',
-
   function(event){
 
-    if(
-      event.key==='Escape'
-    ){
+    if(event.key==='Escape'){
 
       closeAllModals();
 
       clearTarget();
 
-
       if(!tweening){
-
-        cameraMode.textContent=
-          'ORBIT';
-
+        cameraMode.textContent='ORBIT';
       }
 
     }
 
   }
-
 );
 
 
-/* =========================================================
-   RESIZE
-========================================================= */
-
 window.addEventListener(
-
   'resize',
-
   function(){
 
     camera.aspect=
       window.innerWidth/
       window.innerHeight;
 
-
     camera.updateProjectionMatrix();
-
 
     renderer.setSize(
       window.innerWidth,
       window.innerHeight
     );
 
-
     positionTargetReticle();
 
   }
-
 );
 
 
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-var clock=
-  new THREE.Clock();
-
+var clock=new THREE.Clock();
 
 var frameCounter=0;
 
-var lastFpsTime=
-  performance.now();
+var lastFpsTime=performance.now();
 
 
 function animate(){
 
-  requestAnimationFrame(
-    animate
-  );
+  requestAnimationFrame(animate);
+
+  var delta=clock.getDelta();
 
 
-  var delta=
-    clock.getDelta();
+  starsFar.rotation.y+=delta*.00018;
+  starsA.rotation.y+=delta*.00045;
+  starsB.rotation.y-=delta*.00075;
 
+  starClusters.rotation.y+=delta*.00008;
 
-  /*
-    Different background layers rotate at
-    different speeds. This gives the scene
-    actual spatial depth when navigating.
-  */
+  galaxyDust.rotation.y+=delta*.000055;
+  galaxyCore.rotation.y+=delta*.00010;
 
-  starsFar.rotation.y+=
-    delta*.00018;
-
-  starsA.rotation.y+=
-    delta*.00045;
-
-  starsB.rotation.y-=
-    delta*.00075;
-
-
-  starClusters.rotation.y+=
-    delta*.00008;
-
-
-  galaxyDust.rotation.y+=
-    delta*.000055;
-
-  galaxyCore.rotation.y+=
-    delta*.00010;
-
-
-  nebula.rotation.y+=
-    delta*.000035;
-
-  nebula.rotation.x+=
-    delta*.000012;
+  nebula.rotation.y+=delta*.000035;
+  nebula.rotation.x+=delta*.000012;
 
 
   nebulaCloudA.position.x=
@@ -5402,12 +3741,9 @@ function animate(){
     )*3;
 
 
-  asteroidBelt.rotation.y+=
-    delta*.004;
+  asteroidBelt.rotation.y+=delta*.004;
 
-
-  sunMesh.rotation.y+=
-    delta*.025;
+  sunMesh.rotation.y+=delta*.025;
 
 
   glowSprite.material.opacity=
@@ -5427,23 +3763,15 @@ function animate(){
     function(project){
 
       project.angle+=
-        delta*
-        project.speed;
-
+        delta*project.speed;
 
       project.group.position.x=
-        Math.cos(
-          project.angle
-        )*
+        Math.cos(project.angle)*
         project.distance;
-
 
       project.group.position.z=
-        Math.sin(
-          project.angle
-        )*
+        Math.sin(project.angle)*
         project.distance;
-
 
       project.mesh.rotation.y+=
         delta*.12;
@@ -5469,27 +3797,17 @@ function animate(){
 
     positionTargetReticle();
 
-
     var targetPos=
-      objectPosition(
-        selectedObject
-      );
-
+      objectPosition(selectedObject);
 
     var distance=
-      camera.position.distanceTo(
-        targetPos
-      );
-
+      camera.position.distanceTo(targetPos);
 
     rangeValue.textContent=
       distance.toFixed(1);
 
-
     targetMeta.textContent=
-      getObjectType(
-        selectedObject
-      )+
+      getObjectType(selectedObject)+
       ' · STATUS ACTIVE · RANGE '+
       distance.toFixed(1)+
       ' UNITS';
@@ -5499,20 +3817,12 @@ function animate(){
 
   frameCounter++;
 
+  var now=performance.now();
 
-  var now=
-    performance.now();
-
-
-  if(
-    now-lastFpsTime>=1000
-  ){
+  if(now-lastFpsTime>=1000){
 
     fpsValue.textContent=
-      String(
-        frameCounter
-      );
-
+      String(frameCounter);
 
     frameCounter=0;
 
@@ -5532,30 +3842,17 @@ function animate(){
 animate();
 
 
-/* =========================================================
-   HINT FADE
-========================================================= */
-
 setTimeout(
-
   function(){
 
-    var hint=
-      document.getElementById(
-        'hint'
-      );
-
+    var hint=document.getElementById('hint');
 
     if(hint){
-
       hint.style.opacity='0';
-
     }
 
   },
-
   7000
-
 );
 
 
