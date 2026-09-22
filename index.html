@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>NAFUH ORBIT — Digital Exploration System</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 
 <style>
 *{
@@ -16,803 +20,626 @@
   padding:0;
 }
 
-html,
-body{
+html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#020305;
-  color:#fff;
-  font-family:Sora,Arial,sans-serif;
+  background:#020711;
+  color:#e8f5ff;
+  font-family:Inter,Arial,sans-serif;
 }
 
 body{
-  user-select:none;
-  -webkit-user-select:none;
+  position:relative;
 }
 
-button,
-a{
-  font-family:inherit;
-}
+/* =========================================================
+   SPACE BACKGROUND
+========================================================= */
 
-#scene-canvas{
+#space{
   position:fixed;
   inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  z-index:1;
-  cursor:grab;
-}
-
-#scene-canvas:active{
-  cursor:grabbing;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-#loading-screen{
-  position:fixed;
-  inset:0;
-  z-index:1000;
   background:
-    radial-gradient(circle at 50% 45%,rgba(36,60,95,.12),transparent 38%),
-    #020305;
+    radial-gradient(circle at 50% 45%, rgba(25,67,110,.13), transparent 35%),
+    radial-gradient(circle at 20% 80%, rgba(63,45,125,.08), transparent 32%),
+    radial-gradient(circle at 80% 20%, rgba(20,90,140,.08), transparent 30%),
+    #020711;
+}
+
+/* subtle blue atmospheric veil */
+#space::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,
+      transparent 35%,
+      rgba(1,7,17,.2) 70%,
+      rgba(0,3,10,.7) 100%);
+}
+
+/* =========================================================
+   LOADING SCREEN
+========================================================= */
+
+#loader{
+  position:fixed;
+  inset:0;
+  z-index:10000;
   display:flex;
   align-items:center;
   justify-content:center;
+  background:
+    radial-gradient(circle at center,rgba(28,78,125,.16),transparent 38%),
+    #020711;
   transition:opacity .8s ease,visibility .8s ease;
 }
 
-#loading-screen.hidden{
+#loader.hide{
   opacity:0;
   visibility:hidden;
-  pointer-events:none;
 }
 
-.loading-wrap{
-  width:min(440px,80vw);
+.loaderBox{
+  width:min(460px,88vw);
+  text-align:center;
 }
 
-.loading-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:18px;
-  color:rgba(255,255,255,.48);
-  font-size:9px;
-  letter-spacing:2.5px;
-  text-transform:uppercase;
+.loaderLogo{
+  font-family:"Space Grotesk",sans-serif;
+  font-size:clamp(28px,7vw,48px);
+  font-weight:700;
+  letter-spacing:.15em;
+  color:#eaf8ff;
 }
 
-.loading-title{
-  font-family:Fraunces,serif;
-  font-size:clamp(25px,5vw,42px);
-  letter-spacing:-1px;
-  margin-bottom:8px;
-}
-
-.loading-sub{
-  color:rgba(255,255,255,.42);
+.loaderSub{
+  margin-top:9px;
   font-size:10px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:24px;
+  letter-spacing:.28em;
+  color:#6bbfe8;
 }
 
-.loading-line{
+.loaderLine{
   height:1px;
+  margin:28px 0 15px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #55d9ff,
+    transparent
+  );
+  animation:loaderPulse 1.8s infinite;
+}
+
+.loaderText{
+  font-size:9px;
+  letter-spacing:.2em;
+  color:#708da1;
+}
+
+.loaderProgress{
   width:100%;
-  background:rgba(255,255,255,.1);
-  position:relative;
+  height:2px;
+  margin-top:15px;
+  background:#0b1a29;
   overflow:hidden;
 }
 
-.loading-progress{
-  position:absolute;
-  left:0;
-  top:0;
-  height:100%;
+.loaderProgress span{
+  display:block;
   width:0%;
-  background:rgba(255,255,255,.8);
-  transition:width .25s ease;
+  height:100%;
+  background:#55d9ff;
+  animation:loading 2.2s ease forwards;
 }
 
-.loading-status{
-  margin-top:12px;
-  color:rgba(255,255,255,.32);
-  font-size:8px;
-  letter-spacing:1.8px;
-  text-transform:uppercase;
+@keyframes loading{
+  to{width:100%}
 }
 
-/* =========================
-   MAIN HUD
-========================= */
+@keyframes loaderPulse{
+  0%,100%{opacity:.3}
+  50%{opacity:1}
+}
 
-#mission-hud{
+/* =========================================================
+   THREE.JS
+========================================================= */
+
+canvas{
+  position:fixed;
+  inset:0;
+  display:block;
+  z-index:1;
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+#hud{
   position:fixed;
   inset:0;
   z-index:10;
   pointer-events:none;
+  font-family:"Space Grotesk",sans-serif;
 }
 
-#mission-hud > *{
-  pointer-events:auto;
-}
-
-.hud-panel{
-  background:rgba(4,7,11,.64);
-  border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 12px 40px rgba(0,0,0,.2);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-}
-
-/* TOP LEFT */
-
-#system-id{
+/* top left */
+.hudTopLeft{
   position:absolute;
   top:22px;
-  left:22px;
-  min-width:230px;
-  padding:14px 16px;
-  border-left:2px solid rgba(255,255,255,.8);
+  left:24px;
 }
 
-.system-name{
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:2.6px;
-}
-
-.system-sub{
-  margin-top:5px;
-  color:rgba(255,255,255,.4);
-  font-size:7px;
-  letter-spacing:1.8px;
-  text-transform:uppercase;
-}
-
-.system-status{
+.brand{
   display:flex;
   align-items:center;
-  gap:7px;
-  margin-top:12px;
-  color:rgba(255,255,255,.55);
-  font-size:7px;
-  letter-spacing:1.5px;
+  gap:10px;
 }
 
-.status-dot{
+.brandMark{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#64dcff;
+  box-shadow:
+    0 0 8px #64dcff,
+    0 0 20px rgba(100,220,255,.55);
+}
+
+.brandName{
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.22em;
+  color:#edf9ff;
+}
+
+.brandSub{
+  margin-top:6px;
+  margin-left:19px;
+  color:#628399;
+  font-size:8px;
+  letter-spacing:.22em;
+}
+
+/* top right */
+.hudTopRight{
+  position:absolute;
+  top:22px;
+  right:24px;
+  text-align:right;
+}
+
+.status{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:7px;
+  font-size:9px;
+  letter-spacing:.18em;
+  color:#78d9ff;
+}
+
+.statusDot{
   width:6px;
   height:6px;
   border-radius:50%;
-  background:#a6ffbd;
-  box-shadow:0 0 10px rgba(166,255,189,.7);
+  background:#68e0a3;
+  box-shadow:0 0 9px rgba(104,224,163,.8);
 }
 
-/* TOP RIGHT */
-
-#system-data{
-  position:absolute;
-  top:22px;
-  right:22px;
-  padding:13px 15px;
-  min-width:170px;
-  text-align:right;
-}
-
-.data-row{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:7px;
-  font-size:7px;
-  letter-spacing:1.3px;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.38);
-}
-
-.data-row:last-child{
-  margin-bottom:0;
-}
-
-.data-value{
-  color:rgba(255,255,255,.72);
-}
-
-/* NAV */
-
-#main-nav{
-  position:absolute;
-  top:22px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:3px;
-  padding:4px;
-  border:1px solid rgba(255,255,255,.09);
-  background:rgba(3,5,8,.56);
-  border-radius:100px;
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-}
-
-.nav-btn{
-  border:0;
-  background:transparent;
-  color:rgba(255,255,255,.45);
-  padding:9px 14px;
-  border-radius:100px;
-  font-size:8px;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:.25s ease;
-}
-
-.nav-btn:hover{
-  color:#fff;
-  background:rgba(255,255,255,.08);
-}
-
-#reset-view{
-  position:absolute;
-  top:82px;
-  right:22px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(3,5,8,.58);
-  color:rgba(255,255,255,.5);
-  padding:8px 11px;
-  font-size:7px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  cursor:pointer;
-  border-radius:4px;
-  backdrop-filter:blur(12px);
-  transition:.2s ease;
-}
-
-#reset-view:hover{
-  color:#fff;
-  border-color:rgba(255,255,255,.3);
-}
-
-/* TARGET RETICLE */
-
-#target-reticle{
-  position:absolute;
-  width:74px;
-  height:74px;
-  transform:translate(-50%,-50%);
-  opacity:0;
-  visibility:hidden;
-  transition:opacity .25s ease;
-  pointer-events:none;
-}
-
-#target-reticle.active{
-  opacity:1;
-  visibility:visible;
-}
-
-.reticle-corner{
-  position:absolute;
-  width:16px;
-  height:16px;
-  border-color:rgba(255,255,255,.75);
-  border-style:solid;
-}
-
-.reticle-corner.tl{
-  top:0;
-  left:0;
-  border-width:1px 0 0 1px;
-}
-
-.reticle-corner.tr{
-  top:0;
-  right:0;
-  border-width:1px 1px 0 0;
-}
-
-.reticle-corner.bl{
-  bottom:0;
-  left:0;
-  border-width:0 0 1px 1px;
-}
-
-.reticle-corner.br{
-  bottom:0;
-  right:0;
-  border-width:0 1px 1px 0;
-}
-
-.reticle-cross-h,
-.reticle-cross-v{
-  position:absolute;
-  background:rgba(255,255,255,.35);
-}
-
-.reticle-cross-h{
-  width:22px;
-  height:1px;
-  left:26px;
-  top:36px;
-}
-
-.reticle-cross-v{
-  width:1px;
-  height:22px;
-  left:36px;
-  top:26px;
-}
-
-/* TARGET READOUT */
-
-#target-readout{
-  position:absolute;
-  left:22px;
-  top:145px;
-  width:220px;
-  padding:13px 15px;
-  opacity:0;
-  transform:translateX(-10px);
-  visibility:hidden;
-  transition:.3s ease;
-}
-
-#target-readout.active{
-  opacity:1;
-  transform:translateX(0);
-  visibility:visible;
-}
-
-.target-header{
-  color:rgba(255,255,255,.35);
-  font-size:7px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:7px;
-}
-
-.target-name{
-  font-family:Fraunces,serif;
-  font-size:22px;
-  line-height:1;
-}
-
-.target-meta{
+.systemData{
   margin-top:7px;
-  color:rgba(255,255,255,.43);
-  font-size:7px;
-  line-height:1.7;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-/* CAMERA READOUT */
-
-#camera-readout{
-  position:absolute;
-  right:22px;
-  bottom:82px;
-  padding:10px 13px;
-  min-width:155px;
-  text-align:right;
-}
-
-.camera-label{
-  color:rgba(255,255,255,.3);
-  font-size:6px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-}
-
-#camera-mode{
-  color:rgba(255,255,255,.65);
   font-size:8px;
-  letter-spacing:1.4px;
-  margin-top:4px;
-  text-transform:uppercase;
+  line-height:1.8;
+  letter-spacing:.15em;
+  color:#627c8f;
 }
 
-/* BOTTOM HUD */
-
-#bottom-hud{
-  position:absolute;
-  left:22px;
-  right:22px;
-  bottom:22px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 14px;
-  background:rgba(3,5,8,.58);
-  border:1px solid rgba(255,255,255,.09);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-}
-
-.bottom-group{
-  display:flex;
-  align-items:center;
-  gap:17px;
-}
-
-.hud-stat{
-  color:rgba(255,255,255,.34);
-  font-size:6.5px;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-}
-
-.hud-stat strong{
-  color:rgba(255,255,255,.7);
-  font-weight:500;
-}
-
-#hint{
-  position:absolute;
-  left:50%;
-  bottom:76px;
-  transform:translateX(-50%);
-  color:rgba(255,255,255,.27);
-  font-size:7px;
-  letter-spacing:1.3px;
-  text-transform:uppercase;
-  text-align:center;
-  white-space:nowrap;
-  transition:opacity 1s ease;
-}
-
-/* AXIS MARKER */
-
-#axis-marker{
+/* target */
+#targetHUD{
   position:absolute;
   left:50%;
   top:50%;
-  width:0;
-  height:0;
-  opacity:.25;
-  pointer-events:none;
+  transform:translate(-50%,-50%);
+  width:230px;
+  text-align:center;
+  opacity:0;
+  transition:opacity .25s ease;
 }
 
-#axis-marker::before,
-#axis-marker::after{
+#targetHUD.visible{
+  opacity:1;
+}
+
+.targetLabel{
+  font-size:8px;
+  letter-spacing:.28em;
+  color:#61dcff;
+  margin-bottom:6px;
+}
+
+.targetName{
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:#f1fbff;
+  text-shadow:0 0 16px rgba(91,212,255,.45);
+}
+
+.targetType{
+  margin-top:5px;
+  font-size:8px;
+  letter-spacing:.2em;
+  color:#7997aa;
+}
+
+.targetRange{
+  margin-top:5px;
+  font-size:8px;
+  color:#5e788b;
+  letter-spacing:.13em;
+}
+
+/* target reticle */
+#reticle{
+  position:absolute;
+  width:62px;
+  height:62px;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  transition:opacity .2s ease;
+}
+
+#reticle.visible{
+  opacity:1;
+}
+
+.reticleCircle{
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(98,220,255,.55);
+  border-radius:50%;
+  box-shadow:
+    0 0 18px rgba(80,210,255,.14),
+    inset 0 0 18px rgba(80,210,255,.06);
+}
+
+.reticleCircle::before,
+.reticleCircle::after{
   content:"";
   position:absolute;
+  background:#72ddff;
 }
 
-#axis-marker::before{
-  width:30px;
-  height:1px;
-  left:-15px;
-  top:0;
-  background:rgba(255,255,255,.3);
-}
-
-#axis-marker::after{
+.reticleCircle::before{
   width:1px;
-  height:30px;
-  left:0;
-  top:-15px;
-  background:rgba(255,255,255,.3);
+  height:12px;
+  left:50%;
+  top:-7px;
 }
 
-/* =========================
-   MODALS
-========================= */
+.reticleCircle::after{
+  width:12px;
+  height:1px;
+  left:-7px;
+  top:50%;
+}
+
+/* camera readout */
+#cameraReadout{
+  position:absolute;
+  right:24px;
+  bottom:72px;
+  text-align:right;
+  color:#536f83;
+  font-size:8px;
+  line-height:1.8;
+  letter-spacing:.13em;
+}
+
+/* bottom */
+.hudBottom{
+  position:absolute;
+  left:24px;
+  right:24px;
+  bottom:20px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+}
+
+.controlHint{
+  color:#607d90;
+  font-size:8px;
+  letter-spacing:.16em;
+  line-height:1.8;
+}
+
+.controlHint strong{
+  color:#89b0c3;
+  font-weight:500;
+}
+
+.bottomRight{
+  text-align:right;
+  color:#536f83;
+  font-size:8px;
+  letter-spacing:.14em;
+  line-height:1.8;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+#nav{
+  position:fixed;
+  top:76px;
+  left:24px;
+  z-index:20;
+  pointer-events:auto;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.navButton{
+  border:0;
+  background:rgba(3,12,22,.55);
+  color:#7895a8;
+  border-left:1px solid rgba(90,210,255,.25);
+  padding:8px 12px;
+  text-align:left;
+  font-family:"Space Grotesk",sans-serif;
+  font-size:8px;
+  letter-spacing:.17em;
+  cursor:pointer;
+  transition:.2s;
+  backdrop-filter:blur(7px);
+}
+
+.navButton:hover{
+  color:#dff8ff;
+  border-left-color:#60d9ff;
+  background:rgba(25,73,100,.28);
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
 
 .modal{
   position:fixed;
   inset:0;
-  z-index:100;
-  display:flex;
+  z-index:500;
+  display:none;
   align-items:center;
   justify-content:center;
-  padding:24px;
-  background:rgba(0,0,0,.5);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  opacity:0;
-  visibility:hidden;
-  transition:.25s ease;
+  padding:25px;
+  background:rgba(1,5,12,.7);
+  backdrop-filter:blur(9px);
 }
 
 .modal.active{
-  opacity:1;
-  visibility:visible;
+  display:flex;
 }
 
-.modal-card{
-  position:relative;
-  width:min(620px,94vw);
-  max-height:88vh;
+.modalBox{
+  width:min(600px,94vw);
+  max-height:85vh;
   overflow:auto;
-  background:rgba(6,8,12,.94);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 30px 100px rgba(0,0,0,.65);
-  padding:34px;
-  transform:translateY(15px) scale(.98);
-  transition:.3s ease;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(9,26,42,.97),
+      rgba(3,11,20,.97)
+    );
+  border:1px solid rgba(89,210,255,.25);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.65),
+    0 0 50px rgba(43,137,180,.08);
+  padding:28px;
+  position:relative;
 }
 
-.modal.active .modal-card{
-  transform:translateY(0) scale(1);
-}
-
-.modal-card::-webkit-scrollbar{
-  width:4px;
-}
-
-.modal-card::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.18);
-}
-
-.close-modal{
+.modalBox::before{
+  content:"";
   position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    #5bdcff,
+    transparent
+  );
+}
+
+.close{
+  position:absolute;
+  right:18px;
   top:14px;
-  right:14px;
-  width:30px;
-  height:30px;
-  border:1px solid rgba(255,255,255,.1);
-  background:transparent;
-  color:rgba(255,255,255,.45);
+  background:none;
+  border:0;
+  color:#617d90;
+  font-size:18px;
   cursor:pointer;
-  font-size:16px;
 }
 
-.close-modal:hover{
-  color:#fff;
+.close:hover{
+  color:#aeeaff;
 }
 
-.modal-kicker{
-  color:rgba(255,255,255,.35);
-  font-size:7px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:10px;
+.modalEyebrow{
+  font-size:8px;
+  letter-spacing:.25em;
+  color:#59cfee;
+  margin-bottom:8px;
 }
 
-.modal-title{
-  font-family:Fraunces,serif;
-  font-size:clamp(32px,6vw,55px);
-  line-height:.95;
-  margin-bottom:18px;
+.modalTitle{
+  font-family:"Space Grotesk",sans-serif;
+  font-size:27px;
+  color:#eefaff;
+  margin-bottom:13px;
 }
 
-.modal-copy{
-  color:rgba(255,255,255,.56);
-  font-size:12px;
-  line-height:1.9;
-  margin-bottom:22px;
+.modalText{
+  color:#91aaba;
+  font-size:13px;
+  line-height:1.8;
 }
 
-.modal-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin-bottom:22px;
+.modalText strong{
+  color:#d9f5ff;
 }
 
-.info-box{
-  padding:13px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.025);
-}
-
-.info-label{
-  color:rgba(255,255,255,.28);
-  font-size:6px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  margin-bottom:5px;
-}
-
-.info-value{
-  color:rgba(255,255,255,.75);
-  font-size:9px;
-}
-
-.modal-actions{
+.modalActions{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
+  margin-top:22px;
 }
 
-.modal-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:38px;
-  padding:0 15px;
-  border:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.72);
-  background:rgba(255,255,255,.04);
+.modalLink{
   text-decoration:none;
-  font-size:7px;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  transition:.2s ease;
-  cursor:pointer;
+  color:#bdeeff;
+  border:1px solid rgba(86,209,255,.28);
+  background:rgba(38,105,135,.13);
+  padding:10px 13px;
+  font-size:8px;
+  letter-spacing:.16em;
+  transition:.2s;
 }
 
-.modal-btn:hover{
-  color:#fff;
-  background:rgba(255,255,255,.1);
-  border-color:rgba(255,255,255,.25);
+.modalLink:hover{
+  background:rgba(57,157,197,.24);
+  border-color:#5edbff;
 }
 
-.project-list{
-  display:grid;
+.projectList{
+  display:flex;
+  flex-direction:column;
   gap:9px;
+  margin-top:20px;
 }
 
-.project-item{
+.projectItem{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:15px;
-  padding:15px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.025);
+  padding:13px;
+  border:1px solid rgba(86,209,255,.12);
+  background:rgba(10,30,45,.4);
+}
+
+.projectItem span{
+  font-size:11px;
+  color:#c8e8f5;
+}
+
+.projectItem button{
+  border:1px solid rgba(86,209,255,.22);
+  background:transparent;
+  color:#72d9f7;
+  padding:7px 10px;
+  font-size:8px;
   cursor:pointer;
-  transition:.2s ease;
+  font-family:inherit;
 }
 
-.project-item:hover{
-  background:rgba(255,255,255,.07);
-  border-color:rgba(255,255,255,.18);
-}
-
-.project-item-name{
-  font-family:Fraunces,serif;
-  font-size:20px;
-}
-
-.project-item-type{
-  margin-top:4px;
-  color:rgba(255,255,255,.3);
-  font-size:6px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-}
-
-.project-arrow{
-  color:rgba(255,255,255,.35);
-  font-size:16px;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:700px){
 
-  #system-id{
-    top:12px;
-    left:12px;
-    min-width:0;
-    padding:10px 12px;
+  .hudTopLeft{
+    top:15px;
+    left:15px;
   }
 
-  .system-name{
-    font-size:8px;
-    letter-spacing:2px;
+  .hudTopRight{
+    top:15px;
+    right:15px;
   }
 
-  .system-sub{
-    font-size:5.5px;
-    letter-spacing:1.2px;
+  .brandName{
+    font-size:12px;
   }
 
-  .system-status{
-    margin-top:8px;
-    font-size:5.5px;
-  }
-
-  #system-data{
-    top:12px;
-    right:12px;
-    min-width:130px;
-    padding:10px;
-  }
-
-  .data-row{
-    gap:10px;
-    font-size:5.5px;
-    margin-bottom:5px;
-  }
-
-  #main-nav{
-    top:auto;
-    bottom:78px;
-    left:50%;
-  }
-
-  .nav-btn{
-    padding:8px 10px;
+  .brandSub{
     font-size:6px;
   }
 
-  #reset-view{
-    top:68px;
-    right:12px;
-    font-size:5.5px;
+  .systemData{
+    font-size:6px;
+  }
+
+  #nav{
+    top:auto;
+    left:15px;
+    bottom:105px;
+    flex-direction:row;
+    flex-wrap:wrap;
+    max-width:240px;
+  }
+
+  .navButton{
     padding:7px 9px;
+    font-size:7px;
   }
 
-  #target-readout{
-    left:12px;
-    top:112px;
-    width:185px;
-    padding:10px 12px;
+  #cameraReadout{
+    display:none;
   }
 
-  .target-name{
-    font-size:18px;
+  .hudBottom{
+    left:15px;
+    right:15px;
+    bottom:15px;
   }
 
-  .target-meta{
-    font-size:5.5px;
+  .controlHint{
+    font-size:6px;
+    max-width:190px;
   }
 
-  #camera-readout{
-    right:12px;
-    bottom:132px;
-    min-width:125px;
-    padding:8px 10px;
+  .bottomRight{
+    font-size:6px;
   }
 
-  #bottom-hud{
-    left:12px;
-    right:12px;
-    bottom:12px;
-    height:38px;
-    padding:0 10px;
+  #targetHUD{
+    width:180px;
   }
 
-  .bottom-group{
-    gap:9px;
-  }
-
-  .hud-stat{
-    font-size:5px;
-    letter-spacing:.9px;
-  }
-
-  #hint{
-    bottom:124px;
-    width:90%;
-    white-space:normal;
-    line-height:1.6;
-    font-size:5.5px;
+  .targetName{
+    font-size:15px;
   }
 
   .modal{
-    padding:12px;
+    padding:14px;
   }
 
-  .modal-card{
-    padding:25px 20px;
+  .modalBox{
+    padding:23px 18px;
   }
 
-  .modal-title{
-    font-size:38px;
+  .modalTitle{
+    font-size:22px;
   }
 
-  .modal-copy{
-    font-size:11px;
-  }
-
-  .modal-grid{
-    grid-template-columns:1fr;
+  .modalText{
+    font-size:12px;
   }
 }
 </style>
@@ -820,466 +647,257 @@ a{
 
 <body>
 
-<!-- =========================
+<div id="space"></div>
+
+<!-- =====================================================
      LOADING
-========================= -->
+===================================================== -->
 
-<div id="loading-screen">
-  <div class="loading-wrap">
-    <div class="loading-top">
-      <span>NAFUH ORBIT</span>
-      <span id="loading-percent">00%</span>
+<div id="loader">
+  <div class="loaderBox">
+    <div class="loaderLogo">NAFUH ORBIT</div>
+    <div class="loaderSub">DIGITAL EXPLORATION SYSTEM</div>
+    <div class="loaderLine"></div>
+    <div class="loaderText" id="loaderText">
+      INITIALIZING DEEP SPACE ENVIRONMENT
     </div>
-
-    <div class="loading-title">Digital Exploration System</div>
-
-    <div class="loading-sub">
-      Initializing orbital environment
-    </div>
-
-    <div class="loading-line">
-      <div class="loading-progress" id="loading-progress"></div>
-    </div>
-
-    <div class="loading-status" id="loading-status">
-      Establishing navigation system...
+    <div class="loaderProgress">
+      <span></span>
     </div>
   </div>
 </div>
 
-<canvas id="scene-canvas"></canvas>
+<!-- =====================================================
+     HUD
+===================================================== -->
 
-<!-- =========================
-     MISSION HUD
-========================= -->
+<div id="hud">
 
-<div id="mission-hud">
+  <div class="hudTopLeft">
+    <div class="brand">
+      <div class="brandMark"></div>
+      <div class="brandName">NAFUH ORBIT</div>
+    </div>
 
-  <div id="system-id" class="hud-panel">
-    <div class="system-name">NAFUH ORBIT</div>
-    <div class="system-sub">Digital Exploration System</div>
-
-    <div class="system-status">
-      <span class="status-dot"></span>
-      <span>SYSTEM STATUS: ONLINE</span>
+    <div class="brandSub">
+      DIGITAL EXPLORATION SYSTEM
     </div>
   </div>
 
-  <div id="system-data" class="hud-panel">
-
-    <div class="data-row">
-      <span>Objects</span>
-      <span class="data-value" id="hud-objects">06</span>
+  <div class="hudTopRight">
+    <div class="status">
+      <span class="statusDot"></span>
+      SYSTEM ONLINE
     </div>
 
-    <div class="data-row">
-      <span>Projects</span>
-      <span class="data-value">03</span>
-    </div>
-
-    <div class="data-row">
-      <span>Sector</span>
-      <span class="data-value">ORBITAL-01</span>
-    </div>
-
-    <div class="data-row">
-      <span>System</span>
-      <span class="data-value">NFO-2026</span>
-    </div>
-
-  </div>
-
-  <nav id="main-nav">
-    <button class="nav-btn" id="nav-about">About</button>
-    <button class="nav-btn" id="nav-projects">Projects</button>
-    <button class="nav-btn" id="nav-contact">Contact</button>
-  </nav>
-
-  <button id="reset-view">Reset View</button>
-
-  <div id="target-reticle">
-    <div class="reticle-corner tl"></div>
-    <div class="reticle-corner tr"></div>
-    <div class="reticle-corner bl"></div>
-    <div class="reticle-corner br"></div>
-    <div class="reticle-cross-h"></div>
-    <div class="reticle-cross-v"></div>
-  </div>
-
-  <div id="target-readout" class="hud-panel">
-    <div class="target-header">Target Acquired</div>
-    <div class="target-name" id="target-name">—</div>
-    <div class="target-meta" id="target-meta">
-      Awaiting object data...
+    <div class="systemData">
+      SOLAR SECTOR / N-01<br>
+      04 OBJECTS / 02 SKILL NODES
     </div>
   </div>
 
-  <div id="camera-readout" class="hud-panel">
-    <div class="camera-label">Navigation Mode</div>
-    <div id="camera-mode">ORBIT</div>
+  <div id="reticle">
+    <div class="reticleCircle"></div>
   </div>
 
-  <div id="axis-marker"></div>
-
-  <div id="hint">
-    Drag to orbit · scroll or pinch to zoom · click a planet or star
+  <div id="targetHUD">
+    <div class="targetLabel">TARGET ACQUIRED</div>
+    <div class="targetName" id="targetName">—</div>
+    <div class="targetType" id="targetType">—</div>
+    <div class="targetRange" id="targetRange">RANGE —</div>
   </div>
 
-  <div id="bottom-hud">
+  <div id="cameraReadout">
+    CAMERA VECTOR <span id="camVector">0 / 0 / 0</span><br>
+    ORBITAL VIEW ACTIVE
+  </div>
 
-    <div class="bottom-group">
-      <div class="hud-stat">
-        <strong>ROT</strong> CAMERA
-      </div>
-
-      <div class="hud-stat">
-        <strong>ZOOM</strong> SCROLL
-      </div>
-
-      <div class="hud-stat">
-        <strong>SELECT</strong> OBJECT
-      </div>
+  <div class="hudBottom">
+    <div class="controlHint">
+      <strong>DRAG</strong> ORBIT &nbsp;·&nbsp;
+      <strong>SCROLL</strong> ZOOM &nbsp;·&nbsp;
+      <strong>CLICK</strong> TARGET &nbsp;·&nbsp;
+      <strong>ESC</strong> RELEASE
     </div>
 
-    <div class="bottom-group">
-      <div class="hud-stat">
-        <strong>FPS</strong> <span id="fps-value">60</span>
-      </div>
-
-      <div class="hud-stat">
-        <strong>RANGE</strong> <span id="range-value">—</span>
-      </div>
+    <div class="bottomRight">
+      NAFUH / ORBITAL INTERFACE<br>
+      © 2026 JOHN NAFUH
     </div>
-
   </div>
+
 </div>
 
-<!-- =========================
-     ABOUT MODAL
-========================= -->
+<!-- =====================================================
+     NAV
+===================================================== -->
+
+<div id="nav">
+  <button class="navButton" onclick="openModal('modal-about')">ABOUT</button>
+  <button class="navButton" onclick="openModal('modal-projects')">PROJECTS</button>
+  <button class="navButton" onclick="openModal('modal-contact')">CONTACT</button>
+  <button class="navButton" onclick="resetView()">RESET VIEW</button>
+</div>
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
 
 <div class="modal" id="modal-about">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-about')">×</button>
 
-    <div class="modal-kicker">
-      Central Node / Creator
-    </div>
+    <div class="modalEyebrow">CENTRAL STAR / PROFILE</div>
 
-    <div class="modal-title">
-      John Nafuh
-    </div>
+    <div class="modalTitle">John Nafuh</div>
 
-    <div class="modal-copy">
-      A technology-focused entrepreneur and builder exploring the intersection
-      of finance, design, software and digital products. NAFUH ORBIT is a
-      visual representation of that ecosystem.
-    </div>
-
-    <div class="modal-grid">
-
-      <div class="info-box">
-        <div class="info-label">Role</div>
-        <div class="info-value">Entrepreneur / Builder</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Focus</div>
-        <div class="info-value">Technology & Digital Products</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Environment</div>
-        <div class="info-value">NAFUH ORBIT</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Current Sector</div>
-        <div class="info-value">Software / Finance / Design</div>
-      </div>
-
-    </div>
-
-    <div class="modal-actions">
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GitHub
-      </a>
-
-      <button class="modal-btn close-action">
-        Return to Orbit
-      </button>
+    <div class="modalText">
+      Welcome to <strong>NAFUH ORBIT</strong>, a digital exploration
+      system representing my work, projects, skills and ideas as an
+      interactive solar system.
+      <br><br>
+      Each object represents a different part of my digital journey.
+      Explore the system, lock onto an object and discover what it does.
     </div>
 
   </div>
 </div>
 
-<!-- =========================
+<!-- =====================================================
+     FIN DASH
+===================================================== -->
+
+<div class="modal" id="modal-findash">
+  <div class="modalBox">
+
+    <button class="close" onclick="closeModal('modal-findash')">×</button>
+
+    <div class="modalEyebrow">PROJECT / FINANCIAL SYSTEM</div>
+
+    <div class="modalTitle">Fin-Dash</div>
+
+    <div class="modalText">
+      A personal finance dashboard designed to transform transaction
+      information into a clearer view of spending, income and financial
+      activity.
+    </div>
+
+    <div class="modalActions">
+      <a class="modalLink"
+         href="https://johnnafuh.github.io/Fin-dash/"
+         target="_blank">
+        LAUNCH PROJECT
+      </a>
+
+      <a class="modalLink"
+         href="https://github.com/JohnNafuh"
+         target="_blank">
+        GITHUB
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- =====================================================
      CROWN CAPITAL
-========================= -->
+===================================================== -->
 
 <div class="modal" id="modal-crown">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-crown')">×</button>
 
-    <div class="modal-kicker">
-      Project Planet / Financial Intelligence
+    <div class="modalEyebrow">PROJECT / INVESTMENT SYSTEM</div>
+
+    <div class="modalTitle">Crown Capital</div>
+
+    <div class="modalText">
+      A modern investment-focused digital experience built around
+      financial information, presentation and a premium visual identity.
     </div>
 
-    <div class="modal-title">
-      Crown Capital
-    </div>
-
-    <div class="modal-copy">
-      A financial and investment-themed digital experience designed around
-      wealth, capital and financial exploration. The interface uses a refined
-      gold visual system to communicate a premium financial environment.
-    </div>
-
-    <div class="modal-grid">
-
-      <div class="info-box">
-        <div class="info-label">Category</div>
-        <div class="info-value">Finance</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Interface</div>
-        <div class="info-value">Financial Dashboard</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Visual System</div>
-        <div class="info-value">Gold / Dark</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Type</div>
-        <div class="info-value">Web Experience</div>
-      </div>
-
-    </div>
-
-    <div class="modal-actions">
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/CrownCapital/index.html"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Launch Project
+    <div class="modalActions">
+      <a class="modalLink"
+         href="https://johnnafuh.github.io/CrownCapital/index.html"
+         target="_blank">
+        LAUNCH PROJECT
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Source
+      <a class="modalLink"
+         href="https://github.com/JohnNafuh"
+         target="_blank">
+        GITHUB
       </a>
     </div>
 
   </div>
 </div>
 
-<!-- =========================
-     FIN-DASH
-========================= -->
-
-<div class="modal" id="modal-fin">
-  <div class="modal-card">
-
-    <button class="close-modal">×</button>
-
-    <div class="modal-kicker">
-      Project Planet / Personal Finance
-    </div>
-
-    <div class="modal-title">
-      Fin-Dash
-    </div>
-
-    <div class="modal-copy">
-      A personal finance dashboard built to turn financial transaction data
-      into a clearer visual picture of spending, balances and expenses.
-    </div>
-
-    <div class="modal-grid">
-
-      <div class="info-box">
-        <div class="info-label">Category</div>
-        <div class="info-value">Personal Finance</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Core</div>
-        <div class="info-value">Transaction Analysis</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Interface</div>
-        <div class="info-value">Finance Dashboard</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Visual System</div>
-        <div class="info-value">White / Purple</div>
-      </div>
-
-    </div>
-
-    <div class="modal-actions">
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/Fin-dash/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Launch Project
-      </a>
-
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Source
-      </a>
-    </div>
-
-  </div>
-</div>
-
-<!-- =========================
+<!-- =====================================================
      RECLUSE
-========================= -->
+===================================================== -->
 
 <div class="modal" id="modal-recluse">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-recluse')">×</button>
 
-    <div class="modal-kicker">
-      Project Planet / Streetwear
+    <div class="modalEyebrow">PROJECT / DIGITAL BRAND</div>
+
+    <div class="modalTitle">RECLUSE</div>
+
+    <div class="modalText">
+      A dark streetwear and tech-core concept built around a bold
+      digital identity, minimal interface and underground aesthetic.
     </div>
 
-    <div class="modal-title">
-      RECLUSE
-    </div>
-
-    <div class="modal-copy">
-      A dark streetwear and tech-core storefront built around a minimal,
-      aggressive visual identity. The experience combines product presentation,
-      drop culture and a high-contrast digital aesthetic.
-    </div>
-
-    <div class="modal-grid">
-
-      <div class="info-box">
-        <div class="info-label">Category</div>
-        <div class="info-value">Streetwear</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Identity</div>
-        <div class="info-value">Tech-Core / Dark</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Drop</div>
-        <div class="info-value">Limited Release</div>
-      </div>
-
-      <div class="info-box">
-        <div class="info-label">Status</div>
-        <div class="info-value">Active Concept</div>
-      </div>
-
-    </div>
-
-    <div class="modal-actions">
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/recluse52-site/index.html"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Launch Project
+    <div class="modalActions">
+      <a class="modalLink"
+         href="https://johnnafuh.github.io/recluse52-site/index.html"
+         target="_blank">
+        LAUNCH PROJECT
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Source
+      <a class="modalLink"
+         href="https://github.com/JohnNafuh"
+         target="_blank">
+        GITHUB
       </a>
     </div>
 
   </div>
 </div>
 
-<!-- =========================
-     PROJECTS MODAL
-========================= -->
+<!-- =====================================================
+     PROJECT REGISTRY
+===================================================== -->
 
 <div class="modal" id="modal-projects">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-projects')">×</button>
 
-    <div class="modal-kicker">
-      Orbital Registry
-    </div>
+    <div class="modalEyebrow">ORBITAL REGISTRY</div>
 
-    <div class="modal-title">
-      Projects
-    </div>
+    <div class="modalTitle">Project Systems</div>
 
-    <div class="modal-copy">
-      Three active project environments orbit the central NAFUH node.
-      Select an object from the registry or directly from the 3D system.
-    </div>
+    <div class="projectList">
 
-    <div class="project-list">
-
-      <div class="project-item" data-fly="fin">
-        <div>
-          <div class="project-item-name">Fin-Dash</div>
-          <div class="project-item-type">
-            Personal Finance / Dashboard
-          </div>
-        </div>
-        <div class="project-arrow">→</div>
+      <div class="projectItem">
+        <span>FIN-DASH</span>
+        <button onclick="targetProject('Fin-Dash')">LOCATE</button>
       </div>
 
-      <div class="project-item" data-fly="crown">
-        <div>
-          <div class="project-item-name">Crown Capital</div>
-          <div class="project-item-type">
-            Finance / Investment
-          </div>
-        </div>
-        <div class="project-arrow">→</div>
+      <div class="projectItem">
+        <span>CROWN CAPITAL</span>
+        <button onclick="targetProject('Crown Capital')">LOCATE</button>
       </div>
 
-      <div class="project-item" data-fly="recluse">
-        <div>
-          <div class="project-item-name">RECLUSE</div>
-          <div class="project-item-type">
-            Streetwear / Digital Commerce
-          </div>
-        </div>
-        <div class="project-arrow">→</div>
+      <div class="projectItem">
+        <span>RECLUSE</span>
+        <button onclick="targetProject('RECLUSE')">LOCATE</button>
       </div>
 
     </div>
@@ -1287,53 +905,41 @@ a{
   </div>
 </div>
 
-<!-- =========================
+<!-- =====================================================
      CONTACT
-========================= -->
+===================================================== -->
 
 <div class="modal" id="modal-contact">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-contact')">×</button>
 
-    <div class="modal-kicker">
-      Communication Node
+    <div class="modalEyebrow">COMMUNICATION NODE</div>
+
+    <div class="modalTitle">Contact</div>
+
+    <div class="modalText">
+      Interested in working together, discussing a project or simply
+      connecting?
     </div>
 
-    <div class="modal-title">
-      Contact
-    </div>
+    <div class="modalActions">
 
-    <div class="modal-copy">
-      Open a communication channel for projects, collaborations,
-      opportunities or general enquiries.
-    </div>
-
-    <div class="modal-actions">
-
-      <a
-        class="modal-btn"
-        href="mailto:johnnafuh@gmail.com"
-      >
-        Email
+      <a class="modalLink"
+         href="mailto:johnnafuh@gmail.com">
+        EMAIL
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://wa.me/2347038547668"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        WhatsApp
+      <a class="modalLink"
+         href="https://wa.me/2347038547668"
+         target="_blank">
+        WHATSAPP
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GitHub
+      <a class="modalLink"
+         href="https://github.com/JohnNafuh"
+         target="_blank">
+        GITHUB
       </a>
 
     </div>
@@ -1341,134 +947,53 @@ a{
   </div>
 </div>
 
-<!-- =========================
+<!-- =====================================================
      GRAPHIC DESIGN
-========================= -->
+===================================================== -->
 
 <div class="modal" id="modal-design">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-design')">×</button>
 
-    <div class="modal-kicker">
-      Skill Constellation
-    </div>
+    <div class="modalEyebrow">SKILL NODE</div>
 
-    <div class="modal-title">
-      Graphic Design
-    </div>
+    <div class="modalTitle">Graphic Design</div>
 
-    <div class="modal-copy">
-      Visual communication, digital interfaces, branding systems and
-      creative direction across digital projects.
+    <div class="modalText">
+      Visual design, digital interfaces, branding and creative
+      experimentation.
     </div>
 
   </div>
 </div>
 
-<!-- =========================
+<!-- =====================================================
      LEADERSHIP
-========================= -->
+===================================================== -->
 
 <div class="modal" id="modal-leadership">
-  <div class="modal-card">
+  <div class="modalBox">
 
-    <button class="close-modal">×</button>
+    <button class="close" onclick="closeModal('modal-leadership')">×</button>
 
-    <div class="modal-kicker">
-      Skill Constellation
-    </div>
+    <div class="modalEyebrow">SKILL NODE</div>
 
-    <div class="modal-title">
-      Leadership
-    </div>
+    <div class="modalTitle">Leadership</div>
 
-    <div class="modal-copy">
-      Building ideas into systems, coordinating execution and moving
-      projects from concept toward a usable result.
+    <div class="modalText">
+      Leadership, coordination, communication and the ability to turn
+      ideas into practical execution.
     </div>
 
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
 <script>
-/* =========================================================
-   NAFUH ORBIT
-   DIGITAL EXPLORATION SYSTEM
-   ========================================================= */
-
-(function(){
-
-'use strict';
 
 /* =========================================================
-   DOM
-   ========================================================= */
-
-var canvas = document.getElementById('scene-canvas');
-
-var loadingScreen = document.getElementById('loading-screen');
-var loadingProgress = document.getElementById('loading-progress');
-var loadingPercent = document.getElementById('loading-percent');
-var loadingStatus = document.getElementById('loading-status');
-
-var targetReticle = document.getElementById('target-reticle');
-var targetReadout = document.getElementById('target-readout');
-var targetName = document.getElementById('target-name');
-var targetMeta = document.getElementById('target-meta');
-
-var cameraMode = document.getElementById('camera-mode');
-var rangeValue = document.getElementById('range-value');
-var fpsValue = document.getElementById('fps-value');
-
-var hudObjects = document.getElementById('hud-objects');
-
-/* =========================================================
-   LOADING
-   ========================================================= */
-
-var loadSteps = [
-  [12,'Booting navigation core...'],
-  [27,'Generating stellar field...'],
-  [43,'Constructing planetary bodies...'],
-  [61,'Mapping orbital trajectories...'],
-  [78,'Calibrating camera system...'],
-  [91,'Activating mission HUD...'],
-  [100,'SYSTEM READY']
-];
-
-var loadIndex = 0;
-
-function updateLoading(){
-
-  if(loadIndex >= loadSteps.length){
-    setTimeout(function(){
-      loadingScreen.classList.add('hidden');
-    },500);
-    return;
-  }
-
-  var step = loadSteps[loadIndex];
-
-  loadingProgress.style.width = step[0] + '%';
-  loadingPercent.textContent =
-    String(step[0]).padStart(2,'0') + '%';
-
-  loadingStatus.textContent = step[1];
-
-  loadIndex++;
-
-  setTimeout(updateLoading,170);
-}
-
-updateLoading();
-
-/* =========================================================
-   THREE SETUP
-   ========================================================= */
+   BASIC SETUP
+========================================================= */
 
 var scene = new THREE.Scene();
 
@@ -1476,19 +1001,18 @@ var camera = new THREE.PerspectiveCamera(
   50,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  500
 );
 
 camera.position.set(0,20,46);
 
 var renderer = new THREE.WebGLRenderer({
-  canvas:canvas,
   antialias:true,
-  alpha:false
+  alpha:true
 });
 
 renderer.setPixelRatio(
-  Math.min(window.devicePixelRatio || 1,2)
+  Math.min(window.devicePixelRatio,2)
 );
 
 renderer.setSize(
@@ -1496,7 +1020,9 @@ renderer.setSize(
   window.innerHeight
 );
 
-renderer.setClearColor(0x020305,1);
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+document.body.appendChild(renderer.domElement);
 
 var controls = new THREE.OrbitControls(
   camera,
@@ -1505,272 +1031,62 @@ var controls = new THREE.OrbitControls(
 
 controls.enableDamping = true;
 controls.dampingFactor = .055;
-controls.minDistance = 8;
-controls.maxDistance = 72;
 controls.enablePan = false;
+controls.minDistance = 7;
+controls.maxDistance = 85;
 controls.rotateSpeed = .5;
 controls.zoomSpeed = .7;
 
+
 /* =========================================================
    LIGHTING
-   ========================================================= */
+========================================================= */
 
 var ambientLight = new THREE.AmbientLight(
-  0xffffff,
-  .12
+  0x7899b5,
+  .22
 );
 
 scene.add(ambientLight);
 
 var sunLight = new THREE.PointLight(
-  0xffffff,
-  2.8,
+  0xffd38a,
+  3.2,
   180
 );
 
-sunLight.position.set(0,0,0);
-
 scene.add(sunLight);
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+var blueFill = new THREE.PointLight(
+  0x438cff,
+  .45,
+  150
+);
 
-var textureCanvas = document.createElement('canvas');
-textureCanvas.width = 512;
-textureCanvas.height = 512;
+blueFill.position.set(-45,20,35);
+scene.add(blueFill);
 
-var textureCtx = textureCanvas.getContext('2d');
-
-function noise(){
-
-  var value = 0;
-
-  for(var i=0;i<4;i++){
-    value += Math.random();
-  }
-
-  return value / 4;
-}
-
-function makeTexture(type){
-
-  var ctx = textureCtx;
-  var w = textureCanvas.width;
-  var h = textureCanvas.height;
-
-  ctx.clearRect(0,0,w,h);
-
-  if(type === 'sun'){
-
-    var sunGradient = ctx.createRadialGradient(
-      256,256,20,
-      256,256,270
-    );
-
-    sunGradient.addColorStop(0,'#fff7c7');
-    sunGradient.addColorStop(.25,'#ffd76a');
-    sunGradient.addColorStop(.6,'#ef9d28');
-    sunGradient.addColorStop(1,'#8d3b09');
-
-    ctx.fillStyle = sunGradient;
-    ctx.fillRect(0,0,w,h);
-
-    for(var s=0;s<700;s++){
-
-      var sx=Math.random()*w;
-      var sy=Math.random()*h;
-      var sr=Math.random()*7+.5;
-
-      ctx.fillStyle =
-        Math.random()>.5
-        ? 'rgba(255,245,180,.18)'
-        : 'rgba(110,40,0,.16)';
-
-      ctx.beginPath();
-      ctx.arc(sx,sy,sr,0,Math.PI*2);
-      ctx.fill();
-    }
-
-  }else if(type === 'ocean'){
-
-    ctx.fillStyle='#092a4d';
-    ctx.fillRect(0,0,w,h);
-
-    for(var o=0;o<1200;o++){
-
-      var ox=Math.random()*w;
-      var oy=Math.random()*h;
-      var ow=Math.random()*70+5;
-      var oh=Math.random()*12+2;
-
-      ctx.fillStyle =
-        Math.random()>.48
-        ? 'rgba(55,160,195,.45)'
-        : 'rgba(15,65,95,.5)';
-
-      ctx.beginPath();
-      ctx.ellipse(
-        ox,
-        oy,
-        ow,
-        oh,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-      ctx.fill();
-    }
-
-  }else if(type === 'gold'){
-
-    var goldGradient=ctx.createLinearGradient(
-      0,0,w,h
-    );
-
-    goldGradient.addColorStop(0,'#2b1703');
-    goldGradient.addColorStop(.25,'#8c5a12');
-    goldGradient.addColorStop(.5,'#e5bd54');
-    goldGradient.addColorStop(.72,'#70430a');
-    goldGradient.addColorStop(1,'#1d0d02');
-
-    ctx.fillStyle=goldGradient;
-    ctx.fillRect(0,0,w,h);
-
-    for(var g=0;g<100;g++){
-
-      var gy=Math.random()*h;
-
-      ctx.strokeStyle =
-        Math.random()>.5
-        ? 'rgba(255,220,100,.22)'
-        : 'rgba(30,10,0,.3)';
-
-      ctx.lineWidth=Math.random()*5+1;
-
-      ctx.beginPath();
-      ctx.moveTo(0,gy);
-      ctx.bezierCurveTo(
-        w*.25,
-        gy+Math.random()*30-15,
-        w*.7,
-        gy+Math.random()*30-15,
-        w,
-        gy+Math.random()*30-15
-      );
-      ctx.stroke();
-    }
-
-  }else if(type === 'volcanic'){
-
-    ctx.fillStyle='#180706';
-    ctx.fillRect(0,0,w,h);
-
-    for(var r=0;r<1100;r++){
-
-      var rx=Math.random()*w;
-      var ry=Math.random()*h;
-      var rr=Math.random()*14+2;
-
-      ctx.fillStyle =
-        Math.random()>.7
-        ? 'rgba(240,75,30,.7)'
-        : 'rgba(70,20,14,.8)';
-
-      ctx.beginPath();
-      ctx.arc(rx,ry,rr,0,Math.PI*2);
-      ctx.fill();
-    }
-
-    for(var crack=0;crack<100;crack++){
-
-      ctx.strokeStyle='rgba(255,110,50,.25)';
-      ctx.lineWidth=Math.random()*2+1;
-
-      ctx.beginPath();
-
-      var cx=Math.random()*w;
-      var cy=Math.random()*h;
-
-      ctx.moveTo(cx,cy);
-
-      for(var c=0;c<5;c++){
-
-        cx+=Math.random()*50-25;
-        cy+=Math.random()*50-25;
-
-        ctx.lineTo(cx,cy);
-      }
-
-      ctx.stroke();
-    }
-
-  }else if(type === 'nebula'){
-
-    ctx.fillStyle='#03050a';
-    ctx.fillRect(0,0,w,h);
-
-    for(var n=0;n<500;n++){
-
-      var nx=Math.random()*w;
-      var ny=Math.random()*h;
-      var nr=Math.random()*70+10;
-
-      var colors=[
-        'rgba(45,75,150,.09)',
-        'rgba(110,55,140,.07)',
-        'rgba(30,110,145,.06)'
-      ];
-
-      var ng=ctx.createRadialGradient(
-        nx,ny,0,
-        nx,ny,nr
-      );
-
-      ng.addColorStop(0,
-        colors[Math.floor(Math.random()*colors.length)]
-      );
-
-      ng.addColorStop(1,'rgba(0,0,0,0)');
-
-      ctx.fillStyle=ng;
-
-      ctx.beginPath();
-      ctx.arc(nx,ny,nr,0,Math.PI*2);
-      ctx.fill();
-    }
-  }
-
-  return new THREE.CanvasTexture(textureCanvas);
-}
 
 /* =========================================================
    STARS
-   ========================================================= */
+========================================================= */
 
-function createStars(count,size,opacity){
+function createStars(count,size,spread,opacity){
 
   var geometry = new THREE.BufferGeometry();
 
-  var positions = new Float32Array(count*3);
+  var positions = new Float32Array(count * 3);
 
   for(var i=0;i<count;i++){
 
-    var radius=90+Math.random()*280;
-
-    var theta=Math.random()*Math.PI*2;
-    var phi=Math.acos(
-      2*Math.random()-1
-    );
-
     positions[i*3] =
-      radius*Math.sin(phi)*Math.cos(theta);
+      (Math.random()-.5)*spread;
 
     positions[i*3+1] =
-      radius*Math.cos(phi);
+      (Math.random()-.5)*spread;
 
     positions[i*3+2] =
-      radius*Math.sin(phi)*Math.sin(theta);
+      (Math.random()-.5)*spread;
   }
 
   geometry.setAttribute(
@@ -1778,15 +1094,15 @@ function createStars(count,size,opacity){
     new THREE.BufferAttribute(positions,3)
   );
 
-  var material=new THREE.PointsMaterial({
-    color:0xffffff,
+  var material = new THREE.PointsMaterial({
+    color:0xdff5ff,
     size:size,
     transparent:true,
     opacity:opacity,
-    sizeAttenuation:true
+    depthWrite:false
   });
 
-  var stars=new THREE.Points(
+  var stars = new THREE.Points(
     geometry,
     material
   );
@@ -1796,316 +1112,569 @@ function createStars(count,size,opacity){
   return stars;
 }
 
-var starsA=createStars(4500,.11,.7);
-var starsB=createStars(2200,.22,.35);
+var starsA = createStars(
+  5200,
+  .075,
+  420,
+  .9
+);
+
+var starsB = createStars(
+  2400,
+  .14,
+  300,
+  .48
+);
+
 
 /* =========================================================
    NEBULA
-   ========================================================= */
+========================================================= */
 
-var nebulaGeometry=new THREE.SphereGeometry(
-  260,
-  48,
-  48
-);
+function createNebula(){
 
-var nebulaMaterial=new THREE.MeshBasicMaterial({
-  map:makeTexture('nebula'),
-  side:THREE.BackSide,
-  transparent:true,
-  opacity:.55
-});
-
-var nebula=new THREE.Mesh(
-  nebulaGeometry,
-  nebulaMaterial
-);
-
-scene.add(nebula);
-
-/* =========================================================
-   SUN
-   ========================================================= */
-
-var sunGeometry=new THREE.SphereGeometry(
-  5,
-  64,
-  64
-);
-
-var sunMaterial=new THREE.MeshStandardMaterial({
-  map:makeTexture('sun'),
-  emissive:0xf39b22,
-  emissiveMap:makeTexture('sun'),
-  emissiveIntensity:1.3,
-  roughness:.72,
-  metalness:.05
-});
-
-var sunMesh=new THREE.Mesh(
-  sunGeometry,
-  sunMaterial
-);
-
-sunMesh.position.set(0,0,0);
-
-scene.add(sunMesh);
-
-/* SUN GLOW */
-
-function createGlowTexture(){
-
-  var c=document.createElement('canvas');
-
-  c.width=256;
-  c.height=256;
-
-  var ctx=c.getContext('2d');
-
-  var gradient=ctx.createRadialGradient(
-    128,128,5,
-    128,128,128
+  var geometry = new THREE.SphereGeometry(
+    190,
+    32,
+    32
   );
 
-  gradient.addColorStop(0,'rgba(255,220,130,1)');
-  gradient.addColorStop(.2,'rgba(255,170,50,.55)');
-  gradient.addColorStop(.5,'rgba(255,100,20,.18)');
-  gradient.addColorStop(1,'rgba(255,50,0,0)');
-
-  ctx.fillStyle=gradient;
-  ctx.fillRect(0,0,256,256);
-
-  return new THREE.CanvasTexture(c);
-}
-
-var glowSprite=new THREE.Sprite(
-  new THREE.SpriteMaterial({
-    map:createGlowTexture(),
+  var material = new THREE.MeshBasicMaterial({
+    side:THREE.BackSide,
     transparent:true,
-    depthWrite:false
-  })
-);
-
-glowSprite.scale.set(18,18,1);
-
-sunMesh.add(glowSprite);
-
-/* =========================================================
-   PROJECT DATA
-   ========================================================= */
-
-var projects=[
-  {
-    name:'Fin-Dash',
-    distance:14,
-    radius:1.9,
-    speed:.085,
-    texture:'ocean',
-    modal:'modal-fin',
-    type:'PERSONAL FINANCE'
-  },
-  {
-    name:'Crown Capital',
-    distance:22,
-    radius:2.3,
-    speed:.055,
-    texture:'gold',
-    modal:'modal-crown',
-    type:'FINANCIAL SYSTEM'
-  },
-  {
-    name:'RECLUSE',
-    distance:30,
-    radius:2.5,
-    speed:.04,
-    texture:'volcanic',
-    modal:'modal-recluse',
-    type:'STREETWEAR SYSTEM'
-  }
-];
-
-/* =========================================================
-   OBJECT REGISTRY
-   ========================================================= */
-
-var interactive=[];
-
-/* =========================================================
-   ORBIT RINGS
-   ========================================================= */
-
-function createOrbitRing(radius){
-
-  var points=[];
-
-  for(var i=0;i<=128;i++){
-
-    var a=(i/128)*Math.PI*2;
-
-    points.push(
-      new THREE.Vector3(
-        Math.cos(a)*radius,
-        0,
-        Math.sin(a)*radius
-      )
-    );
-  }
-
-  var geometry=new THREE.BufferGeometry()
-    .setFromPoints(points);
-
-  var material=new THREE.LineBasicMaterial({
-    color:0xffffff,
-    transparent:true,
-    opacity:.08
+    opacity:.18,
+    color:0x162e62
   });
 
-  var line=new THREE.Line(
+  var mesh = new THREE.Mesh(
     geometry,
     material
-  );
-
-  scene.add(line);
-
-  return line;
-}
-
-/* =========================================================
-   PROJECT PLANETS
-   ========================================================= */
-
-projects.forEach(function(project,index){
-
-  var group=new THREE.Group();
-
-  group.position.set(
-    project.distance,
-    0,
-    0
-  );
-
-  scene.add(group);
-
-  var geometry=new THREE.SphereGeometry(
-    project.radius,
-    48,
-    48
-  );
-
-  var material=new THREE.MeshStandardMaterial({
-    map:makeTexture(project.texture),
-    roughness:.72,
-    metalness:project.texture==='gold' ? .45 : .05
-  });
-
-  var mesh=new THREE.Mesh(
-    geometry,
-    material
-  );
-
-  group.add(mesh);
-
-  if(project.texture==='gold'){
-
-    var ringGeometry=new THREE.RingGeometry(
-      project.radius*1.45,
-      project.radius*1.55,
-      64
-    );
-
-    var ringMaterial=new THREE.MeshBasicMaterial({
-      color:0xc99531,
-      transparent:true,
-      opacity:.45,
-      side:THREE.DoubleSide
-    });
-
-    var ring=new THREE.Mesh(
-      ringGeometry,
-      ringMaterial
-    );
-
-    ring.rotation.x=Math.PI/2.3;
-
-    group.add(ring);
-  }
-
-  project.group=group;
-  project.mesh=mesh;
-  project.angle=index*2.1;
-
-  createOrbitRing(project.distance);
-
-  interactive.push({
-    mesh:mesh,
-    obj:project
-  });
-});
-
-/* =========================================================
-   SKILL CONSTELLATIONS
-   ========================================================= */
-
-var skills=[
-  {
-    name:'Graphic Design',
-    distance:42,
-    y:9,
-    modal:'modal-design'
-  },
-  {
-    name:'Leadership',
-    distance:46,
-    y:-7,
-    modal:'modal-leadership'
-  }
-];
-
-skills.forEach(function(skill,index){
-
-  var angle=index===0 ? .55 : 3.4;
-
-  var mesh=new THREE.Mesh(
-    new THREE.SphereGeometry(.55,24,24),
-    new THREE.MeshBasicMaterial({
-      color:0xffffff
-    })
-  );
-
-  mesh.position.set(
-    Math.cos(angle)*skill.distance,
-    skill.y,
-    Math.sin(angle)*skill.distance
   );
 
   scene.add(mesh);
 
-  skill.mesh=mesh;
+  return mesh;
+}
 
-  skill.group={
-    position:mesh.position
+var nebula = createNebula();
+
+
+/* =========================================================
+   TEXTURE HELPERS
+========================================================= */
+
+function canvasTexture(draw){
+
+  var canvas =
+    document.createElement("canvas");
+
+  canvas.width=512;
+  canvas.height=512;
+
+  var ctx=canvas.getContext("2d");
+
+  draw(ctx,canvas);
+
+  var texture =
+    new THREE.CanvasTexture(canvas);
+
+  texture.encoding =
+    THREE.sRGBEncoding;
+
+  return texture;
+}
+
+
+/* =========================================================
+   SUN
+========================================================= */
+
+var sunTexture = canvasTexture(function(ctx,c){
+
+  var g = ctx.createRadialGradient(
+    256,256,15,
+    256,256,260
+  );
+
+  g.addColorStop(0,"#fff9d5");
+  g.addColorStop(.2,"#ffe88b");
+  g.addColorStop(.48,"#ffbd3d");
+  g.addColorStop(.75,"#ee711d");
+  g.addColorStop(1,"#9b2f0b");
+
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,c.width,c.height);
+
+  for(var i=0;i<220;i++){
+
+    var x=Math.random()*512;
+    var y=Math.random()*512;
+    var r=Math.random()*14+2;
+
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+
+    ctx.fillStyle=
+      Math.random()>.5
+      ?"rgba(255,246,175,.28)"
+      :"rgba(150,47,8,.18)";
+
+    ctx.fill();
+  }
+});
+
+var sunMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(5,64,64),
+  new THREE.MeshBasicMaterial({
+    map:sunTexture
+  })
+);
+
+scene.add(sunMesh);
+
+
+/* sun glow */
+
+var glowCanvas =
+  document.createElement("canvas");
+
+glowCanvas.width=256;
+glowCanvas.height=256;
+
+var glowCtx =
+  glowCanvas.getContext("2d");
+
+var glowGradient =
+  glowCtx.createRadialGradient(
+    128,128,5,
+    128,128,125
+  );
+
+glowGradient.addColorStop(
+  0,
+  "rgba(255,220,105,.85)"
+);
+
+glowGradient.addColorStop(
+  .25,
+  "rgba(255,169,40,.45)"
+);
+
+glowGradient.addColorStop(
+  1,
+  "rgba(255,100,0,0)"
+);
+
+glowCtx.fillStyle=glowGradient;
+glowCtx.fillRect(0,0,256,256);
+
+var glowTexture =
+  new THREE.CanvasTexture(glowCanvas);
+
+var glowSprite =
+  new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map:glowTexture,
+      transparent:true,
+      depthWrite:false
+    })
+  );
+
+glowSprite.scale.set(18,18,1);
+scene.add(glowSprite);
+
+
+/* =========================================================
+   PLANET TEXTURES
+========================================================= */
+
+var oceanTexture = canvasTexture(function(ctx,c){
+
+  ctx.fillStyle="#183f66";
+  ctx.fillRect(0,0,512,512);
+
+  for(var i=0;i<90;i++){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      Math.random()*512,
+      Math.random()*512,
+      Math.random()*45+8,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle =
+      Math.random()>.35
+      ? "#3e83a1"
+      : "#d7d6a0";
+
+    ctx.globalAlpha=.35;
+
+    ctx.fill();
+
+    ctx.globalAlpha=1;
+  }
+
+  for(var j=0;j<60;j++){
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      Math.random()*512,
+      Math.random()*512
+    );
+
+    ctx.lineTo(
+      Math.random()*512,
+      Math.random()*512
+    );
+
+    ctx.strokeStyle="rgba(190,225,235,.2)";
+    ctx.stroke();
+  }
+});
+
+
+var goldTexture = canvasTexture(function(ctx,c){
+
+  ctx.fillStyle="#8a6120";
+  ctx.fillRect(0,0,512,512);
+
+  for(var y=0;y<512;y+=18){
+
+    ctx.fillStyle =
+      y%36===0
+      ? "#c99838"
+      : "#704b17";
+
+    ctx.fillRect(0,y,512,11);
+  }
+
+  for(var i=0;i<70;i++){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      Math.random()*512,
+      Math.random()*512,
+      Math.random()*8+2,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle="#f2c65c";
+    ctx.globalAlpha=.18;
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+});
+
+
+var volcanicTexture = canvasTexture(function(ctx,c){
+
+  ctx.fillStyle="#462c27";
+  ctx.fillRect(0,0,512,512);
+
+  for(var i=0;i<130;i++){
+
+    var x=Math.random()*512;
+    var y=Math.random()*512;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      Math.random()*25+4,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle =
+      Math.random()>.5
+      ? "#734238"
+      : "#241a1b";
+
+    ctx.globalAlpha=.6;
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+
+  for(var j=0;j<50;j++){
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      Math.random()*512,
+      Math.random()*512
+    );
+
+    ctx.lineTo(
+      Math.random()*512,
+      Math.random()*512
+    );
+
+    ctx.strokeStyle="rgba(220,115,70,.25)";
+    ctx.lineWidth=2;
+    ctx.stroke();
+  }
+});
+
+
+/* =========================================================
+   PLANET CREATION
+========================================================= */
+
+var interactive=[];
+
+function makePlanet(
+  name,
+  distance,
+  radius,
+  texture,
+  speed,
+  modal
+){
+
+  var pivot = new THREE.Group();
+
+  scene.add(pivot);
+
+  var mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(
+      radius,
+      48,
+      48
+    ),
+    new THREE.MeshStandardMaterial({
+      map:texture,
+      roughness:.85,
+      metalness:.05
+    })
+  );
+
+  mesh.position.x=distance;
+
+  pivot.add(mesh);
+
+  var obj={
+    name:name,
+    modal:modal,
+    radius:radius,
+    distance:distance,
+    pivot:pivot,
+    mesh:mesh,
+    speed:speed,
+    angle:Math.random()*Math.PI*2
   };
-
-  skill.isStatic=true;
 
   interactive.push({
     mesh:mesh,
-    obj:skill
+    obj:obj
   });
-});
+
+  return obj;
+}
+
+
+/* =========================================================
+   PLANETS
+========================================================= */
+
+var finDash =
+  makePlanet(
+    "Fin-Dash",
+    14,
+    1.9,
+    oceanTexture,
+    .085,
+    "modal-findash"
+  );
+
+var crownCapital =
+  makePlanet(
+    "Crown Capital",
+    22,
+    2.3,
+    goldTexture,
+    .055,
+    "modal-crown"
+  );
+
+var recluse =
+  makePlanet(
+    "RECLUSE",
+    30,
+    2.5,
+    volcanicTexture,
+    .04,
+    "modal-recluse"
+  );
+
+
+/* =========================================================
+   CROWN RING
+========================================================= */
+
+var crownRing =
+  new THREE.Mesh(
+    new THREE.RingGeometry(
+      3,
+      4.2,
+      64
+    ),
+    new THREE.MeshBasicMaterial({
+      color:0xe7c36c,
+      transparent:true,
+      opacity:.55,
+      side:THREE.DoubleSide
+    })
+  );
+
+crownRing.rotation.x=
+  Math.PI/2.7;
+
+crownCapital.mesh.add(crownRing);
+
+
+/* =========================================================
+   ORBIT RINGS
+========================================================= */
+
+function createOrbit(distance){
+
+  var ring =
+    new THREE.LineLoop(
+      new THREE.BufferGeometry(),
+      new THREE.LineBasicMaterial({
+        color:0x4c91b8,
+        transparent:true,
+        opacity:.25
+      })
+    );
+
+  var pts=[];
+
+  for(var i=0;i<128;i++){
+
+    var a =
+      i/128*Math.PI*2;
+
+    pts.push(
+      new THREE.Vector3(
+        Math.cos(a)*distance,
+        0,
+        Math.sin(a)*distance
+      )
+    );
+  }
+
+  ring.geometry.setFromPoints(pts);
+
+  scene.add(ring);
+
+  return ring;
+}
+
+var orbit1=createOrbit(14);
+var orbit2=createOrbit(22);
+var orbit3=createOrbit(30);
+
+
+/* =========================================================
+   SKILL NODES
+========================================================= */
+
+function makeSkill(
+  name,
+  distance,
+  y,
+  modal
+){
+
+  var geometry =
+    new THREE.SphereGeometry(
+      .75,
+      24,
+      24
+    );
+
+  var material =
+    new THREE.MeshBasicMaterial({
+      color:0x6adfff
+    });
+
+  var mesh =
+    new THREE.Mesh(
+      geometry,
+      material
+    );
+
+  mesh.position.set(
+    distance,
+    y,
+    0
+  );
+
+  scene.add(mesh);
+
+  var glow =
+    new THREE.PointLight(
+      0x55d8ff,
+      .6,
+      15
+    );
+
+  glow.position.copy(
+    mesh.position
+  );
+
+  scene.add(glow);
+
+  var obj={
+    name:name,
+    modal:modal,
+    isSkill:true,
+    mesh:mesh
+  };
+
+  interactive.push({
+    mesh:mesh,
+    obj:obj
+  });
+
+  return obj;
+}
+
+var design =
+  makeSkill(
+    "Graphic Design",
+    42,
+    9,
+    "modal-design"
+  );
+
+var leadership =
+  makeSkill(
+    "Leadership",
+    46,
+    -7,
+    "modal-leadership"
+  );
+
 
 /* =========================================================
    SUN OBJECT
-   ========================================================= */
+========================================================= */
 
 var sunObj={
-  name:'John Nafuh',
-  modal:'modal-about',
+  name:"John Nafuh",
+  modal:"modal-about",
   radius:5,
   isSun:true,
-  group:{
-    position:sunMesh.position
-  }
+  mesh:sunMesh
 };
 
 interactive.push({
@@ -2114,603 +1683,550 @@ interactive.push({
   isSun:true
 });
 
-/* =========================================================
-   HUD COUNT
-========================================================= */
-
-hudObjects.textContent=
-  String(interactive.length).padStart(2,'0');
 
 /* =========================================================
    TARGET SYSTEM
-   ========================================================= */
+========================================================= */
 
-var selectedObject=null;
+var currentTarget=null;
 
-function objectPosition(obj){
+var raycaster =
+  new THREE.Raycaster();
 
-  if(!obj){
-    return new THREE.Vector3();
-  }
-
-  if(obj.isSun){
-    return sunMesh.position;
-  }
-
-  if(obj.group && obj.group.position){
-    return obj.group.position;
-  }
-
-  if(obj.mesh && obj.mesh.position){
-    return obj.mesh.position;
-  }
-
-  return new THREE.Vector3();
-}
-
-function getObjectType(obj){
-
-  if(obj.isSun){
-    return 'CENTRAL NODE / CREATOR';
-  }
-
-  if(obj.isStatic){
-    return 'SKILL CONSTELLATION';
-  }
-
-  return 'PROJECT PLANET';
-}
-
-function acquireTarget(obj){
-
-  if(!obj){
-    return;
-  }
-
-  selectedObject=obj;
-
-  targetReadout.classList.add('active');
-
-  targetName.textContent=obj.name || 'UNKNOWN OBJECT';
-
-  targetMeta.textContent=
-    getObjectType(obj) +
-    ' · STATUS ACTIVE';
-
-  cameraMode.textContent='TARGET LOCK';
-
-  positionTargetReticle();
-}
-
-function clearTarget(){
-
-  selectedObject=null;
-
-  targetReadout.classList.remove('active');
-
-  targetReticle.classList.remove('active');
-
-  targetName.textContent='—';
-
-  targetMeta.textContent='Awaiting object data...';
-
-  cameraMode.textContent='ORBIT';
-
-  rangeValue.textContent='—';
-}
-
-function positionTargetReticle(){
-
-  if(!selectedObject){
-    targetReticle.classList.remove('active');
-    return;
-  }
-
-  var pos=objectPosition(selectedObject);
-
-  var projected=pos.clone().project(camera);
-
-  if(
-    projected.z>1 ||
-    projected.z<-1 ||
-    projected.x<-1.2 ||
-    projected.x>1.2 ||
-    projected.y<-1.2 ||
-    projected.y>1.2
-  ){
-    targetReticle.classList.remove('active');
-    return;
-  }
-
-  var x=
-    (projected.x*.5+.5)*
-    window.innerWidth;
-
-  var y=
-    (-projected.y*.5+.5)*
-    window.innerHeight;
-
-  targetReticle.style.left=x+'px';
-  targetReticle.style.top=y+'px';
-
-  targetReticle.classList.add('active');
-}
-
-/* =========================================================
-   CAMERA
-   ========================================================= */
-
-var tweening=false;
-
-function easeInOutCubic(t){
-
-  return t<.5
-    ?4*t*t*t
-    :1-Math.pow(-2*t+2,3)/2;
-}
-
-function tweenCamera(
-  targetPos,
-  lookAt,
-  duration,
-  onDone
-){
-
-  tweening=true;
-
-  controls.enabled=false;
-
-  var startPos=camera.position.clone();
-  var startTarget=controls.target.clone();
-
-  var startTime=performance.now();
-
-  function step(now){
-
-    var t=Math.min(
-      1,
-      (now-startTime)/duration
-    );
-
-    var e=easeInOutCubic(t);
-
-    camera.position.lerpVectors(
-      startPos,
-      targetPos,
-      e
-    );
-
-    controls.target.lerpVectors(
-      startTarget,
-      lookAt,
-      e
-    );
-
-    controls.update();
-
-    if(t<1){
-
-      requestAnimationFrame(step);
-
-    }else{
-
-      tweening=false;
-
-      controls.enabled=true;
-
-      controls.update();
-
-      if(onDone){
-        onDone();
-      }
-    }
-  }
-
-  requestAnimationFrame(step);
-}
-
-function flyTo(obj){
-
-  if(!obj){
-    return;
-  }
-
-  acquireTarget(obj);
-
-  var pos=objectPosition(obj).clone();
-
-  var camDist;
-
-  if(obj.isSun){
-
-    camDist=17;
-
-  }else if(obj.isStatic){
-
-    camDist=10;
-
-  }else{
-
-    camDist=
-      Math.max(
-        9,
-        obj.radius*4.4+7
-      );
-  }
-
-  /*
-    IMPORTANT:
-    Instead of calculating direction from the object's
-    position relative to the origin, calculate the viewing
-    direction from the CURRENT CAMERA toward the target.
-
-    This fixes the Sun-at-origin problem and gives much
-    smoother camera movement for orbiting planets.
-  */
-
-  var viewDir=
-    camera.position.clone()
-      .sub(pos);
-
-  if(viewDir.length()<.01){
-    viewDir.set(0,.25,1);
-  }
-
-  viewDir.normalize();
-
-  var newPos=
-    pos.clone()
-      .add(
-        viewDir.multiplyScalar(camDist)
-      );
-
-  newPos.y+=camDist*.12;
-
-  tweenCamera(
-    newPos,
-    pos,
-    1100,
-    function(){
-
-      cameraMode.textContent='TARGET LOCK';
-
-      positionTargetReticle();
-
-      openModal(obj.modal);
-    }
-  );
-}
-
-function resetView(){
-
-  clearTarget();
-
-  var homePos=
-    new THREE.Vector3(
-      0,
-      20,
-      46
-    );
-
-  var homeTarget=
-    new THREE.Vector3(
-      0,
-      0,
-      0
-    );
-
-  tweenCamera(
-    homePos,
-    homeTarget,
-    1000,
-    function(){
-      cameraMode.textContent='ORBIT';
-    }
-  );
-}
-
-/* =========================================================
-   RAYCASTING
-   ========================================================= */
-
-var raycaster=new THREE.Raycaster();
-
-var pointer=new THREE.Vector2();
+var mouse =
+  new THREE.Vector2();
 
 var pointerDown={
   x:0,
   y:0
 };
 
-var dragging=false;
+function objectPosition(obj){
 
-function getPointerPosition(event){
-
-  var rect=canvas.getBoundingClientRect();
-
-  var clientX=
-    event.touches
-      ?event.touches[0].clientX
-      :event.clientX;
-
-  var clientY=
-    event.touches
-      ?event.touches[0].clientY
-      :event.clientY;
-
-  pointer.x=
-    ((clientX-rect.left)/rect.width)*2-1;
-
-  pointer.y=
-    -((clientY-rect.top)/rect.height)*2+1;
-}
-
-function findObject(){
-
-  raycaster.setFromCamera(
-    pointer,
-    camera
-  );
-
-  var meshes=interactive.map(
-    function(item){
-      return item.mesh;
-    }
-  );
-
-  var hits=raycaster.intersectObjects(
-    meshes,
-    true
-  );
-
-  if(!hits.length){
-    return null;
+  if(obj.isSun){
+    return sunMesh.position.clone();
   }
 
-  var hit=hits[0].object;
-
-  for(var i=0;i<interactive.length;i++){
-
-    if(
-      interactive[i].mesh===hit ||
-      interactive[i].mesh.children.indexOf(hit)!==-1
-    ){
-      return interactive[i];
-    }
+  if(obj.mesh){
+    return obj.mesh.getWorldPosition(
+      new THREE.Vector3()
+    );
   }
 
-  return null;
+  return new THREE.Vector3();
 }
+
+
+function getObjectType(obj){
+
+  if(obj.isSun)
+    return "CENTRAL STAR";
+
+  if(obj.isSkill)
+    return "SKILL NODE";
+
+  return "PROJECT PLANET";
+}
+
+
+function acquireTarget(obj){
+
+  currentTarget=obj;
+
+  document
+    .getElementById("targetHUD")
+    .classList.add("visible");
+
+  document
+    .getElementById("reticle")
+    .classList.add("visible");
+
+  document
+    .getElementById("targetName")
+    .textContent=obj.name;
+
+  document
+    .getElementById("targetType")
+    .textContent=getObjectType(obj);
+
+  flyTo(obj);
+}
+
+
+function releaseTarget(){
+
+  currentTarget=null;
+
+  document
+    .getElementById("targetHUD")
+    .classList.remove("visible");
+
+  document
+    .getElementById("reticle")
+    .classList.remove("visible");
+}
+
 
 /* =========================================================
-   POINTER EVENTS
-   ========================================================= */
+   CAMERA
+========================================================= */
 
-canvas.addEventListener(
-  'pointerdown',
-  function(event){
+function flyTo(obj){
 
-    pointerDown.x=event.clientX;
-    pointerDown.y=event.clientY;
+  var target =
+    objectPosition(obj);
 
-    dragging=false;
+  var direction =
+    camera.position.clone()
+    .sub(target)
+    .normalize();
+
+  if(direction.length()<.01){
+    direction.set(0,0,1);
   }
-);
 
-canvas.addEventListener(
-  'pointermove',
-  function(event){
+  var distance =
+    Math.max(
+      obj.radius
+      ? obj.radius*5
+      : 10,
+      9
+    );
 
-    var dx=
-      event.clientX-pointerDown.x;
+  var destination =
+    target.clone()
+    .add(
+      direction.multiplyScalar(distance)
+    );
 
-    var dy=
-      event.clientY-pointerDown.y;
+  var startPos =
+    camera.position.clone();
 
-    if(
-      Math.sqrt(dx*dx+dy*dy)>6
-    ){
-      dragging=true;
-    }
-  }
-);
+  var startTarget =
+    controls.target.clone();
 
-canvas.addEventListener(
-  'pointerup',
-  function(event){
+  var duration=950;
+  var start=performance.now();
 
-    if(dragging || tweening){
-      return;
-    }
+  function animateCamera(now){
 
-    getPointerPosition(event);
+    var progress =
+      Math.min(
+        (now-start)/duration,
+        1
+      );
 
-    var found=findObject();
+    var eased =
+      1-Math.pow(1-progress,3);
 
-    if(found){
+    camera.position.lerpVectors(
+      startPos,
+      destination,
+      eased
+    );
 
-      flyTo(found.obj);
+    controls.target.lerpVectors(
+      startTarget,
+      target,
+      eased
+    );
+
+    if(progress<1){
+
+      requestAnimationFrame(
+        animateCamera
+      );
 
     }else{
 
-      /*
-        Clicking empty space does not destroy
-        the existing target lock.
-      */
+      controls.target.copy(target);
     }
   }
-);
 
-/* =========================================================
-   MODALS
-   ========================================================= */
-
-var modals=
-  document.querySelectorAll('.modal');
-
-function openModal(id){
-
-  if(!id){
-    return;
-  }
-
-  closeAllModals();
-
-  var modal=
-    document.getElementById(id);
-
-  if(modal){
-    modal.classList.add('active');
-  }
-}
-
-function closeAllModals(){
-
-  modals.forEach(function(modal){
-    modal.classList.remove('active');
-  });
-}
-
-document.querySelectorAll(
-  '.close-modal,.close-action'
-).forEach(function(button){
-
-  button.addEventListener(
-    'click',
-    function(){
-
-      closeAllModals();
-    }
+  requestAnimationFrame(
+    animateCamera
   );
-});
 
-modals.forEach(function(modal){
-
-  modal.addEventListener(
-    'click',
-    function(event){
-
-      if(event.target===modal){
-        closeAllModals();
-      }
-    }
-  );
-});
-
-/* =========================================================
-   PROJECT REGISTRY
-   ========================================================= */
-
-document.querySelectorAll(
-  '.project-item'
-).forEach(function(item){
-
-  item.addEventListener(
-    'click',
-    function(){
-
-      var target=item.getAttribute(
-        'data-fly'
-      );
-
-      closeAllModals();
-
-      if(target==='fin'){
-        flyTo(projects[0]);
-      }
-
-      if(target==='crown'){
-        flyTo(projects[1]);
-      }
-
-      if(target==='recluse'){
-        flyTo(projects[2]);
-      }
-    }
-  );
-});
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-document.getElementById(
-  'nav-about'
-).addEventListener(
-  'click',
-  function(){
-    flyTo(sunObj);
-  }
-);
-
-document.getElementById(
-  'nav-projects'
-).addEventListener(
-  'click',
-  function(){
-
-    clearTarget();
-    resetView();
+  if(obj.modal){
 
     setTimeout(function(){
-      openModal('modal-projects');
-    },950);
+
+      openModal(obj.modal);
+
+    },700);
   }
-);
+}
 
-document.getElementById(
-  'nav-contact'
-).addEventListener(
-  'click',
-  function(){
 
-    clearTarget();
+function resetView(){
 
-    openModal(
-      'modal-contact'
+  closeAllModals();
+  releaseTarget();
+
+  var startPos=
+    camera.position.clone();
+
+  var endPos=
+    new THREE.Vector3(
+      0,
+      20,
+      46
     );
+
+  var startTarget=
+    controls.target.clone();
+
+  var endTarget=
+    new THREE.Vector3(0,0,0);
+
+  var duration=850;
+  var start=performance.now();
+
+  function animateReset(now){
+
+    var p=
+      Math.min(
+        (now-start)/duration,
+        1
+      );
+
+    var e=
+      1-Math.pow(1-p,3);
+
+    camera.position.lerpVectors(
+      startPos,
+      endPos,
+      e
+    );
+
+    controls.target.lerpVectors(
+      startTarget,
+      endTarget,
+      e
+    );
+
+    if(p<1)
+      requestAnimationFrame(
+        animateReset
+      );
+  }
+
+  requestAnimationFrame(
+    animateReset
+  );
+}
+
+
+/* =========================================================
+   CLICK SYSTEM
+========================================================= */
+
+renderer.domElement.addEventListener(
+  "pointerdown",
+  function(e){
+
+    pointerDown.x=e.clientX;
+    pointerDown.y=e.clientY;
   }
 );
 
-document.getElementById(
-  'reset-view'
-).addEventListener(
-  'click',
-  function(){
 
-    closeAllModals();
+renderer.domElement.addEventListener(
+  "pointerup",
+  function(e){
 
-    resetView();
+    var dx=
+      e.clientX-pointerDown.x;
+
+    var dy=
+      e.clientY-pointerDown.y;
+
+    if(Math.sqrt(dx*dx+dy*dy)>6)
+      return;
+
+    mouse.x=
+      (e.clientX/window.innerWidth)*2-1;
+
+    mouse.y=
+      -(e.clientY/window.innerHeight)*2+1;
+
+    raycaster.setFromCamera(
+      mouse,
+      camera
+    );
+
+    var meshes=
+      interactive.map(function(item){
+        return item.mesh;
+      });
+
+    var hits=
+      raycaster.intersectObjects(
+        meshes,
+        true
+      );
+
+    if(!hits.length)
+      return;
+
+    var hitMesh=
+      hits[0].object;
+
+    var found=null;
+
+    for(var i=0;i<interactive.length;i++){
+
+      if(
+        interactive[i].mesh===hitMesh ||
+        interactive[i].mesh.children.includes(hitMesh)
+      ){
+
+        found=interactive[i];
+        break;
+      }
+    }
+
+    if(found){
+
+      acquireTarget(
+        found.obj
+      );
+    }
+
   }
 );
+
 
 /* =========================================================
    ESCAPE
-   ========================================================= */
+========================================================= */
 
-document.addEventListener(
-  'keydown',
-  function(event){
+window.addEventListener(
+  "keydown",
+  function(e){
 
-    if(event.key==='Escape'){
+    if(e.key==="Escape"){
 
       closeAllModals();
-
-      clearTarget();
-
-      if(!tweening){
-        cameraMode.textContent='ORBIT';
-      }
+      releaseTarget();
     }
+
   }
 );
 
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id){
+
+  var el=
+    document.getElementById(id);
+
+  if(el)
+    el.classList.add("active");
+}
+
+
+function closeModal(id){
+
+  var el=
+    document.getElementById(id);
+
+  if(el)
+    el.classList.remove("active");
+}
+
+
+function closeAllModals(){
+
+  document
+    .querySelectorAll(".modal")
+    .forEach(function(el){
+
+      el.classList.remove("active");
+
+    });
+}
+
+
+/* =========================================================
+   PROJECT REGISTRY
+========================================================= */
+
+function targetProject(name){
+
+  closeModal("modal-projects");
+
+  if(name==="Fin-Dash")
+    acquireTarget(finDash);
+
+  if(name==="Crown Capital")
+    acquireTarget(crownCapital);
+
+  if(name==="RECLUSE")
+    acquireTarget(recluse);
+}
+
+
+/* =========================================================
+   MODAL BACKGROUND CLICK
+========================================================= */
+
+document
+  .querySelectorAll(".modal")
+  .forEach(function(modal){
+
+    modal.addEventListener(
+      "click",
+      function(e){
+
+        if(e.target===modal)
+          modal.classList.remove("active");
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+var clock=
+  new THREE.Clock();
+
+function animate(){
+
+  requestAnimationFrame(
+    animate
+  );
+
+  var delta=
+    clock.getDelta();
+
+  var elapsed=
+    clock.elapsedTime;
+
+  /* planets */
+
+  [
+    finDash,
+    crownCapital,
+    recluse
+  ].forEach(function(planet){
+
+    planet.angle +=
+      planet.speed*delta;
+
+    planet.mesh.position.x=
+      Math.cos(planet.angle)
+      *planet.distance;
+
+    planet.mesh.position.z=
+      Math.sin(planet.angle)
+      *planet.distance;
+
+    planet.mesh.rotation.y +=
+      .15*delta;
+
+  });
+
+  /* sun */
+
+  sunMesh.rotation.y +=
+    .035*delta;
+
+  glowSprite.position.copy(
+    sunMesh.position
+  );
+
+  /* stars */
+
+  starsA.rotation.y +=
+    .000035;
+
+  starsB.rotation.y -=
+    .00002;
+
+  nebula.rotation.y +=
+    .000012;
+
+  /* skill pulse */
+
+  [design,leadership]
+    .forEach(function(skill){
+
+      if(skill && skill.mesh){
+
+        var scale=
+          1+
+          Math.sin(
+            elapsed*2.2
+          )*.12;
+
+        skill.mesh.scale.set(
+          scale,
+          scale,
+          scale
+        );
+      }
+
+    });
+
+  /* target range */
+
+  if(currentTarget){
+
+    var targetPos=
+      objectPosition(
+        currentTarget
+      );
+
+    var range=
+      camera.position.distanceTo(
+        targetPos
+      );
+
+    document
+      .getElementById("targetRange")
+      .textContent=
+      "RANGE "+
+      range.toFixed(1)+
+      " AU";
+
+  }
+
+  /* camera readout */
+
+  document
+    .getElementById("camVector")
+    .textContent=
+      camera.position.x.toFixed(1)+
+      " / "+
+      camera.position.y.toFixed(1)+
+      " / "+
+      camera.position.z.toFixed(1);
+
+  controls.update();
+
+  renderer.render(
+    scene,
+    camera
+  );
+}
+
+animate();
+
+
 /* =========================================================
    RESIZE
-   ========================================================= */
+========================================================= */
 
 window.addEventListener(
-  'resize',
+  "resize",
   function(){
 
     camera.aspect=
@@ -2724,137 +2240,31 @@ window.addEventListener(
       window.innerHeight
     );
 
-    positionTargetReticle();
   }
 );
 
-/* =========================================================
-   ANIMATION
-   ========================================================= */
-
-var clock=new THREE.Clock();
-
-var frameCounter=0;
-var lastFpsTime=performance.now();
-
-function animate(){
-
-  requestAnimationFrame(animate);
-
-  var delta=clock.getDelta();
-
-  var elapsed=clock.elapsedTime;
-
-  /* Stars */
-
-  starsA.rotation.y+=delta*.001;
-  starsB.rotation.y-=delta*.0005;
-
-  /* Nebula */
-
-  nebula.rotation.y+=delta*.0003;
-
-  /* Sun */
-
-  sunMesh.rotation.y+=delta*.025;
-
-  /* Project planets */
-
-  projects.forEach(function(project){
-
-    project.angle+=
-      delta*project.speed;
-
-    project.group.position.x=
-      Math.cos(project.angle)*
-      project.distance;
-
-    project.group.position.z=
-      Math.sin(project.angle)*
-      project.distance;
-
-    project.mesh.rotation.y+=
-      delta*.12;
-  });
-
-  /* Skills */
-
-  skills.forEach(function(skill){
-
-    skill.mesh.rotation.y+=
-      delta*.02;
-  });
-
-  /* Camera */
-
-  controls.update();
-
-  /* Target HUD */
-
-  if(selectedObject){
-
-    positionTargetReticle();
-
-    var targetPos=
-      objectPosition(
-        selectedObject
-      );
-
-    var distance=
-      camera.position.distanceTo(
-        targetPos
-      );
-
-    rangeValue.textContent=
-      distance.toFixed(1);
-
-    targetMeta.textContent=
-      getObjectType(selectedObject) +
-      ' · STATUS ACTIVE · RANGE ' +
-      distance.toFixed(1) +
-      ' UNITS';
-  }
-
-  /* FPS */
-
-  frameCounter++;
-
-  var now=performance.now();
-
-  if(now-lastFpsTime>=1000){
-
-    fpsValue.textContent=
-      String(frameCounter);
-
-    frameCounter=0;
-    lastFpsTime=now;
-  }
-
-  renderer.render(
-    scene,
-    camera
-  );
-}
-
-animate();
 
 /* =========================================================
-   HINT FADE
-   ========================================================= */
+   LOADING
+========================================================= */
 
 setTimeout(function(){
 
-  var hint=document.getElementById(
-    'hint'
-  );
+  document
+    .getElementById("loaderText")
+    .textContent=
+      "ORBITAL ENVIRONMENT READY";
 
-  if(hint){
-    hint.style.opacity='0';
-  }
+},1200);
 
-},7000);
+setTimeout(function(){
 
-})();
+  document
+    .getElementById("loader")
+    .classList.add("hide");
+
+},2300);
+
 </script>
 
 </body>
