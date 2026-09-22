@@ -13,10 +13,6 @@
 
 <style>
 
-/* =========================================================
-   GLOBAL
-========================================================= */
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -28,11 +24,8 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
-
-  background:#020712;
-
+  background:#000208;
   color:#eef7ff;
-
   font-family:Sora,Arial,sans-serif;
 }
 
@@ -49,14 +42,10 @@ a{
 #scene-canvas{
   position:fixed;
   inset:0;
-
   width:100%;
   height:100%;
-
   display:block;
-
   z-index:1;
-
   cursor:grab;
 }
 
@@ -72,7 +61,6 @@ a{
 #loading-screen{
   position:fixed;
   inset:0;
-
   z-index:1000;
 
   background:
@@ -111,11 +99,8 @@ a{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   margin-bottom:18px;
-
   color:rgba(186,220,245,.48);
-
   font-size:9px;
   letter-spacing:2.5px;
   text-transform:uppercase;
@@ -123,71 +108,44 @@ a{
 
 .loading-title{
   font-family:Fraunces,serif;
-
   font-size:clamp(25px,5vw,42px);
-
   letter-spacing:-1px;
-
   margin-bottom:8px;
-
   color:#eef8ff;
 }
 
 .loading-sub{
   color:rgba(169,204,230,.46);
-
   font-size:10px;
-
   letter-spacing:2px;
-
   text-transform:uppercase;
-
   margin-bottom:24px;
 }
 
 .loading-line{
   height:1px;
-
   width:100%;
-
   background:rgba(116,185,230,.13);
-
   position:relative;
-
   overflow:hidden;
 }
 
 .loading-progress{
   position:absolute;
-
   left:0;
   top:0;
-
   height:100%;
   width:0%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #5db9e8,
-      #a5e8ff
-    );
-
-  box-shadow:
-    0 0 12px rgba(91,196,245,.65);
-
+  background:linear-gradient(90deg,#5db9e8,#a5e8ff);
+  box-shadow:0 0 12px rgba(91,196,245,.65);
   transition:width .25s ease;
 }
 
 .loading-status{
   margin-top:12px;
-
   color:rgba(142,190,220,.36);
-
   font-size:8px;
-
   letter-spacing:1.8px;
-
   text-transform:uppercase;
 }
 
@@ -199,9 +157,7 @@ a{
 #mission-hud{
   position:fixed;
   inset:0;
-
   z-index:10;
-
   pointer-events:none;
 }
 
@@ -234,65 +190,44 @@ a{
 
 #system-id{
   position:absolute;
-
   top:22px;
   left:22px;
-
   min-width:230px;
-
   padding:14px 16px;
-
-  border-left:
-    2px solid rgba(94,202,245,.85);
+  border-left:2px solid rgba(94,202,245,.85);
 }
 
 .system-name{
   font-size:11px;
-
   font-weight:600;
-
   letter-spacing:2.6px;
-
   color:#e9f7ff;
 }
 
 .system-sub{
   margin-top:5px;
-
   color:rgba(148,194,220,.42);
-
   font-size:7px;
-
   letter-spacing:1.8px;
-
   text-transform:uppercase;
 }
 
 .system-status{
   display:flex;
   align-items:center;
-
   gap:7px;
-
   margin-top:12px;
-
   color:rgba(151,205,232,.62);
-
   font-size:7px;
-
   letter-spacing:1.5px;
 }
 
 .status-dot{
   width:6px;
   height:6px;
-
   border-radius:50%;
-
   background:#73e7b2;
-
-  box-shadow:
-    0 0 10px rgba(115,231,178,.7);
+  box-shadow:0 0 10px rgba(115,231,178,.7);
 }
 
 
@@ -302,32 +237,21 @@ a{
 
 #system-data{
   position:absolute;
-
   top:22px;
   right:22px;
-
   padding:13px 15px;
-
   min-width:170px;
-
   text-align:right;
 }
 
 .data-row{
   display:flex;
-
   justify-content:space-between;
-
   gap:20px;
-
   margin-bottom:7px;
-
   font-size:7px;
-
   letter-spacing:1.3px;
-
   text-transform:uppercase;
-
   color:rgba(151,197,223,.38);
 }
 
@@ -346,57 +270,35 @@ a{
 
 #main-nav{
   position:absolute;
-
   top:22px;
   left:50%;
-
   transform:translateX(-50%);
-
   display:flex;
-
   gap:3px;
-
   padding:4px;
-
-  border:
-    1px solid rgba(100,183,224,.13);
-
-  background:
-    rgba(3,13,24,.62);
-
+  border:1px solid rgba(100,183,224,.13);
+  background:rgba(3,13,24,.62);
   border-radius:100px;
-
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
 
 .nav-btn{
   border:0;
-
   background:transparent;
-
   color:rgba(169,208,229,.46);
-
   padding:9px 14px;
-
   border-radius:100px;
-
   font-size:8px;
-
   letter-spacing:1.4px;
-
   text-transform:uppercase;
-
   cursor:pointer;
-
   transition:.25s ease;
 }
 
 .nav-btn:hover{
   color:#eaf8ff;
-
-  background:
-    rgba(76,176,224,.10);
+  background:rgba(76,176,224,.10);
 }
 
 
@@ -406,43 +308,25 @@ a{
 
 #reset-view{
   position:absolute;
-
   top:82px;
   right:22px;
-
-  border:
-    1px solid rgba(99,180,220,.14);
-
-  background:
-    rgba(3,12,22,.62);
-
+  border:1px solid rgba(99,180,220,.14);
+  background:rgba(3,12,22,.62);
   color:rgba(164,205,226,.52);
-
   padding:8px 11px;
-
   font-size:7px;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
-
   cursor:pointer;
-
   border-radius:4px;
-
   backdrop-filter:blur(12px);
-
   transition:.2s ease;
 }
 
 #reset-view:hover{
   color:#ecfaff;
-
-  border-color:
-    rgba(102,203,244,.45);
-
-  background:
-    rgba(55,144,190,.10);
+  border-color:rgba(102,203,244,.45);
+  background:rgba(55,144,190,.10);
 }
 
 
@@ -452,90 +336,63 @@ a{
 
 #target-reticle{
   position:absolute;
-
   width:74px;
   height:74px;
-
-  transform:
-    translate(-50%,-50%);
-
+  transform:translate(-50%,-50%);
   opacity:0;
-
   visibility:hidden;
-
   transition:opacity .25s ease;
-
   pointer-events:none;
 }
 
 #target-reticle.active{
   opacity:1;
-
   visibility:visible;
 }
 
 .reticle-corner{
   position:absolute;
-
   width:16px;
   height:16px;
-
-  border-color:
-    rgba(105,220,255,.85);
-
+  border-color:rgba(105,220,255,.85);
   border-style:solid;
-
-  filter:
-    drop-shadow(
-      0 0 5px
-      rgba(76,207,255,.45)
-    );
+  filter:drop-shadow(0 0 5px rgba(76,207,255,.45));
 }
 
 .reticle-corner.tl{
   top:0;
   left:0;
-
   border-width:1px 0 0 1px;
 }
 
 .reticle-corner.tr{
   top:0;
   right:0;
-
   border-width:1px 1px 0 0;
 }
 
 .reticle-corner.bl{
   bottom:0;
   left:0;
-
   border-width:0 0 1px 1px;
 }
 
 .reticle-corner.br{
   bottom:0;
   right:0;
-
   border-width:0 1px 1px 0;
 }
 
 .reticle-cross-h,
 .reticle-cross-v{
   position:absolute;
-
-  background:
-    rgba(106,216,249,.48);
-
-  box-shadow:
-    0 0 5px
-    rgba(80,200,245,.35);
+  background:rgba(106,216,249,.48);
+  box-shadow:0 0 5px rgba(80,200,245,.35);
 }
 
 .reticle-cross-h{
   width:22px;
   height:1px;
-
   left:26px;
   top:36px;
 }
@@ -543,7 +400,6 @@ a{
 .reticle-cross-v{
   width:1px;
   height:22px;
-
   left:36px;
   top:26px;
 }
@@ -555,67 +411,44 @@ a{
 
 #target-readout{
   position:absolute;
-
   left:22px;
   top:145px;
-
   width:240px;
-
   padding:13px 15px;
-
   opacity:0;
-
   transform:translateX(-10px);
-
   visibility:hidden;
-
   transition:.3s ease;
-
-  border-left:
-    2px solid rgba(83,205,247,.75);
+  border-left:2px solid rgba(83,205,247,.75);
 }
 
 #target-readout.active{
   opacity:1;
-
   transform:translateX(0);
-
   visibility:visible;
 }
 
 .target-header{
   color:rgba(99,203,239,.55);
-
   font-size:7px;
-
   letter-spacing:2px;
-
   text-transform:uppercase;
-
   margin-bottom:7px;
 }
 
 .target-name{
   font-family:Fraunces,serif;
-
   font-size:22px;
-
   line-height:1;
-
   color:#edfaff;
 }
 
 .target-meta{
   margin-top:7px;
-
   color:rgba(157,202,225,.46);
-
   font-size:7px;
-
   line-height:1.7;
-
   letter-spacing:1px;
-
   text-transform:uppercase;
 }
 
@@ -626,36 +459,25 @@ a{
 
 #camera-readout{
   position:absolute;
-
   right:22px;
   bottom:82px;
-
   padding:10px 13px;
-
   min-width:155px;
-
   text-align:right;
 }
 
 .camera-label{
   color:rgba(136,188,215,.35);
-
   font-size:6px;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
 }
 
 #camera-mode{
   color:rgba(191,228,246,.70);
-
   font-size:8px;
-
   letter-spacing:1.4px;
-
   margin-top:4px;
-
   text-transform:uppercase;
 }
 
@@ -666,77 +488,49 @@ a{
 
 #bottom-hud{
   position:absolute;
-
   left:22px;
   right:22px;
-
   bottom:22px;
-
   height:42px;
-
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   padding:0 14px;
-
-  background:
-    rgba(3,12,22,.62);
-
-  border:
-    1px solid rgba(91,176,220,.12);
-
+  background:rgba(3,12,22,.62);
+  border:1px solid rgba(91,176,220,.12);
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
 
 .bottom-group{
   display:flex;
-
   align-items:center;
-
   gap:17px;
 }
 
 .hud-stat{
   color:rgba(139,187,211,.34);
-
   font-size:6.5px;
-
   letter-spacing:1.4px;
-
   text-transform:uppercase;
 }
 
 .hud-stat strong{
   color:rgba(185,228,247,.72);
-
   font-weight:500;
 }
 
 #hint{
   position:absolute;
-
   left:50%;
-
   bottom:76px;
-
   transform:translateX(-50%);
-
   color:rgba(137,188,214,.30);
-
   font-size:7px;
-
   letter-spacing:1.3px;
-
   text-transform:uppercase;
-
   text-align:center;
-
   white-space:nowrap;
-
   transition:opacity 1s ease;
 }
 
@@ -747,45 +541,34 @@ a{
 
 #axis-marker{
   position:absolute;
-
   left:50%;
   top:50%;
-
   width:0;
   height:0;
-
   opacity:.25;
-
   pointer-events:none;
 }
 
 #axis-marker::before,
 #axis-marker::after{
   content:"";
-
   position:absolute;
 }
 
 #axis-marker::before{
   width:30px;
   height:1px;
-
   left:-15px;
   top:0;
-
-  background:
-    rgba(106,196,235,.32);
+  background:rgba(106,196,235,.32);
 }
 
 #axis-marker::after{
   width:1px;
   height:30px;
-
   left:0;
   top:-15px;
-
-  background:
-    rgba(106,196,235,.32);
+  background:rgba(106,196,235,.32);
 }
 
 
@@ -795,74 +578,47 @@ a{
 
 .modal{
   position:fixed;
-
   inset:0;
-
   z-index:100;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
   padding:24px;
-
-  background:
-    rgba(0,7,17,.62);
-
+  background:rgba(0,7,17,.62);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
-
   opacity:0;
-
   visibility:hidden;
-
   transition:.25s ease;
 }
 
 .modal.active{
   opacity:1;
-
   visibility:visible;
 }
 
 .modal-card{
   position:relative;
-
   width:min(620px,94vw);
-
   max-height:88vh;
-
   overflow:auto;
-
   background:
     linear-gradient(
       145deg,
       rgba(7,18,31,.96),
       rgba(3,10,19,.96)
     );
-
-  border:
-    1px solid rgba(102,186,225,.17);
-
+  border:1px solid rgba(102,186,225,.17);
   box-shadow:
     0 30px 100px rgba(0,0,0,.70),
     0 0 50px rgba(17,82,126,.08);
-
   padding:34px;
-
-  transform:
-    translateY(15px)
-    scale(.98);
-
+  transform:translateY(15px) scale(.98);
   transition:.3s ease;
 }
 
 .modal.active .modal-card{
-  transform:
-    translateY(0)
-    scale(1);
+  transform:translateY(0) scale(1);
 }
 
 .modal-card::-webkit-scrollbar{
@@ -870,227 +626,143 @@ a{
 }
 
 .modal-card::-webkit-scrollbar-thumb{
-  background:
-    rgba(92,181,222,.25);
+  background:rgba(92,181,222,.25);
 }
 
 .close-modal{
   position:absolute;
-
   top:14px;
   right:14px;
-
   width:30px;
   height:30px;
-
-  border:
-    1px solid rgba(98,179,220,.14);
-
+  border:1px solid rgba(98,179,220,.14);
   background:transparent;
-
   color:rgba(157,204,225,.48);
-
   cursor:pointer;
-
   font-size:16px;
 }
 
 .close-modal:hover{
   color:#ecfaff;
-
-  border-color:
-    rgba(105,205,242,.40);
+  border-color:rgba(105,205,242,.40);
 }
 
 .modal-kicker{
-  color:
-    rgba(96,197,236,.48);
-
+  color:rgba(96,197,236,.48);
   font-size:7px;
-
   letter-spacing:2px;
-
   text-transform:uppercase;
-
   margin-bottom:10px;
 }
 
 .modal-title{
   font-family:Fraunces,serif;
-
   font-size:clamp(32px,6vw,55px);
-
   line-height:.95;
-
   margin-bottom:18px;
-
   color:#eef8ff;
 }
 
 .modal-copy{
-  color:
-    rgba(164,204,224,.60);
-
+  color:rgba(164,204,224,.60);
   font-size:12px;
-
   line-height:1.9;
-
   margin-bottom:22px;
 }
 
 .modal-grid{
   display:grid;
-
-  grid-template-columns:
-    repeat(2,1fr);
-
+  grid-template-columns:repeat(2,1fr);
   gap:8px;
-
   margin-bottom:22px;
 }
 
 .info-box{
   padding:13px;
-
-  border:
-    1px solid rgba(94,173,216,.10);
-
-  background:
-    rgba(61,137,177,.035);
+  border:1px solid rgba(94,173,216,.10);
+  background:rgba(61,137,177,.035);
 }
 
 .info-label{
-  color:
-    rgba(131,185,212,.30);
-
+  color:rgba(131,185,212,.30);
   font-size:6px;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
-
   margin-bottom:5px;
 }
 
 .info-value{
-  color:
-    rgba(201,231,244,.76);
-
+  color:rgba(201,231,244,.76);
   font-size:9px;
 }
 
 .modal-actions{
   display:flex;
-
   flex-wrap:wrap;
-
   gap:8px;
 }
 
 .modal-btn{
   display:inline-flex;
-
   align-items:center;
-
   justify-content:center;
-
   min-height:38px;
-
   padding:0 15px;
-
-  border:
-    1px solid rgba(96,178,221,.15);
-
-  color:
-    rgba(187,225,241,.76);
-
-  background:
-    rgba(64,151,195,.045);
-
+  border:1px solid rgba(96,178,221,.15);
+  color:rgba(187,225,241,.76);
+  background:rgba(64,151,195,.045);
   text-decoration:none;
-
   font-size:7px;
-
   letter-spacing:1.4px;
-
   text-transform:uppercase;
-
   transition:.2s ease;
-
   cursor:pointer;
 }
 
 .modal-btn:hover{
   color:#f2fbff;
-
-  background:
-    rgba(71,174,224,.11);
-
-  border-color:
-    rgba(106,206,244,.34);
+  background:rgba(71,174,224,.11);
+  border-color:rgba(106,206,244,.34);
 }
 
 .project-list{
   display:grid;
-
   gap:9px;
 }
 
 .project-item{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
-
   gap:15px;
-
   padding:15px;
-
-  border:
-    1px solid rgba(92,174,217,.10);
-
-  background:
-    rgba(66,140,180,.035);
-
+  border:1px solid rgba(92,174,217,.10);
+  background:rgba(66,140,180,.035);
   cursor:pointer;
-
   transition:.2s ease;
 }
 
 .project-item:hover{
-  background:
-    rgba(65,164,211,.08);
-
-  border-color:
-    rgba(102,199,238,.25);
+  background:rgba(65,164,211,.08);
+  border-color:rgba(102,199,238,.25);
 }
 
 .project-item-name{
   font-family:Fraunces,serif;
-
   font-size:20px;
-
   color:#eaf7ff;
 }
 
 .project-item-type{
   margin-top:4px;
-
-  color:
-    rgba(135,187,211,.34);
-
+  color:rgba(135,187,211,.34);
   font-size:6px;
-
   letter-spacing:1.5px;
-
   text-transform:uppercase;
 }
 
 .project-arrow{
-  color:
-    rgba(106,199,236,.48);
-
+  color:rgba(106,199,236,.48);
   font-size:16px;
 }
 
@@ -1101,23 +773,17 @@ a{
 
 .sun-stat{
   position:relative;
-
   overflow:hidden;
 }
 
 .sun-stat::after{
   content:"";
-
   position:absolute;
-
   right:-20px;
   bottom:-30px;
-
   width:80px;
   height:80px;
-
   border-radius:50%;
-
   background:
     radial-gradient(
       circle,
@@ -1127,9 +793,7 @@ a{
 }
 
 .sun-highlight{
-  border-color:
-    rgba(241,174,65,.16);
-
+  border-color:rgba(241,174,65,.16);
   background:
     linear-gradient(
       145deg,
@@ -1148,76 +812,60 @@ a{
   #system-id{
     top:12px;
     left:12px;
-
     min-width:0;
-
     padding:10px 12px;
   }
 
   .system-name{
     font-size:8px;
-
     letter-spacing:2px;
   }
 
   .system-sub{
     font-size:5.5px;
-
     letter-spacing:1.2px;
   }
 
   .system-status{
     margin-top:8px;
-
     font-size:5.5px;
   }
 
   #system-data{
     top:12px;
     right:12px;
-
     min-width:130px;
-
     padding:10px;
   }
 
   .data-row{
     gap:10px;
-
     font-size:5.5px;
-
     margin-bottom:5px;
   }
 
   #main-nav{
     top:auto;
-
     bottom:78px;
-
     left:50%;
   }
 
   .nav-btn{
     padding:8px 10px;
-
     font-size:6px;
   }
 
   #reset-view{
     top:68px;
     right:12px;
-
     font-size:5.5px;
-
     padding:7px 9px;
   }
 
   #target-readout{
     left:12px;
     top:112px;
-
     width:190px;
-
     padding:10px 12px;
   }
 
@@ -1231,22 +879,16 @@ a{
 
   #camera-readout{
     right:12px;
-
     bottom:132px;
-
     min-width:125px;
-
     padding:8px 10px;
   }
 
   #bottom-hud{
     left:12px;
     right:12px;
-
     bottom:12px;
-
     height:38px;
-
     padding:0 10px;
   }
 
@@ -1256,19 +898,14 @@ a{
 
   .hud-stat{
     font-size:5px;
-
     letter-spacing:.9px;
   }
 
   #hint{
     bottom:124px;
-
     width:90%;
-
     white-space:normal;
-
     line-height:1.6;
-
     font-size:5.5px;
   }
 
@@ -1309,13 +946,11 @@ a{
   <div class="loading-wrap">
 
     <div class="loading-top">
-
       <span>NAFUH ORBIT</span>
 
       <span id="loading-percent">
         00%
       </span>
-
     </div>
 
     <div class="loading-title">
@@ -1638,8 +1273,6 @@ a{
       </div>
 
       <div class="info-box">
-
-      
 
       </div>
 
@@ -2447,7 +2080,7 @@ renderer.setSize(
 );
 
 renderer.setClearColor(
-  0x010611,
+  0x000208,
   1
 );
 
@@ -2996,8 +2629,19 @@ function makeTexture(type){
 
   }else if(type==='nebula'){
 
+    /*
+      DEEP-SPACE BACKDROP
+
+      The texture is intentionally dark.
+      The stronger spatial depth now comes from:
+      - multiple star layers
+      - galaxy dust
+      - large nebula clouds
+      - the distant stellar sphere
+    */
+
     ctx.fillStyle=
-      '#010611';
+      '#000208';
 
     ctx.fillRect(
       0,
@@ -3007,9 +2651,73 @@ function makeTexture(type){
     );
 
 
+    /* Large diffuse blue/indigo clouds */
+
+    var nebulaClouds=[
+
+      [72,125,190,'rgba(34,91,184,.14)'],
+      [175,82,155,'rgba(74,65,188,.12)'],
+      [310,132,220,'rgba(24,105,184,.13)'],
+      [430,105,170,'rgba(67,62,172,.11)'],
+      [115,350,210,'rgba(22,105,176,.10)'],
+      [300,390,250,'rgba(45,64,176,.11)'],
+      [450,350,190,'rgba(19,111,175,.10)']
+
+    ];
+
+
+    nebulaClouds.forEach(
+      function(cloud){
+
+        var gradient=
+          ctx.createRadialGradient(
+            cloud[0],
+            cloud[1],
+            0,
+            cloud[0],
+            cloud[1],
+            cloud[2]
+          );
+
+        gradient.addColorStop(
+          0,
+          cloud[3]
+        );
+
+        gradient.addColorStop(
+          .35,
+          'rgba(30,80,160,.045)'
+        );
+
+        gradient.addColorStop(
+          1,
+          'rgba(0,0,0,0)'
+        );
+
+        ctx.fillStyle=
+          gradient;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          cloud[0],
+          cloud[1],
+          cloud[2],
+          0,
+          Math.PI*2
+        );
+
+        ctx.fill();
+
+      }
+    );
+
+
+    /* Fine nebula dust */
+
     for(
       var n=0;
-      n<750;
+      n<900;
       n++
     ){
 
@@ -3020,22 +2728,19 @@ function makeTexture(type){
         Math.random()*h;
 
       var nr=
-        Math.random()*110+20;
-
+        Math.random()*65+15;
 
       var colors=[
 
-        'rgba(24,102,185,.105)',
-        'rgba(42,76,190,.095)',
-        'rgba(62,61,178,.075)',
-        'rgba(25,145,190,.080)',
-        'rgba(93,71,190,.060)',
-        'rgba(35,82,150,.075)'
+        'rgba(35,105,195,.065)',
+        'rgba(55,76,195,.060)',
+        'rgba(70,55,180,.055)',
+        'rgba(25,130,190,.055)',
+        'rgba(92,76,190,.045)'
 
       ];
 
-
-      var ng =
+      var ng=
         ctx.createRadialGradient(
           nx,
           ny,
@@ -3044,7 +2749,6 @@ function makeTexture(type){
           ny,
           nr
         );
-
 
       ng.addColorStop(
         0,
@@ -3057,15 +2761,9 @@ function makeTexture(type){
       );
 
       ng.addColorStop(
-        .35,
-        'rgba(20,80,150,.025)'
-      );
-
-      ng.addColorStop(
         1,
         'rgba(0,0,0,0)'
       );
-
 
       ctx.fillStyle=
         ng;
@@ -3085,37 +2783,44 @@ function makeTexture(type){
     }
 
 
+    /* Diagonal galactic haze */
+
     var band=
       ctx.createLinearGradient(
         0,
-        h*.35,
+        h*.18,
         w,
-        h*.70
+        h*.82
       );
 
     band.addColorStop(
       0,
-      'rgba(35,95,170,0)'
+      'rgba(0,0,0,0)'
     );
 
     band.addColorStop(
-      .30,
-      'rgba(50,105,190,.025)'
+      .22,
+      'rgba(40,83,170,.018)'
     );
 
     band.addColorStop(
-      .50,
-      'rgba(100,120,220,.055)'
+      .48,
+      'rgba(96,103,205,.075)'
     );
 
     band.addColorStop(
-      .70,
-      'rgba(35,95,180,.025)'
+      .56,
+      'rgba(45,104,190,.055)'
+    );
+
+    band.addColorStop(
+      .78,
+      'rgba(25,72,155,.018)'
     );
 
     band.addColorStop(
       1,
-      'rgba(35,95,170,0)'
+      'rgba(0,0,0,0)'
     );
 
     ctx.fillStyle=
@@ -3130,20 +2835,29 @@ function makeTexture(type){
 
   }
 
-  return new THREE.CanvasTexture(
-    textureCanvas
-  );
+  var texture=
+    new THREE.CanvasTexture(
+      textureCanvas
+    );
+
+  texture.encoding=
+    THREE.sRGBEncoding;
+
+  return texture;
 }
 
 
 /* =========================================================
-   STARS
+   3D STARFIELD
 ========================================================= */
 
 function createStars(
   count,
   size,
-  opacity
+  opacity,
+  color,
+  minRadius,
+  maxRadius
 ){
 
   var geometry=
@@ -3162,8 +2876,9 @@ function createStars(
   ){
 
     var radius=
-      95+
-      Math.random()*285;
+      minRadius+
+      Math.random()*
+      (maxRadius-minRadius);
 
     var theta=
       Math.random()*
@@ -3204,7 +2919,7 @@ function createStars(
   var material=
     new THREE.PointsMaterial({
 
-      color:0xdff5ff,
+      color:color,
 
       size:size,
 
@@ -3212,7 +2927,9 @@ function createStars(
 
       opacity:opacity,
 
-      sizeAttenuation:true
+      sizeAttenuation:true,
+
+      depthWrite:false
 
     });
 
@@ -3231,30 +2948,424 @@ function createStars(
 }
 
 
+/* =========================================================
+   DISTANT STAR LAYERS
+========================================================= */
+
+var starsFar=
+  createStars(
+    9000,
+    .055,
+    .52,
+    0xbfd8e8,
+    180,
+    480
+  );
+
+
 var starsA=
   createStars(
     5200,
-    .11,
-    .78
+    .105,
+    .78,
+    0xdff5ff,
+    105,
+    360
   );
+
 
 var starsB=
   createStars(
     2600,
-    .22,
-    .45
+    .20,
+    .55,
+    0xffffff,
+    90,
+    300
   );
 
 
 /* =========================================================
-   NEBULA
+   BRIGHT STAR CLUSTERS
+========================================================= */
+
+function createStarClusters(){
+
+  var clusterGroup=
+    new THREE.Group();
+
+
+  for(
+    var c=0;
+    c<24;
+    c++
+  ){
+
+    var cluster=
+      new THREE.Group();
+
+
+    var cx=
+      (Math.random()-.5)*
+      430;
+
+    var cy=
+      (Math.random()-.5)*
+      190;
+
+    var cz=
+      -100-
+      Math.random()*260;
+
+
+    cluster.position.set(
+      cx,
+      cy,
+      cz
+    );
+
+
+    var count=
+      15+
+      Math.floor(
+        Math.random()*28
+      );
+
+
+    var geometry=
+      new THREE.BufferGeometry();
+
+    var positions=
+      new Float32Array(
+        count*3
+      );
+
+
+    for(
+      var i=0;
+      i<count;
+      i++
+    ){
+
+      positions[i*3]=
+        (Math.random()-.5)*
+        12;
+
+      positions[i*3+1]=
+        (Math.random()-.5)*
+        12;
+
+      positions[i*3+2]=
+        (Math.random()-.5)*
+        12;
+
+    }
+
+
+    geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(
+        positions,
+        3
+      )
+    );
+
+
+    var material=
+      new THREE.PointsMaterial({
+
+        color:
+          c%3===0
+          ?0xb7ddff
+          :c%3===1
+          ?0xd9eaff
+          :0x9bc7ed,
+
+        size:
+          .12+
+          Math.random()*.08,
+
+        transparent:true,
+
+        opacity:.42,
+
+        sizeAttenuation:true,
+
+        depthWrite:false
+
+      });
+
+
+    cluster.add(
+      new THREE.Points(
+        geometry,
+        material
+      )
+    );
+
+
+    clusterGroup.add(
+      cluster
+    );
+
+  }
+
+
+  scene.add(
+    clusterGroup
+  );
+
+
+  return clusterGroup;
+}
+
+
+var starClusters=
+  createStarClusters();
+
+
+/* =========================================================
+   MILKY-WAY STYLE GALAXY DUST
+========================================================= */
+
+function createGalaxyDust(){
+
+  var geometry=
+    new THREE.BufferGeometry();
+
+  var count=6500;
+
+  var positions=
+    new Float32Array(
+      count*3
+    );
+
+
+  for(
+    var i=0;
+    i<count;
+    i++
+  ){
+
+    var radius=
+      105+
+      Math.random()*280;
+
+
+    var angle=
+      Math.random()*
+      Math.PI*2;
+
+
+    /*
+      The distribution creates a broad,
+      slightly warped stellar disk.
+    */
+
+    var verticalSpread=
+      7+
+      (radius/280)*24;
+
+
+    var y=
+      (Math.random()-.5)*
+      verticalSpread;
+
+
+    /*
+      Give the galaxy band a little natural
+      turbulence rather than a perfect disk.
+    */
+
+    y+=
+      Math.sin(
+        angle*3+
+        radius*.018
+      )*
+      3;
+
+
+    positions[i*3]=
+      Math.cos(angle)*
+      radius;
+
+
+    positions[i*3+1]=
+      y;
+
+
+    positions[i*3+2]=
+      Math.sin(angle)*
+      radius;
+
+
+  }
+
+
+  geometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+  );
+
+
+  var material=
+    new THREE.PointsMaterial({
+
+      color:0x91bce0,
+
+      size:.075,
+
+      transparent:true,
+
+      opacity:.27,
+
+      sizeAttenuation:true,
+
+      depthWrite:false
+
+    });
+
+
+  var galaxy=
+    new THREE.Points(
+      geometry,
+      material
+    );
+
+
+  galaxy.rotation.z=
+    THREE.MathUtils.degToRad(
+      -11
+    );
+
+
+  scene.add(
+    galaxy
+  );
+
+
+  return galaxy;
+}
+
+
+var galaxyDust=
+  createGalaxyDust();
+
+
+/* =========================================================
+   GALAXY CORE DUST
+========================================================= */
+
+function createGalaxyCore(){
+
+  var geometry=
+    new THREE.BufferGeometry();
+
+  var count=2600;
+
+  var positions=
+    new Float32Array(
+      count*3
+    );
+
+
+  for(
+    var i=0;
+    i<count;
+    i++
+  ){
+
+    var radius=
+      35+
+      Math.random()*130;
+
+    var angle=
+      Math.random()*
+      Math.PI*2;
+
+    var y=
+      (Math.random()-.5)*
+      11;
+
+    positions[i*3]=
+      Math.cos(angle)*
+      radius;
+
+    positions[i*3+1]=
+      y;
+
+    positions[i*3+2]=
+      Math.sin(angle)*
+      radius;
+
+  }
+
+
+  geometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+  );
+
+
+  var material=
+    new THREE.PointsMaterial({
+
+      color:0x668fd0,
+
+      size:.045,
+
+      transparent:true,
+
+      opacity:.20,
+
+      sizeAttenuation:true,
+
+      depthWrite:false
+
+    });
+
+
+  var core=
+    new THREE.Points(
+      geometry,
+      material
+    );
+
+
+  core.rotation.z=
+    THREE.MathUtils.degToRad(
+      -11
+    );
+
+
+  scene.add(
+    core
+  );
+
+
+  return core;
+}
+
+
+var galaxyCore=
+  createGalaxyCore();
+
+
+/* =========================================================
+   DEEP-SPACE NEBULA SPHERE
 ========================================================= */
 
 var nebulaGeometry=
   new THREE.SphereGeometry(
-    260,
-    48,
-    48
+    310,
+    64,
+    64
   );
 
 
@@ -3269,7 +3380,9 @@ var nebulaMaterial=
 
     transparent:true,
 
-    opacity:.72
+    opacity:.82,
+
+    depthWrite:false
 
   });
 
@@ -3280,48 +3393,204 @@ var nebula=
     nebulaMaterial
   );
 
+
 scene.add(
   nebula
 );
 
 
 /* =========================================================
+   LARGE 3D NEBULA CLOUDS
+========================================================= */
+
+function createNebulaCloud(
+  position,
+  scale,
+  opacity,
+  color
+){
+
+  var textureCanvas=
+    document.createElement(
+      'canvas'
+    );
+
+  textureCanvas.width=512;
+  textureCanvas.height=512;
+
+  var ctx=
+    textureCanvas.getContext(
+      '2d'
+    );
+
+
+  var gradient=
+    ctx.createRadialGradient(
+      256,
+      256,
+      8,
+      256,
+      256,
+      250
+    );
+
+
+  gradient.addColorStop(
+    0,
+    color
+  );
+
+  gradient.addColorStop(
+    .22,
+    color.replace(
+      '0.',
+      '0.45'
+    )
+  );
+
+  gradient.addColorStop(
+    .55,
+    'rgba(20,70,150,.08)'
+  );
+
+  gradient.addColorStop(
+    1,
+    'rgba(0,0,0,0)'
+  );
+
+
+  ctx.fillStyle=
+    gradient;
+
+  ctx.fillRect(
+    0,
+    0,
+    512,
+    512
+  );
+
+
+  var texture=
+    new THREE.CanvasTexture(
+      textureCanvas
+    );
+
+
+  var sprite=
+    new THREE.Sprite(
+
+      new THREE.SpriteMaterial({
+
+        map:texture,
+
+        transparent:true,
+
+        opacity:opacity,
+
+        depthWrite:false,
+
+        blending:
+          THREE.AdditiveBlending
+
+      })
+
+    );
+
+
+  sprite.position.set(
+    position.x,
+    position.y,
+    position.z
+  );
+
+
+  sprite.scale.set(
+    scale.x,
+    scale.y,
+    1
+  );
+
+
+  scene.add(
+    sprite
+  );
+
+
+  return sprite;
+}
+
+
+/*
+  These are deliberately distant and very subtle.
+  They provide recognizable nebula structure without
+  turning the background into a colored wallpaper.
+*/
+
+var nebulaCloudA=
+  createNebulaCloud(
+    new THREE.Vector3(
+      -135,
+      75,
+      -210
+    ),
+    new THREE.Vector3(
+      230,
+      150,
+      1
+    ),
+    .28,
+    'rgba(35,95,190,.34)'
+  );
+
+
+var nebulaCloudB=
+  createNebulaCloud(
+    new THREE.Vector3(
+      160,
+      -65,
+      -245
+    ),
+    new THREE.Vector3(
+      270,
+      170,
+      1
+    ),
+    .22,
+    'rgba(68,61,190,.30)'
+  );
+
+
+var nebulaCloudC=
+  createNebulaCloud(
+    new THREE.Vector3(
+      45,
+      125,
+      -300
+    ),
+    new THREE.Vector3(
+      190,
+      125,
+      1
+    ),
+    .18,
+    'rgba(25,125,190,.27)'
+  );
+
+
+/* =========================================================
    SYSTEM BACKDROP
 ========================================================= */
 
-var systemPlaneGeometry=
-  new THREE.CircleGeometry(
-    58,
-    96
-  );
+/*
+  Removed the previous flat CircleGeometry backdrop.
 
-var systemPlaneMaterial=
-  new THREE.MeshBasicMaterial({
+  That object was essentially a faint blue disk behind
+  the system and made the environment feel like a UI
+  background rather than outer space.
 
-    color:0x0b3152,
-
-    transparent:true,
-
-    opacity:.025,
-
-    side:THREE.DoubleSide,
-
-    depthWrite:false
-
-  });
-
-var systemPlane=
-  new THREE.Mesh(
-    systemPlaneGeometry,
-    systemPlaneMaterial
-  );
-
-systemPlane.rotation.x=
-  -Math.PI/2;
-
-scene.add(
-  systemPlane
-);
+  The real 3D starfield / galaxy / nebula now handles
+  the environment.
+*/
 
 
 /* =========================================================
@@ -5080,18 +5349,57 @@ function animate(){
     clock.getDelta();
 
 
+  /*
+    Different background layers rotate at
+    different speeds. This gives the scene
+    actual spatial depth when navigating.
+  */
+
+  starsFar.rotation.y+=
+    delta*.00018;
+
   starsA.rotation.y+=
-    delta*.0012;
+    delta*.00045;
 
   starsB.rotation.y-=
-    delta*.00055;
+    delta*.00075;
+
+
+  starClusters.rotation.y+=
+    delta*.00008;
+
+
+  galaxyDust.rotation.y+=
+    delta*.000055;
+
+  galaxyCore.rotation.y+=
+    delta*.00010;
 
 
   nebula.rotation.y+=
-    delta*.00022;
+    delta*.000035;
 
   nebula.rotation.x+=
-    delta*.000035;
+    delta*.000012;
+
+
+  nebulaCloudA.position.x=
+    -135+
+    Math.sin(
+      performance.now()*.000035
+    )*4;
+
+  nebulaCloudB.position.x=
+    160+
+    Math.cos(
+      performance.now()*.000028
+    )*5;
+
+  nebulaCloudC.position.y=
+    125+
+    Math.sin(
+      performance.now()*.000025
+    )*3;
 
 
   asteroidBelt.rotation.y+=
