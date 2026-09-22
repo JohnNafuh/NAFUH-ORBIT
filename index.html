@@ -4,399 +4,1130 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nafuh Orbit — John Nafuh</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg: #000103;
-    --bg-panel: #0b0d17;
-    --bg-panel-2: #10121e;
-    --sun: #f4c95d;
-    --crown: #d9b23a;
-    --findash: #46a3e0;
-    --recluse: #d1414d;
-    --text: #edeff5;
-    --text-dim: #9aa0b4;
-    --line: rgba(237,239,245,0.14);
+:root{
+  --bg:#000103;
+  --bg-panel:#0b0d17;
+  --bg-panel-2:#10121e;
+  --sun:#f4c95d;
+  --crown:#d9b23a;
+  --findash:#46a3e0;
+  --recluse:#d1414d;
+  --text:#edeff5;
+  --text-dim:#9aa0b4;
+  --text-faint:#62697c;
+  --line:rgba(237,239,245,.14);
+  --line-strong:rgba(237,239,245,.24);
+  --hud:rgba(4,7,13,.68);
+  --green:#8ff0b2;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  overflow:hidden;
+}
+
+h1,h2,h3,.display{
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:500;
+  letter-spacing:-.01em;
+  margin:0;
+}
+
+button{
+  font-family:inherit;
+}
+
+a{
+  color:inherit;
+}
+
+/* =========================================================
+   3D SCENE
+   ========================================================= */
+
+#scene-canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  display:block;
+  touch-action:none;
+  cursor:grab;
+}
+
+#scene-canvas.dragging{
+  cursor:grabbing;
+}
+
+#labels{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
+
+.label3d{
+  position:absolute;
+  transform:translate(-50%,14px);
+  font-size:13.5px;
+  color:var(--text-dim);
+  white-space:nowrap;
+  text-shadow:0 0 8px rgba(0,0,0,.8);
+  transition:opacity .2s ease;
+}
+
+.label3d.sun-label{
+  font-size:17px;
+  color:var(--text);
+  font-family:'Fraunces',Georgia,serif;
+}
+
+/* =========================================================
+   LOADING / INITIALIZATION
+   ========================================================= */
+
+#loading{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:#000103;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:18px;
+  color:var(--text-dim);
+  transition:opacity .7s ease;
+}
+
+.loading-brand{
+  font-size:12px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--text);
+}
+
+.loading-title{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:30px;
+  color:var(--text);
+  letter-spacing:-.02em;
+}
+
+.loading-status{
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+}
+
+.loading-line{
+  width:180px;
+  height:1px;
+  background:rgba(255,255,255,.08);
+  position:relative;
+  overflow:hidden;
+}
+
+.loading-line::after{
+  content:'';
+  position:absolute;
+  left:-40%;
+  top:0;
+  width:40%;
+  height:100%;
+  background:var(--sun);
+  animation:loading-line 1.2s ease-in-out infinite;
+}
+
+@keyframes loading-line{
+  0%{left:-40%}
+  100%{left:100%}
+}
+
+#loading .dot{
+  display:none;
+}
+
+/* =========================================================
+   MISSION HUD
+   ========================================================= */
+
+#mission-hud{
+  position:fixed;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.hud-panel{
+  background:var(--hud);
+  border:1px solid rgba(237,239,245,.12);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+#system-id{
+  position:absolute;
+  top:22px;
+  left:22px;
+  padding:13px 16px;
+  min-width:245px;
+}
+
+.system-kicker{
+  color:var(--text-faint);
+  font-size:9px;
+  letter-spacing:.2em;
+  margin-bottom:5px;
+}
+
+.system-name{
+  color:var(--text);
+  font-size:13px;
+  letter-spacing:.16em;
+  font-weight:500;
+}
+
+.system-sub{
+  color:var(--text-dim);
+  font-size:9px;
+  margin-top:4px;
+  letter-spacing:.12em;
+}
+
+.status-row{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:11px;
+  color:var(--green);
+  font-size:9px;
+  letter-spacing:.14em;
+}
+
+.status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(143,240,178,.75);
+  animation:status-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes status-pulse{
+  0%,100%{opacity:.45}
+  50%{opacity:1}
+}
+
+#system-data{
+  position:absolute;
+  top:22px;
+  right:22px;
+  min-width:220px;
+  padding:13px 16px;
+  text-align:right;
+}
+
+.data-row{
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:7px;
+}
+
+.data-row:last-child{
+  margin-bottom:0;
+}
+
+.data-label{
+  color:var(--text-faint);
+}
+
+.data-value{
+  color:var(--text);
+  font-variant-numeric:tabular-nums;
+}
+
+.data-value.green{
+  color:var(--green);
+}
+
+#target-reticle{
+  position:fixed;
+  z-index:3;
+  width:78px;
+  height:78px;
+  display:none;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+
+#target-reticle.active{
+  display:block;
+}
+
+.reticle-corner{
+  position:absolute;
+  width:13px;
+  height:13px;
+  border-color:rgba(244,201,93,.9);
+  border-style:solid;
+}
+
+.reticle-corner.tl{
+  top:0;
+  left:0;
+  border-width:1px 0 0 1px;
+}
+
+.reticle-corner.tr{
+  top:0;
+  right:0;
+  border-width:1px 1px 0 0;
+}
+
+.reticle-corner.bl{
+  bottom:0;
+  left:0;
+  border-width:0 0 1px 1px;
+}
+
+.reticle-corner.br{
+  bottom:0;
+  right:0;
+  border-width:0 1px 1px 0;
+}
+
+.reticle-cross-h,
+.reticle-cross-v{
+  position:absolute;
+  background:rgba(244,201,93,.65);
+}
+
+.reticle-cross-h{
+  width:18px;
+  height:1px;
+  left:30px;
+  top:38px;
+}
+
+.reticle-cross-v{
+  width:1px;
+  height:18px;
+  left:38px;
+  top:30px;
+}
+
+#target-readout{
+  position:absolute;
+  left:24px;
+  bottom:86px;
+  min-width:265px;
+  padding:14px 16px;
+  display:none;
+  pointer-events:none;
+}
+
+#target-readout.active{
+  display:block;
+}
+
+.target-header{
+  color:var(--sun);
+  font-size:9px;
+  letter-spacing:.2em;
+  margin-bottom:7px;
+}
+
+.target-name{
+  color:var(--text);
+  font-size:17px;
+  font-family:'Fraunces',Georgia,serif;
+  letter-spacing:0;
+  text-transform:none;
+  margin-bottom:4px;
+}
+
+.target-meta{
+  color:var(--text-dim);
+  font-size:9px;
+  line-height:1.7;
+}
+
+#camera-readout{
+  position:absolute;
+  right:24px;
+  bottom:86px;
+  padding:11px 14px;
+  min-width:190px;
+}
+
+.camera-title{
+  color:var(--text-faint);
+  font-size:8px;
+  letter-spacing:.18em;
+  margin-bottom:8px;
+}
+
+.camera-row{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:var(--text-dim);
+  font-size:9px;
+  margin-bottom:5px;
+}
+
+.camera-row:last-child{
+  margin-bottom:0;
+}
+
+.camera-row span:last-child{
+  color:var(--text);
+  font-variant-numeric:tabular-nums;
+}
+
+#bottom-hud{
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  pointer-events:auto;
+}
+
+.hud-command{
+  height:38px;
+  padding:0 16px;
+  background:var(--hud);
+  border:1px solid rgba(237,239,245,.12);
+  border-right:0;
+  color:var(--text-dim);
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease;
+}
+
+.hud-command:first-child{
+  border-radius:7px 0 0 7px;
+}
+
+.hud-command:last-child{
+  border-right:1px solid rgba(237,239,245,.12);
+  border-radius:0 7px 7px 0;
+}
+
+.hud-command:hover{
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+}
+
+.hud-command.active{
+  color:var(--text);
+  background:rgba(255,255,255,.07);
+}
+
+#axis-marker{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:130px;
+  height:130px;
+  transform:translate(-50%,-50%);
+  opacity:.18;
+}
+
+.axis-circle{
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:50%;
+}
+
+.axis-line-x,
+.axis-line-y{
+  position:absolute;
+  background:rgba(255,255,255,.2);
+}
+
+.axis-line-x{
+  left:0;
+  right:0;
+  top:50%;
+  height:1px;
+}
+
+.axis-line-y{
+  top:0;
+  bottom:0;
+  left:50%;
+  width:1px;
+}
+
+/* =========================================================
+   ORIGINAL NAV
+   ========================================================= */
+
+#nav{
+  position:fixed;
+  top:22px;
+  left:290px;
+  z-index:5;
+  display:flex;
+  gap:6px;
+  background:rgba(9,10,20,.5);
+  border:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-radius:999px;
+  padding:6px;
+}
+
+#nav button{
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:14px;
+  padding:9px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:color .2s ease,background .2s ease;
+}
+
+#nav button:hover,
+#nav button:focus-visible{
+  color:var(--text);
+  background:rgba(255,255,255,.07);
+}
+
+#reset-view{
+  position:fixed;
+  top:22px;
+  right:260px;
+  z-index:5;
+  background:rgba(9,10,20,.5);
+  border:1px solid var(--line);
+  color:var(--text-dim);
+  font-size:13px;
+  padding:9px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+#reset-view:hover{
+  color:var(--text);
+}
+
+/* =========================================================
+   ORIGINAL HINT
+   ========================================================= */
+
+#hint{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:5;
+  font-size:12.5px;
+  color:var(--text-dim);
+  background:rgba(9,10,20,.45);
+  border:1px solid var(--line);
+  padding:8px 14px;
+  border-radius:999px;
+  pointer-events:none;
+  transition:opacity .6s ease;
+}
+
+/* =========================================================
+   COMET
+   ========================================================= */
+
+.comet{
+  position:fixed;
+  top:14%;
+  left:-60px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 14px 5px rgba(255,255,255,.85);
+  z-index:3;
+  cursor:pointer;
+  animation:comet-fly 15s linear infinite;
+  animation-delay:3s;
+}
+
+.comet::before{
+  content:'';
+  position:absolute;
+  right:8px;
+  top:3px;
+  width:100px;
+  height:2px;
+  background:linear-gradient(
+    to left,
+    rgba(255,255,255,.9),
+    rgba(255,255,255,0)
+  );
+  transform:rotate(18deg);
+  transform-origin:right center;
+}
+
+@keyframes comet-fly{
+  0%{
+    transform:translate(0,0);
+    opacity:0;
   }
 
-  *{ box-sizing: border-box; }
-
-  html,body{
-    height:100%;
-    margin:0;
-    padding:0;
+  4%{
+    opacity:1;
   }
 
-  body{
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    overflow: hidden;
+  45%{
+    transform:translate(70vw,30vh);
+    opacity:1;
   }
 
-  h1,h2,h3,.display{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:500;
-    letter-spacing:-0.01em;
-    margin:0;
+  52%{
+    opacity:0;
   }
 
-  button{
-    font-family: inherit;
+  100%{
+    transform:translate(70vw,30vh);
+    opacity:0;
+  }
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(2,3,7,.65);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:10;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:100%;
+  max-width:560px;
+  max-height:82vh;
+  overflow-y:auto;
+  background:linear-gradient(
+    180deg,
+    var(--bg-panel-2),
+    var(--bg-panel)
+  );
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:34px 34px 30px;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+.modal-close{
+  position:absolute;
+  top:18px;
+  right:18px;
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:20px;
+  cursor:pointer;
+  line-height:1;
+  padding:6px;
+}
+
+.modal-close:hover{
+  color:var(--text);
+}
+
+.modal .eyebrow{
+  font-size:13px;
+  color:var(--text-dim);
+  margin-bottom:10px;
+}
+
+.modal h2{
+  font-size:30px;
+  margin-bottom:14px;
+}
+
+.modal p{
+  color:var(--text-dim);
+  line-height:1.65;
+  font-size:15px;
+  margin:0 0 14px;
+}
+
+.modal p.lead{
+  color:var(--text);
+  font-size:16px;
+}
+
+.modal .links{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.btn{
+  display:inline-block;
+  padding:11px 20px;
+  border-radius:999px;
+  font-size:14px;
+  text-decoration:none;
+  border:1px solid var(--line);
+  color:var(--text);
+  transition:background .2s ease,border-color .2s ease;
+}
+
+.btn:hover{
+  background:rgba(255,255,255,.07);
+}
+
+.btn.primary{
+  background:var(--accent,var(--sun));
+  color:#10121e;
+  border-color:transparent;
+  font-weight:500;
+}
+
+.btn.primary:hover{
+  filter:brightness(1.08);
+}
+
+.skill-line{
+  color:var(--text-dim);
+  font-size:14.5px;
+  line-height:1.8;
+}
+
+.const-modal ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  color:var(--text-dim);
+  font-size:14.5px;
+  line-height:1.9;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:900px){
+
+  #system-id{
+    top:14px;
+    left:14px;
+    min-width:205px;
   }
 
-  a{
-    color: inherit;
-  }
-
-  #scene-canvas{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    display:block;
-    touch-action:none;
-    cursor:grab;
-  }
-
-  #scene-canvas.dragging{
-    cursor:grabbing;
-  }
-
-  #labels{
-    position:fixed;
-    inset:0;
-    z-index:1;
-    pointer-events:none;
-  }
-
-  .label3d{
-    position:absolute;
-    transform: translate(-50%, 14px);
-    font-size: 13.5px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    text-shadow: 0 0 8px rgba(0,0,0,0.8);
-    transition: opacity .2s ease;
-  }
-
-  .label3d.sun-label{
-    font-size: 17px;
-    color: var(--text);
-    font-family:'Fraunces',Georgia,serif;
-  }
-
-  #loading{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    background: var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:14px;
-    color: var(--text-dim);
-    font-size:14px;
-    transition: opacity .5s ease;
-  }
-
-  #loading .dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background: var(--sun);
-    animation: pulse-dot 1.1s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot{
-    0%,100%{
-      opacity:.25;
-      transform:scale(.8);
-    }
-    50%{
-      opacity:1;
-      transform:scale(1.15);
-    }
+  #system-data{
+    top:14px;
+    right:14px;
+    min-width:175px;
   }
 
   #nav{
-    position: fixed;
-    top: 22px;
-    left: 22px;
-    z-index: 5;
-    display:flex;
-    gap: 6px;
-    background: rgba(9,10,20,0.5);
-    border: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-    border-radius: 999px;
-    padding: 6px;
-  }
-
-  #nav button{
-    background:none;
-    border:none;
-    color: var(--text-dim);
-    font-size: 14px;
-    padding: 9px 16px;
-    border-radius: 999px;
-    cursor:pointer;
-    transition: color .2s ease, background .2s ease;
-  }
-
-  #nav button:hover,
-  #nav button:focus-visible{
-    color: var(--text);
-    background: rgba(255,255,255,0.07);
-  }
-
-  #hint{
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
-    font-size: 12.5px;
-    color: var(--text-dim);
-    background: rgba(9,10,20,0.45);
-    border: 1px solid var(--line);
-    padding: 8px 14px;
-    border-radius: 999px;
-    pointer-events:none;
-    transition: opacity .6s ease;
+    top:88px;
+    left:14px;
   }
 
   #reset-view{
-    position: fixed;
-    top: 22px;
-    right: 22px;
-    z-index: 5;
-    background: rgba(9,10,20,0.5);
-    border: 1px solid var(--line);
-    color: var(--text-dim);
-    font-size: 13px;
-    padding: 9px 16px;
-    border-radius: 999px;
-    cursor:pointer;
-    backdrop-filter: blur(10px);
+    top:88px;
+    right:14px;
   }
 
-  #reset-view:hover{
-    color: var(--text);
+  #camera-readout{
+    right:14px;
+    bottom:72px;
   }
 
-  .comet{
-    position: fixed;
-    top: 14%;
-    left: -60px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 14px 5px rgba(255,255,255,0.85);
-    z-index: 3;
-    cursor: pointer;
-    animation: comet-fly 15s linear infinite;
-    animation-delay: 3s;
+  #target-readout{
+    left:14px;
+    bottom:72px;
   }
 
-  .comet::before{
-    content:'';
-    position:absolute;
-    right: 8px;
-    top: 3px;
-    width: 100px;
-    height: 2px;
-    background: linear-gradient(
-      to left,
-      rgba(255,255,255,0.9),
-      rgba(255,255,255,0)
-    );
-    transform: rotate(18deg);
-    transform-origin: right center;
+  #bottom-hud{
+    bottom:14px;
   }
 
-  @keyframes comet-fly{
-    0%{
-      transform: translate(0,0);
-      opacity:0;
-    }
-    4%{
-      opacity:1;
-    }
-    45%{
-      transform: translate(70vw, 30vh);
-      opacity:1;
-    }
-    52%{
-      opacity:0;
-    }
-    100%{
-      transform: translate(70vw, 30vh);
-      opacity:0;
-    }
+  .hud-command{
+    padding:0 11px;
+    font-size:8px;
+  }
+}
+
+@media(max-width:640px){
+
+  #mission-hud{
+    font-size:9px;
   }
 
-  .modal-backdrop{
-    position: fixed;
-    inset:0;
-    background: rgba(2,3,7,0.65);
-    backdrop-filter: blur(4px);
-    z-index: 10;
-    display:none;
-    align-items:center;
+  #system-id{
+    padding:10px 11px;
+    min-width:170px;
+  }
+
+  .system-kicker{
+    font-size:7px;
+  }
+
+  .system-name{
+    font-size:10px;
+  }
+
+  .system-sub{
+    font-size:7px;
+  }
+
+  .status-row{
+    font-size:7px;
+    margin-top:8px;
+  }
+
+  #system-data{
+    padding:10px 11px;
+    min-width:145px;
+  }
+
+  .data-row{
+    gap:10px;
+    margin-bottom:5px;
+  }
+
+  .data-label,
+  .data-value{
+    font-size:7px;
+  }
+
+  #nav{
+    top:auto;
+    bottom:68px;
+    left:14px;
+    padding:4px;
+  }
+
+  #nav button{
+    font-size:10px;
+    padding:7px 10px;
+  }
+
+  #reset-view{
+    top:auto;
+    bottom:68px;
+    right:14px;
+    font-size:10px;
+    padding:7px 11px;
+  }
+
+  #bottom-hud{
+    width:calc(100% - 28px);
     justify-content:center;
-    padding: 24px;
   }
 
-  .modal-backdrop.open{
-    display:flex;
+  .hud-command{
+    flex:1;
+    padding:0 5px;
+    height:34px;
+    font-size:7px;
+    letter-spacing:.08em;
+  }
+
+  #target-readout{
+    left:14px;
+    bottom:112px;
+    min-width:210px;
+    padding:10px 12px;
+  }
+
+  .target-name{
+    font-size:15px;
+  }
+
+  #camera-readout{
+    display:none;
+  }
+
+  #axis-marker{
+    width:90px;
+    height:90px;
+  }
+
+  #hint{
+    display:none;
+  }
+
+  .label3d{
+    font-size:11px;
+  }
+
+  .label3d.sun-label{
+    font-size:14px;
   }
 
   .modal{
-    width: 100%;
-    max-width: 560px;
-    max-height: 82vh;
-    overflow-y: auto;
-    background: linear-gradient(
-      180deg,
-      var(--bg-panel-2),
-      var(--bg-panel)
-    );
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 34px 34px 30px;
-    position: relative;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-  }
-
-  .modal-close{
-    position:absolute;
-    top: 18px;
-    right: 18px;
-    background:none;
-    border:none;
-    color: var(--text-dim);
-    font-size: 20px;
-    cursor:pointer;
-    line-height:1;
-    padding: 6px;
-  }
-
-  .modal-close:hover{
-    color: var(--text);
-  }
-
-  .modal .eyebrow{
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 10px;
+    padding:26px 22px 24px;
+    max-height:84vh;
   }
 
   .modal h2{
-    font-size: 30px;
-    margin-bottom: 14px;
+    font-size:24px;
   }
 
-  .modal p{
-    color: var(--text-dim);
-    line-height: 1.65;
-    font-size: 15px;
-    margin: 0 0 14px;
+  .loading-title{
+    font-size:24px;
   }
-
-  .modal p.lead{
-    color: var(--text);
-    font-size: 16px;
-  }
-
-  .modal .links{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top: 20px;
-  }
-
-  .btn{
-    display:inline-block;
-    padding: 11px 20px;
-    border-radius: 999px;
-    font-size: 14px;
-    text-decoration:none;
-    border: 1px solid var(--line);
-    color: var(--text);
-    transition: background .2s ease, border-color .2s ease;
-  }
-
-  .btn:hover{
-    background: rgba(255,255,255,0.07);
-  }
-
-  .btn.primary{
-    background: var(--accent, var(--sun));
-    color: #10121e;
-    border-color: transparent;
-    font-weight:500;
-  }
-
-  .btn.primary:hover{
-    filter: brightness(1.08);
-  }
-
-  .skill-line{
-    color: var(--text-dim);
-    font-size: 14.5px;
-    line-height: 1.8;
-  }
-
-  .const-modal ul{
-    list-style:none;
-    margin:0;
-    padding:0;
-    color: var(--text-dim);
-    font-size: 14.5px;
-    line-height: 1.9;
-  }
-
-  @media (max-width: 640px){
-    #hint{
-      display:none;
-    }
-
-    .modal{
-      padding: 26px 22px 24px;
-    }
-
-    .modal h2{
-      font-size: 24px;
-    }
-  }
+}
 </style>
 </head>
 
 <body>
 
+<!-- =======================================================
+     INITIALIZATION SCREEN
+     ======================================================= -->
+
 <div id="loading">
-  <div class="dot"></div>
-  <div>Loading the system…</div>
+
+  <div class="loading-brand">
+    NAFUH ORBIT
+  </div>
+
+  <div class="loading-title">
+    Digital Exploration System
+  </div>
+
+  <div class="loading-line"></div>
+
+  <div class="loading-status">
+    Initializing orbital environment
+  </div>
+
 </div>
+
+<!-- =======================================================
+     THREE.JS SCENE
+     ======================================================= -->
 
 <canvas id="scene-canvas"></canvas>
 <div id="labels"></div>
 
-<div id="nav">
-  <button data-nav="about">About</button>
-  <button data-nav="projects">Projects</button>
-  <button data-nav="contact">Contact</button>
+<!-- =======================================================
+     MISSION CONTROL HUD
+     ======================================================= -->
+
+<div id="mission-hud">
+
+  <div id="system-id" class="hud-panel">
+
+    <div class="system-kicker">
+      Mission Control / Personal Portfolio
+    </div>
+
+    <div class="system-name">
+      NAFUH ORBIT
+    </div>
+
+    <div class="system-sub">
+      Digital Exploration System
+    </div>
+
+    <div class="status-row">
+      <span class="status-dot"></span>
+      <span>SYSTEM STATUS: ONLINE</span>
+    </div>
+
+  </div>
+
+  <div id="system-data" class="hud-panel">
+
+    <div class="data-row">
+      <span class="data-label">LOCAL TIME</span>
+      <span class="data-value" id="hud-time">--:--:--</span>
+    </div>
+
+    <div class="data-row">
+      <span class="data-label">OBJECTS</span>
+      <span class="data-value" id="hud-objects">06</span>
+    </div>
+
+    <div class="data-row">
+      <span class="data-label">SECTOR</span>
+      <span class="data-value">N-01</span>
+    </div>
+
+    <div class="data-row">
+      <span class="data-label">SYSTEM</span>
+      <span class="data-value green">ACTIVE</span>
+    </div>
+
+  </div>
+
+  <!-- subtle center navigation reference -->
+
+  <div id="axis-marker">
+    <div class="axis-circle"></div>
+    <div class="axis-line-x"></div>
+    <div class="axis-line-y"></div>
+  </div>
+
+  <!-- selected object reticle -->
+
+  <div id="target-reticle">
+
+    <div class="reticle-corner tl"></div>
+    <div class="reticle-corner tr"></div>
+    <div class="reticle-corner bl"></div>
+    <div class="reticle-corner br"></div>
+
+    <div class="reticle-cross-h"></div>
+    <div class="reticle-cross-v"></div>
+
+  </div>
+
+  <!-- target information -->
+
+  <div id="target-readout" class="hud-panel">
+
+    <div class="target-header">
+      TARGET ACQUIRED
+    </div>
+
+    <div class="target-name" id="target-name">
+      —
+    </div>
+
+    <div class="target-meta" id="target-meta">
+      Awaiting object data...
+    </div>
+
+  </div>
+
+  <!-- camera information -->
+
+  <div id="camera-readout" class="hud-panel">
+
+    <div class="camera-title">
+      NAVIGATION TELEMETRY
+    </div>
+
+    <div class="camera-row">
+      <span>CAMERA</span>
+      <span id="camera-mode">ORBIT</span>
+    </div>
+
+    <div class="camera-row">
+      <span>DISTANCE</span>
+      <span id="camera-distance">--</span>
+    </div>
+
+    <div class="camera-row">
+      <span>ALTITUDE</span>
+      <span id="camera-altitude">--</span>
+    </div>
+
+  </div>
+
+  <!-- bottom mission controls -->
+
+  <div id="bottom-hud">
+
+    <button class="hud-command active" data-command="system">
+      System
+    </button>
+
+    <button class="hud-command" data-command="objects">
+      Objects
+    </button>
+
+    <button class="hud-command" data-command="projects">
+      Projects
+    </button>
+
+    <button class="hud-command" data-command="contact">
+      Contact
+    </button>
+
+    <button class="hud-command" data-command="reset">
+      Reset
+    </button>
+
+  </div>
+
 </div>
 
-<button id="reset-view">Reset view</button>
+<!-- =======================================================
+     ORIGINAL NAV
+     ======================================================= -->
+
+<div id="nav">
+
+  <button data-nav="about">
+    About
+  </button>
+
+  <button data-nav="projects">
+    Projects
+  </button>
+
+  <button data-nav="contact">
+    Contact
+  </button>
+
+</div>
+
+<button id="reset-view">
+  Reset view
+</button>
 
 <div id="hint">
   Drag to orbit · scroll or pinch to zoom · click a planet or star
 </div>
+
+<!-- =======================================================
+     COMET
+     ======================================================= -->
 
 <div
   class="comet"
@@ -405,9 +1136,14 @@
   aria-label="Contact">
 </div>
 
-<!-- ABOUT -->
+<!-- =======================================================
+     ABOUT
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-about">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -415,9 +1151,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Abuja, Nigeria</div>
+    <div class="eyebrow">
+      Abuja, Nigeria
+    </div>
 
-    <h2>John Nafuh</h2>
+    <h2>
+      John Nafuh
+    </h2>
 
     <p class="lead">
       Computer scientist and creative — working across code,
@@ -442,12 +1182,19 @@
       UI/UX design · Web design &amp; development · Graphic design ·
       Art · Leadership
     </div>
+
   </div>
+
 </div>
 
-<!-- CROWN CAPITAL -->
+<!-- =======================================================
+     CROWN CAPITAL
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-crown">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -455,9 +1202,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Project</div>
+    <div class="eyebrow">
+      Project
+    </div>
 
-    <h2>Crown Capital</h2>
+    <h2>
+      Crown Capital
+    </h2>
 
     <p class="lead">
       A digital investment platform.
@@ -472,21 +1223,30 @@
     </p>
 
     <div class="links">
+
       <a
         class="btn primary"
-        style="--accent: var(--crown);"
+        style="--accent:var(--crown);"
         href="https://johnnafuh.github.io/CrownCapital/index.html"
         target="_blank"
         rel="noopener">
         Visit site
       </a>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- FIN-DASH -->
+<!-- =======================================================
+     FIN-DASH
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-findash">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -494,9 +1254,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Project</div>
+    <div class="eyebrow">
+      Project
+    </div>
 
-    <h2>Fin-Dash</h2>
+    <h2>
+      Fin-Dash
+    </h2>
 
     <p class="lead">
       A personal finance management platform.
@@ -510,21 +1274,30 @@
     </p>
 
     <div class="links">
+
       <a
         class="btn primary"
-        style="--accent: var(--findash);"
+        style="--accent:var(--findash);"
         href="https://johnnafuh.github.io/Fin-dash/"
         target="_blank"
         rel="noopener">
         Visit site
       </a>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- RECLUSE -->
+<!-- =======================================================
+     RECLUSE
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-recluse">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -532,9 +1305,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Project · Brand</div>
+    <div class="eyebrow">
+      Project · Brand
+    </div>
 
-    <h2>RECLUSE</h2>
+    <h2>
+      RECLUSE
+    </h2>
 
     <p class="lead">
       A bold streetwear brand.
@@ -548,21 +1325,30 @@
     </p>
 
     <div class="links">
+
       <a
         class="btn primary"
-        style="--accent: var(--recluse);"
+        style="--accent:var(--recluse);"
         href="https://johnnafuh.github.io/recluse52-site/index.html"
         target="_blank"
         rel="noopener">
         Visit site
       </a>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- PROJECTS -->
+<!-- =======================================================
+     PROJECTS
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-projects">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -570,9 +1356,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Projects</div>
+    <div class="eyebrow">
+      Projects
+    </div>
 
-    <h2>Three worlds, three builds</h2>
+    <h2>
+      Three worlds, three builds
+    </h2>
 
     <p>
       Each planet in the system is a live project. Click through
@@ -580,6 +1370,7 @@
     </p>
 
     <div class="links">
+
       <a
         class="btn"
         href="https://johnnafuh.github.io/CrownCapital/index.html"
@@ -603,13 +1394,21 @@
         rel="noopener">
         RECLUSE
       </a>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- CONTACT -->
+<!-- =======================================================
+     CONTACT
+     ======================================================= -->
+
 <div class="modal-backdrop" id="modal-contact">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -617,15 +1416,20 @@
       &times;
     </button>
 
-    <div class="eyebrow">Get in touch</div>
+    <div class="eyebrow">
+      Get in touch
+    </div>
 
-    <h2>Say hello</h2>
+    <h2>
+      Say hello
+    </h2>
 
     <p>
       Open to new projects, collaborations, and conversations.
     </p>
 
     <div class="links">
+
       <a
         class="btn primary"
         href="mailto:johnnafuh@gmail.com">
@@ -645,13 +1449,21 @@
         rel="noopener">
         GitHub
       </a>
+
     </div>
+
   </div>
+
 </div>
 
-<!-- GRAPHIC DESIGN -->
+<!-- =======================================================
+     GRAPHIC DESIGN
+     ======================================================= -->
+
 <div class="modal-backdrop const-modal" id="modal-graphic">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -659,9 +1471,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Constellation</div>
+    <div class="eyebrow">
+      Constellation
+    </div>
 
-    <h2>Graphic Design</h2>
+    <h2>
+      Graphic Design
+    </h2>
 
     <p>
       Visual identity, branding, illustration, and print-to-digital
@@ -673,12 +1489,19 @@
       <li>Illustration &amp; layout</li>
       <li>Packaging &amp; print-to-digital design</li>
     </ul>
+
   </div>
+
 </div>
 
-<!-- LEADERSHIP -->
+<!-- =======================================================
+     LEADERSHIP
+     ======================================================= -->
+
 <div class="modal-backdrop const-modal" id="modal-leadership">
+
   <div class="modal">
+
     <button
       class="modal-close"
       data-close
@@ -686,9 +1509,13 @@
       &times;
     </button>
 
-    <div class="eyebrow">Constellation</div>
+    <div class="eyebrow">
+      Constellation
+    </div>
 
-    <h2>Leadership</h2>
+    <h2>
+      Leadership
+    </h2>
 
     <p>
       Leading creative teams and shaping direction on brand and
@@ -701,138 +1528,288 @@
       <li>Team leadership</li>
       <li>Project ownership, start to finish</li>
     </ul>
+
   </div>
+
 </div>
+
+<!-- =======================================================
+     THREE.JS
+     ======================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 (function(){
-  "use strict";
 
-  function ready(){
-    return window.THREE && THREE.OrbitControls;
+"use strict";
+
+/* =========================================================
+   ENGINE CHECK
+   ========================================================= */
+
+function ready(){
+  return window.THREE && THREE.OrbitControls;
+}
+
+function boot(){
+
+  if(!ready()){
+
+    document.getElementById('loading').innerHTML =
+      '<div style="max-width:320px;text-align:center;">' +
+      'Couldn\\'t load the 3D engine. Check your internet connection and reload.' +
+      '</div>';
+
+    return;
   }
 
-  function boot(){
-    if(!ready()){
-      document.getElementById('loading').innerHTML =
-        '<div style="max-width:320px;text-align:center;">' +
-        'Couldn\'t load the 3D engine. Check your internet connection and reload.' +
-        '</div>';
-      return;
-    }
+  init();
+}
 
-    init();
-  }
+window.addEventListener('load',function(){
+  setTimeout(boot,60);
+});
 
-  window.addEventListener('load', function(){
-    setTimeout(boot, 60);
-  });
 
-  function init(){
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
 
-    /* ---------- renderer / scene / camera ---------- */
+function init(){
 
-    var canvas = document.getElementById('scene-canvas');
+  /* ---------- renderer / scene / camera ---------- */
 
-    var renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true
+  var canvas =
+    document.getElementById('scene-canvas');
+
+  var renderer =
+    new THREE.WebGLRenderer({
+      canvas:canvas,
+      antialias:true
     });
 
-    renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio, 2)
-    );
+  renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio,2)
+  );
 
-    renderer.setSize(
-      window.innerWidth,
-      window.innerHeight
-    );
+  renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+  );
 
-    var scene = new THREE.Scene();
+  var scene =
+    new THREE.Scene();
 
-    var camera = new THREE.PerspectiveCamera(
+  var camera =
+    new THREE.PerspectiveCamera(
       50,
-      window.innerWidth / window.innerHeight,
+      window.innerWidth/window.innerHeight,
       0.1,
       2000
     );
 
-    camera.position.set(0, 20, 46);
+  camera.position.set(
+    0,
+    20,
+    46
+  );
 
-    var controls = new THREE.OrbitControls(
+  var controls =
+    new THREE.OrbitControls(
       camera,
       renderer.domElement
     );
 
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.minDistance = 11;
-    controls.maxDistance = 58;
-    controls.enablePan = false;
-    controls.rotateSpeed = 0.5;
-    controls.zoomSpeed = 0.7;
-    controls.target.set(0,0,0);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 11;
+  controls.maxDistance = 58;
+  controls.enablePan = false;
+  controls.rotateSpeed = 0.5;
+  controls.zoomSpeed = 0.7;
+  controls.target.set(0,0,0);
 
-    /* ---------- lighting ---------- */
 
-    scene.add(
-      new THREE.AmbientLight(0x30364a, 0.55)
-    );
+  /* =======================================================
+     HUD REFERENCES
+     ======================================================= */
 
-    var sunLight = new THREE.PointLight(
+  var hudTime =
+    document.getElementById('hud-time');
+
+  var hudObjects =
+    document.getElementById('hud-objects');
+
+  var cameraDistance =
+    document.getElementById('camera-distance');
+
+  var cameraAltitude =
+    document.getElementById('camera-altitude');
+
+  var cameraMode =
+    document.getElementById('camera-mode');
+
+  var targetReadout =
+    document.getElementById('target-readout');
+
+  var targetName =
+    document.getElementById('target-name');
+
+  var targetMeta =
+    document.getElementById('target-meta');
+
+  var targetReticle =
+    document.getElementById('target-reticle');
+
+
+  /* =======================================================
+     LIVE CLOCK
+     ======================================================= */
+
+  function updateClock(){
+
+    var now =
+      new Date();
+
+    var hours =
+      String(now.getHours()).padStart(2,'0');
+
+    var minutes =
+      String(now.getMinutes()).padStart(2,'0');
+
+    var seconds =
+      String(now.getSeconds()).padStart(2,'0');
+
+    hudTime.textContent =
+      hours + ':' +
+      minutes + ':' +
+      seconds;
+  }
+
+  updateClock();
+
+  setInterval(
+    updateClock,
+    1000
+  );
+
+
+  /* =======================================================
+     LIGHTING
+     ======================================================= */
+
+  scene.add(
+    new THREE.AmbientLight(
+      0x30364a,
+      0.55
+    )
+  );
+
+  var sunLight =
+    new THREE.PointLight(
       0xfff2d0,
       2.4,
       0,
       1.6
     );
 
-    sunLight.position.set(0,0,0);
-    scene.add(sunLight);
+  sunLight.position.set(
+    0,
+    0,
+    0
+  );
 
-    /* ---------- helpers: canvas textures ---------- */
+  scene.add(
+    sunLight
+  );
 
-    function canvasTex(size, drawFn){
-      var c = document.createElement('canvas');
 
-      c.width = size * 2;
-      c.height = size;
+  /* =======================================================
+     CANVAS TEXTURES
+     ======================================================= */
 
-      var ctx = c.getContext('2d');
+  function canvasTex(size,drawFn){
 
-      drawFn(ctx, c.width, c.height);
+    var c =
+      document.createElement('canvas');
 
-      var tex = new THREE.CanvasTexture(c);
+    c.width =
+      size*2;
 
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.wrapT = THREE.ClampToEdgeWrapping;
+    c.height =
+      size;
 
-      return tex;
-    }
+    var ctx =
+      c.getContext('2d');
 
-    function rand(a,b){
-      return a + Math.random() * (b-a);
-    }
+    drawFn(
+      ctx,
+      c.width,
+      c.height
+    );
 
-    function sunTexture(){
-      return canvasTex(256, function(ctx,w,h){
+    var tex =
+      new THREE.CanvasTexture(c);
 
-        var g = ctx.createLinearGradient(
-          0,0,0,h
+    tex.wrapS =
+      THREE.RepeatWrapping;
+
+    tex.wrapT =
+      THREE.ClampToEdgeWrapping;
+
+    return tex;
+  }
+
+  function rand(a,b){
+    return a +
+      Math.random()*(b-a);
+  }
+
+
+  /* =======================================================
+     SUN TEXTURE
+     ======================================================= */
+
+  function sunTexture(){
+
+    return canvasTex(
+      256,
+      function(ctx,w,h){
+
+        var g =
+          ctx.createLinearGradient(
+            0,0,0,h
+          );
+
+        g.addColorStop(
+          0,
+          '#fff2b8'
         );
 
-        g.addColorStop(0,'#fff2b8');
-        g.addColorStop(0.5,'#ffcf5e');
-        g.addColorStop(1,'#ff9d2e');
+        g.addColorStop(
+          .5,
+          '#ffcf5e'
+        );
+
+        g.addColorStop(
+          1,
+          '#ff9d2e'
+        );
 
         ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
+        ctx.fillRect(
+          0,
+          0,
+          w,
+          h
+        );
 
         for(var i=0;i<420;i++){
 
-          var r = rand(4,20);
+          var r =
+            rand(4,20);
 
           ctx.beginPath();
 
@@ -842,7 +1819,7 @@
             ',' +
             Math.floor(rand(60,140)) +
             ',' +
-            rand(0.08,0.22) +
+            rand(.08,.22) +
             ')';
 
           ctx.arc(
@@ -855,30 +1832,60 @@
 
           ctx.fill();
         }
-      });
-    }
+      }
+    );
+  }
 
-    function bandedTexture(base1, base2, accent){
-      return canvasTex(256, function(ctx,w,h){
+
+  /* =======================================================
+     BANDED TEXTURE
+     ======================================================= */
+
+  function bandedTexture(
+    base1,
+    base2,
+    accent
+  ){
+
+    return canvasTex(
+      256,
+      function(ctx,w,h){
 
         for(var y=0;y<h;y++){
 
-          var t = y/h;
-          var band = Math.sin(t*22) * 0.5 + 0.5;
-          var mix = band*0.5 + t*0.5;
+          var t =
+            y/h;
+
+          var band =
+            Math.sin(t*22)*.5+.5;
+
+          var mix =
+            band*.5+t*.5;
 
           ctx.fillStyle =
-            lerpColor(base1, base2, mix);
+            lerpColor(
+              base1,
+              base2,
+              mix
+            );
 
-          ctx.fillRect(0,y,w,2);
+          ctx.fillRect(
+            0,
+            y,
+            w,
+            2
+          );
         }
 
         for(var i=0;i<26;i++){
 
           ctx.beginPath();
 
-          ctx.fillStyle = accent;
-          ctx.globalAlpha = rand(0.08,0.22);
+          ctx.fillStyle =
+            accent;
+
+          ctx.globalAlpha =
+            rand(.08,.22);
 
           ctx.ellipse(
             rand(0,w),
@@ -894,40 +1901,75 @@
         }
 
         ctx.globalAlpha = 1;
-      });
-    }
+      }
+    );
+  }
 
-    function oceanTexture(base1, base2, land){
-      return canvasTex(256, function(ctx,w,h){
 
-        var g = ctx.createLinearGradient(
-          0,0,0,h
+  /* =======================================================
+     OCEAN TEXTURE
+     ======================================================= */
+
+  function oceanTexture(
+    base1,
+    base2,
+    land
+  ){
+
+    return canvasTex(
+      256,
+      function(ctx,w,h){
+
+        var g =
+          ctx.createLinearGradient(
+            0,0,0,h
+          );
+
+        g.addColorStop(
+          0,
+          base1
         );
 
-        g.addColorStop(0, base1);
-        g.addColorStop(1, base2);
+        g.addColorStop(
+          1,
+          base2
+        );
 
         ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
+
+        ctx.fillRect(
+          0,
+          0,
+          w,
+          h
+        );
 
         for(var i=0;i<60;i++){
 
-          var cx = rand(0,w);
-          var cy = rand(0,h);
-          var rr = rand(10,34);
+          var cx =
+            rand(0,w);
+
+          var cy =
+            rand(0,h);
+
+          var rr =
+            rand(10,34);
 
           ctx.beginPath();
 
-          ctx.fillStyle = land;
-          ctx.globalAlpha = rand(0.12,0.3);
+          ctx.fillStyle =
+            land;
+
+          ctx.globalAlpha =
+            rand(.12,.3);
 
           for(var k=0;k<6;k++){
 
             ctx.ellipse(
-              cx + rand(-14,14),
-              cy + rand(-10,10),
-              rr * rand(0.4,1),
-              rr * rand(0.25,0.6),
+              cx+rand(-14,14),
+              cy+rand(-10,10),
+              rr*rand(.4,1),
+              rr*rand(.25,.6),
               rand(0,3),
               0,
               Math.PI*2
@@ -938,30 +1980,58 @@
         }
 
         ctx.globalAlpha = 1;
-      });
-    }
+      }
+    );
+  }
 
-    function volcanicTexture(base1, base2, glow){
-      return canvasTex(256, function(ctx,w,h){
 
-        var g = ctx.createLinearGradient(
-          0,0,w,h
+  /* =======================================================
+     VOLCANIC TEXTURE
+     ======================================================= */
+
+  function volcanicTexture(
+    base1,
+    base2,
+    glow
+  ){
+
+    return canvasTex(
+      256,
+      function(ctx,w,h){
+
+        var g =
+          ctx.createLinearGradient(
+            0,0,w,h
+          );
+
+        g.addColorStop(
+          0,
+          base1
         );
 
-        g.addColorStop(0, base1);
-        g.addColorStop(1, base2);
+        g.addColorStop(
+          1,
+          base2
+        );
 
         ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
+
+        ctx.fillRect(
+          0,
+          0,
+          w,
+          h
+        );
 
         for(var i=0;i<40;i++){
 
-          var r = rand(4,14);
+          var r =
+            rand(4,14);
 
           ctx.beginPath();
 
           ctx.strokeStyle =
-            'rgba(0,0,0,0.35)';
+            'rgba(0,0,0,.35)';
 
           ctx.lineWidth = 2;
 
@@ -980,392 +2050,555 @@
 
           ctx.beginPath();
 
-          ctx.strokeStyle = glow;
-          ctx.globalAlpha = rand(0.35,0.7);
-          ctx.lineWidth = rand(1,2.4);
+          ctx.strokeStyle =
+            glow;
 
-          var sx = rand(0,w);
-          var sy = rand(0,h);
+          ctx.globalAlpha =
+            rand(.35,.7);
 
-          ctx.moveTo(sx,sy);
+          ctx.lineWidth =
+            rand(1,2.4);
+
+          var sx =
+            rand(0,w);
+
+          var sy =
+            rand(0,h);
+
+          ctx.moveTo(
+            sx,
+            sy
+          );
 
           for(
             var seg=0;
             seg<4;
             seg++
           ){
-            sx += rand(-24,24);
-            sy += rand(-14,14);
-            ctx.lineTo(sx,sy);
+
+            sx +=
+              rand(-24,24);
+
+            sy +=
+              rand(-14,14);
+
+            ctx.lineTo(
+              sx,
+              sy
+            );
           }
 
           ctx.stroke();
         }
 
         ctx.globalAlpha = 1;
-      });
-    }
+      }
+    );
+  }
 
-    function lerpColor(c1,c2,t){
 
-      var a = hexToRgb(c1);
-      var b = hexToRgb(c2);
+  function lerpColor(
+    c1,
+    c2,
+    t
+  ){
 
-      var r = Math.round(
-        a.r + (b.r-a.r)*t
+    var a =
+      hexToRgb(c1);
+
+    var b =
+      hexToRgb(c2);
+
+    var r =
+      Math.round(
+        a.r+(b.r-a.r)*t
       );
 
-      var g = Math.round(
-        a.g + (b.g-a.g)*t
+    var g =
+      Math.round(
+        a.g+(b.g-a.g)*t
       );
 
-      var bl = Math.round(
-        a.b + (b.b-a.b)*t
+    var bl =
+      Math.round(
+        a.b+(b.b-a.b)*t
       );
 
-      return 'rgb(' + r + ',' + g + ',' + bl + ')';
-    }
+    return 'rgb('+
+      r+','+
+      g+','+
+      bl+
+      ')';
+  }
 
-    function hexToRgb(hex){
 
-      var v = hex.replace('#','');
+  function hexToRgb(hex){
 
-      return {
-        r: parseInt(v.substring(0,2),16),
-        g: parseInt(v.substring(2,4),16),
-        b: parseInt(v.substring(4,6),16)
-      };
-    }
+    var v =
+      hex.replace('#','');
 
-    function glowSprite(color, size){
+    return {
+      r:parseInt(
+        v.substring(0,2),
+        16
+      ),
+      g:parseInt(
+        v.substring(2,4),
+        16
+      ),
+      b:parseInt(
+        v.substring(4,6),
+        16
+      )
+    };
+  }
 
-      var tex = canvasTex(128, function(ctx,w,h){
 
-        var g = ctx.createRadialGradient(
-          w/2,
-          h/2,
-          0,
-          w/2,
-          h/2,
-          w/2
-        );
+  function glowSprite(
+    color,
+    size
+  ){
 
-        g.addColorStop(0, color);
-        g.addColorStop(0.4, color);
-        g.addColorStop(1, 'rgba(0,0,0,0)');
+    var tex =
+      canvasTex(
+        128,
+        function(ctx,w,h){
 
-        ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
-      });
+          var g =
+            ctx.createRadialGradient(
+              w/2,
+              h/2,
+              0,
+              w/2,
+              h/2,
+              w/2
+            );
 
-      var mat = new THREE.SpriteMaterial({
-        map: tex,
+          g.addColorStop(
+            0,
+            color
+          );
+
+          g.addColorStop(
+            .4,
+            color
+          );
+
+          g.addColorStop(
+            1,
+            'rgba(0,0,0,0)'
+          );
+
+          ctx.fillStyle = g;
+
+          ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+          );
+        }
+      );
+
+    var mat =
+      new THREE.SpriteMaterial({
+        map:tex,
         transparent:true,
-        blending: THREE.AdditiveBlending,
+        blending:THREE.AdditiveBlending,
         depthWrite:false
       });
 
-      var sprite = new THREE.Sprite(mat);
+    var sprite =
+      new THREE.Sprite(mat);
 
-      sprite.scale.set(
-        size,
-        size,
-        1
+    sprite.scale.set(
+      size,
+      size,
+      1
+    );
+
+    return sprite;
+  }
+
+
+  /* =======================================================
+     STARFIELD
+     ======================================================= */
+
+  function buildStars(
+    count,
+    spread,
+    size
+  ){
+
+    var positions =
+      new Float32Array(
+        count*3
       );
 
-      return sprite;
+    for(var i=0;i<count;i++){
+
+      var r =
+        spread*
+        (.6+Math.random()*.4);
+
+      var theta =
+        Math.random()*
+        Math.PI*2;
+
+      var phi =
+        Math.acos(
+          Math.random()*2-1
+        );
+
+      positions[i*3] =
+        r*
+        Math.sin(phi)*
+        Math.cos(theta);
+
+      positions[i*3+1] =
+        r*
+        Math.sin(phi)*
+        Math.sin(theta);
+
+      positions[i*3+2] =
+        r*
+        Math.cos(phi);
     }
 
-    /* ---------- background: starfield + nebula skybox ---------- */
+    var geo =
+      new THREE.BufferGeometry();
 
-    function buildStars(count, spread, size){
+    geo.setAttribute(
+      'position',
+      new THREE.BufferAttribute(
+        positions,
+        3
+      )
+    );
 
-      var positions = new Float32Array(
-        count * 3
-      );
+    var dotTex =
+      canvasTex(
+        32,
+        function(ctx,w,h){
 
-      for(var i=0;i<count;i++){
+          var g =
+            ctx.createRadialGradient(
+              w/2,
+              h/2,
+              0,
+              w/2,
+              h/2,
+              w/2
+            );
 
-        var r =
-          spread * (0.6 + Math.random()*0.4);
-
-        var theta =
-          Math.random()*Math.PI*2;
-
-        var phi =
-          Math.acos(
-            (Math.random()*2)-1
+          g.addColorStop(
+            0,
+            'rgba(255,255,255,1)'
           );
 
-        positions[i*3] =
-          r*Math.sin(phi)*Math.cos(theta);
+          g.addColorStop(
+            1,
+            'rgba(255,255,255,0)'
+          );
 
-        positions[i*3+1] =
-          r*Math.sin(phi)*Math.sin(theta);
+          ctx.fillStyle = g;
 
-        positions[i*3+2] =
-          r*Math.cos(phi);
-      }
-
-      var geo = new THREE.BufferGeometry();
-
-      geo.setAttribute(
-        'position',
-        new THREE.BufferAttribute(
-          positions,
-          3
-        )
+          ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+          );
+        }
       );
 
-      var dotTex = canvasTex(32, function(ctx,w,h){
-
-        var g = ctx.createRadialGradient(
-          w/2,
-          h/2,
-          0,
-          w/2,
-          h/2,
-          w/2
-        );
-
-        g.addColorStop(
-          0,
-          'rgba(255,255,255,1)'
-        );
-
-        g.addColorStop(
-          1,
-          'rgba(255,255,255,0)'
-        );
-
-        ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
-      });
-
-      var mat = new THREE.PointsMaterial({
+    var mat =
+      new THREE.PointsMaterial({
         size:size,
         map:dotTex,
         transparent:true,
         depthWrite:false,
         sizeAttenuation:true,
-        opacity:0.9
+        opacity:.9
       });
 
-      return new THREE.Points(
-        geo,
-        mat
-      );
-    }
+    return new THREE.Points(
+      geo,
+      mat
+    );
+  }
 
-    scene.add(
-      buildStars(4500, 420, 1.6)
+  scene.add(
+    buildStars(
+      4500,
+      420,
+      1.6
+    )
+  );
+
+  scene.add(
+    buildStars(
+      2200,
+      700,
+      2.6
+    )
+  );
+
+
+  /* =======================================================
+     NEBULA
+     ======================================================= */
+
+  var nebulaTex =
+    canvasTex(
+      256,
+      function(ctx,w,h){
+
+        ctx.fillStyle =
+          '#000103';
+
+        ctx.fillRect(
+          0,
+          0,
+          w,
+          h
+        );
+
+        var blobs = [
+
+          {
+            x:.18,
+            y:.3,
+            r:.28,
+            c:'rgba(70,50,140,.5)'
+          },
+
+          {
+            x:.75,
+            y:.65,
+            r:.24,
+            c:'rgba(20,70,90,.45)'
+          },
+
+          {
+            x:.55,
+            y:.15,
+            r:.2,
+            c:'rgba(90,20,60,.4)'
+          },
+
+          {
+            x:.35,
+            y:.8,
+            r:.22,
+            c:'rgba(40,30,90,.35)'
+          }
+
+        ];
+
+        blobs.forEach(
+          function(b){
+
+            var g =
+              ctx.createRadialGradient(
+                b.x*w,
+                b.y*h,
+                0,
+                b.x*w,
+                b.y*h,
+                b.r*w
+              );
+
+            g.addColorStop(
+              0,
+              b.c
+            );
+
+            g.addColorStop(
+              1,
+              'rgba(0,0,0,0)'
+            );
+
+            ctx.fillStyle = g;
+
+            ctx.fillRect(
+              0,
+              0,
+              w,
+              h
+            );
+          }
+        );
+      }
     );
 
-    scene.add(
-      buildStars(2200, 700, 2.6)
+
+  var skyGeo =
+    new THREE.SphereGeometry(
+      900,
+      32,
+      32
     );
 
-    var nebulaTex = canvasTex(256, function(ctx,w,h){
-
-      ctx.fillStyle = '#000103';
-      ctx.fillRect(0,0,w,h);
-
-      var blobs = [
-        {
-          x:0.18,
-          y:0.3,
-          r:0.28,
-          c:'rgba(70,50,140,0.5)'
-        },
-        {
-          x:0.75,
-          y:0.65,
-          r:0.24,
-          c:'rgba(20,70,90,0.45)'
-        },
-        {
-          x:0.55,
-          y:0.15,
-          r:0.2,
-          c:'rgba(90,20,60,0.4)'
-        },
-        {
-          x:0.35,
-          y:0.8,
-          r:0.22,
-          c:'rgba(40,30,90,0.35)'
-        }
-      ];
-
-      blobs.forEach(function(b){
-
-        var g = ctx.createRadialGradient(
-          b.x*w,
-          b.y*h,
-          0,
-          b.x*w,
-          b.y*h,
-          b.r*w
-        );
-
-        g.addColorStop(
-          0,
-          b.c
-        );
-
-        g.addColorStop(
-          1,
-          'rgba(0,0,0,0)'
-        );
-
-        ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
-      });
+  var skyMat =
+    new THREE.MeshBasicMaterial({
+      map:nebulaTex,
+      side:THREE.BackSide,
+      fog:false
     });
 
-    var skyGeo =
-      new THREE.SphereGeometry(
-        900,
-        32,
-        32
-      );
+  scene.add(
+    new THREE.Mesh(
+      skyGeo,
+      skyMat
+    )
+  );
 
-    var skyMat =
-      new THREE.MeshBasicMaterial({
-        map: nebulaTex,
-        side: THREE.BackSide,
-        fog:false
-      });
 
-    scene.add(
-      new THREE.Mesh(
-        skyGeo,
-        skyMat
-      )
-    );
+  /* =======================================================
+     SUN
+     ======================================================= */
 
-    /* ---------- sun ---------- */
-
-    var sunMesh = new THREE.Mesh(
+  var sunMesh =
+    new THREE.Mesh(
       new THREE.SphereGeometry(
         5,
         48,
         48
       ),
       new THREE.MeshBasicMaterial({
-        map: sunTexture()
+        map:sunTexture()
       })
     );
 
-    scene.add(sunMesh);
+  scene.add(
+    sunMesh
+  );
 
-    scene.add(
-      glowSprite(
-        'rgba(255,205,120,0.9)',
-        26
-      )
-    );
+  scene.add(
+    glowSprite(
+      'rgba(255,205,120,.9)',
+      26
+    )
+  );
 
-    /* ---------- orbit rings ---------- */
 
-    function orbitRing(radius){
+  /* =======================================================
+     ORBIT RINGS
+     ======================================================= */
 
-      var pts = [];
+  function orbitRing(radius){
 
-      for(var i=0;i<=128;i++){
+    var pts = [];
 
-        var a =
-          (i/128)*Math.PI*2;
+    for(var i=0;i<=128;i++){
 
-        pts.push(
-          new THREE.Vector3(
-            Math.cos(a)*radius,
-            0,
-            Math.sin(a)*radius
-          )
-        );
-      }
+      var a =
+        i/128*
+        Math.PI*2;
 
-      var geo =
-        new THREE.BufferGeometry()
-          .setFromPoints(pts);
-
-      var mat =
-        new THREE.LineBasicMaterial({
-          color: 0xffffff,
-          transparent:true,
-          opacity:0.12
-        });
-
-      return new THREE.LineLoop(
-        geo,
-        mat
+      pts.push(
+        new THREE.Vector3(
+          Math.cos(a)*radius,
+          0,
+          Math.sin(a)*radius
+        )
       );
     }
 
-    [14,22,30].forEach(function(r){
+    var geo =
+      new THREE.BufferGeometry()
+        .setFromPoints(pts);
+
+    var mat =
+      new THREE.LineBasicMaterial({
+        color:0xffffff,
+        transparent:true,
+        opacity:.12
+      });
+
+    return new THREE.LineLoop(
+      geo,
+      mat
+    );
+  }
+
+  [14,22,30].forEach(
+    function(r){
       scene.add(
         orbitRing(r)
       );
-    });
+    }
+  );
 
-    /* ---------- planets ---------- */
 
-    var interactive = [];
-    var planets = [];
+  /* =======================================================
+     PLANETS
+     ======================================================= */
 
-    function makePlanet(opts){
+  var interactive = [];
+  var planets = [];
 
-      var geo =
+  function makePlanet(opts){
+
+    var geo =
+      new THREE.SphereGeometry(
+        opts.radius,
+        48,
+        48
+      );
+
+    var tex =
+      opts.texture;
+
+    var mat =
+      new THREE.MeshPhongMaterial({
+        map:tex,
+        bumpMap:tex,
+        bumpScale:.35,
+        shininess:opts.shine||6,
+        specular:0x222233
+      });
+
+    var mesh =
+      new THREE.Mesh(
+        geo,
+        mat
+      );
+
+    var group =
+      new THREE.Group();
+
+    group.add(
+      mesh
+    );
+
+    var atmo =
+      new THREE.Mesh(
         new THREE.SphereGeometry(
-          opts.radius,
-          48,
-          48
-        );
+          opts.radius*1.14,
+          32,
+          32
+        ),
+        new THREE.MeshBasicMaterial({
+          color:opts.glowColor,
+          transparent:true,
+          opacity:.12,
+          side:THREE.BackSide
+        })
+      );
 
-      var tex = opts.texture;
+    group.add(
+      atmo
+    );
 
-      var mat =
-        new THREE.MeshPhongMaterial({
-          map: tex,
-          bumpMap: tex,
-          bumpScale: 0.35,
-          shininess: opts.shine || 6,
-          specular: 0x222233
-        });
+    if(opts.ring){
 
-      var mesh =
-        new THREE.Mesh(
-          geo,
-          mat
-        );
-
-      var group =
-        new THREE.Group();
-
-      group.add(mesh);
-
-      var atmo =
-        new THREE.Mesh(
-          new THREE.SphereGeometry(
-            opts.radius*1.14,
-            32,
-            32
-          ),
-          new THREE.MeshBasicMaterial({
-            color: opts.glowColor,
-            transparent:true,
-            opacity:0.12,
-            side: THREE.BackSide
-          })
-        );
-
-      group.add(atmo);
-
-      if(opts.ring){
-
-        var ringTex =
-          canvasTex(64, function(ctx,w,h){
+      var ringTex =
+        canvasTex(
+          64,
+          function(ctx,w,h){
 
             var g =
               ctx.createLinearGradient(
@@ -1378,8 +2611,8 @@
             );
 
             g.addColorStop(
-              0.5,
-              'rgba(217,178,58,0.55)'
+              .5,
+              'rgba(217,178,58,.55)'
             );
 
             g.addColorStop(
@@ -1388,231 +2621,321 @@
             );
 
             ctx.fillStyle = g;
-            ctx.fillRect(0,0,w,h);
-          });
 
-        var ringGeo =
-          new THREE.RingGeometry(
-            opts.radius*1.5,
-            opts.radius*2.3,
-            64
-          );
+            ctx.fillRect(
+              0,
+              0,
+              w,
+              h
+            );
+          }
+        );
 
-        var ringMat =
-          new THREE.MeshBasicMaterial({
-            map: ringTex,
-            side: THREE.DoubleSide,
-            transparent:true
-          });
+      var ringGeo =
+        new THREE.RingGeometry(
+          opts.radius*1.5,
+          opts.radius*2.3,
+          64
+        );
 
-        var ring =
-          new THREE.Mesh(
-            ringGeo,
-            ringMat
-          );
+      var ringMat =
+        new THREE.MeshBasicMaterial({
+          map:ringTex,
+          side:THREE.DoubleSide,
+          transparent:true
+        });
 
-        ring.rotation.x =
-          Math.PI/2 - 0.35;
+      var ring =
+        new THREE.Mesh(
+          ringGeo,
+          ringMat
+        );
 
-        group.add(ring);
-      }
+      ring.rotation.x =
+        Math.PI/2-.35;
 
-      scene.add(group);
-
-      var p = {
-        group: group,
-        mesh: mesh,
-        distance: opts.distance,
-        angle: opts.angle,
-        speed: opts.speed,
-        radius: opts.radius,
-        name: opts.name,
-        modal: opts.modal
-      };
-
-      planets.push(p);
-
-      interactive.push({
-        mesh: mesh,
-        obj: p,
-        isSun:false
-      });
-
-      return p;
+      group.add(
+        ring
+      );
     }
 
-    makePlanet({
-      name:'Fin-Dash',
-      modal:'modal-findash',
-      distance:14,
-      angle:3.6,
-      speed:0.085,
-      radius:1.9,
-      texture:
-        oceanTexture(
-          '#0e3a52',
-          '#3aa8d8',
-          '#bfeaf2'
-        ),
-      glowColor:0x46a3e0,
-      shine:42
-    });
+    scene.add(
+      group
+    );
 
-    makePlanet({
-      name:'Crown Capital',
-      modal:'modal-crown',
-      distance:22,
-      angle:-0.9,
-      speed:0.055,
-      radius:2.3,
-      texture:
-        bandedTexture(
-          '#3d2f0c',
-          '#e6c463',
-          '#fff4cf'
-        ),
-      glowColor:0xd9b23a,
-      ring:true
-    });
+    var p = {
+      group:group,
+      mesh:mesh,
+      distance:opts.distance,
+      angle:opts.angle,
+      speed:opts.speed,
+      radius:opts.radius,
+      name:opts.name,
+      modal:opts.modal
+    };
 
-    makePlanet({
-      name:'RECLUSE',
-      modal:'modal-recluse',
-      distance:30,
-      angle:1.9,
-      speed:0.04,
-      radius:2.5,
-      texture:
-        volcanicTexture(
-          '#1a0508',
-          '#3a0a10',
-          '#ff5a4a'
-        ),
-      glowColor:0xd1414d,
-      shine:4
-    });
+    planets.push(p);
 
     interactive.push({
-      mesh: sunMesh,
-      obj: {
-        name:'John Nafuh',
-        modal:'modal-about'
-      },
-      isSun:true
+      mesh:mesh,
+      obj:p,
+      isSun:false
     });
 
-    /* ---------- skill stars ---------- */
+    return p;
+  }
 
-    function makeSkillStar(
-      name,
-      modal,
-      distance,
-      angle,
+
+  makePlanet({
+
+    name:'Fin-Dash',
+
+    modal:'modal-findash',
+
+    distance:14,
+
+    angle:3.6,
+
+    speed:.085,
+
+    radius:1.9,
+
+    texture:
+      oceanTexture(
+        '#0e3a52',
+        '#3aa8d8',
+        '#bfeaf2'
+      ),
+
+    glowColor:0x46a3e0,
+
+    shine:42
+
+  });
+
+
+  makePlanet({
+
+    name:'Crown Capital',
+
+    modal:'modal-crown',
+
+    distance:22,
+
+    angle:-.9,
+
+    speed:.055,
+
+    radius:2.3,
+
+    texture:
+      bandedTexture(
+        '#3d2f0c',
+        '#e6c463',
+        '#fff4cf'
+      ),
+
+    glowColor:0xd9b23a,
+
+    ring:true
+
+  });
+
+
+  makePlanet({
+
+    name:'RECLUSE',
+
+    modal:'modal-recluse',
+
+    distance:30,
+
+    angle:1.9,
+
+    speed:.04,
+
+    radius:2.5,
+
+    texture:
+      volcanicTexture(
+        '#1a0508',
+        '#3a0a10',
+        '#ff5a4a'
+      ),
+
+    glowColor:0xd1414d,
+
+    shine:4
+
+  });
+
+
+  /* =======================================================
+     SUN INTERACTION
+     ======================================================= */
+
+  interactive.push({
+
+    mesh:sunMesh,
+
+    obj:{
+      name:'John Nafuh',
+      modal:'modal-about'
+    },
+
+    isSun:true
+
+  });
+
+
+  /* =======================================================
+     SKILL STARS
+     ======================================================= */
+
+  function makeSkillStar(
+    name,
+    modal,
+    distance,
+    angle,
+    y,
+    color
+  ){
+
+    var mesh =
+      new THREE.Mesh(
+        new THREE.SphereGeometry(
+          .55,
+          16,
+          16
+        ),
+        new THREE.MeshBasicMaterial({
+          color:color
+        })
+      );
+
+    mesh.position.set(
+      Math.cos(angle)*distance,
       y,
-      color
-    ){
+      Math.sin(angle)*distance
+    );
 
-      var mesh =
-        new THREE.Mesh(
-          new THREE.SphereGeometry(
-            0.55,
-            16,
-            16
-          ),
-          new THREE.MeshBasicMaterial({
-            color: color
-          })
-        );
-
-      mesh.position.set(
-        Math.cos(angle)*distance,
-        y,
-        Math.sin(angle)*distance
+    var glow =
+      glowSprite(
+        color,
+        6
       );
 
-      var glow =
-        glowSprite(
-          color,
-          6
-        );
+    glow.position.copy(
+      mesh.position
+    );
 
-      glow.position.copy(
-        mesh.position
+    scene.add(mesh);
+    scene.add(glow);
+
+    var p = {
+
+      group:{
+        position:mesh.position
+      },
+
+      name:name,
+
+      modal:modal,
+
+      isStatic:true
+
+    };
+
+    interactive.push({
+
+      mesh:mesh,
+
+      obj:p,
+
+      isSun:false
+
+    });
+
+    return p;
+  }
+
+
+  makeSkillStar(
+    'Graphic Design',
+    'modal-graphic',
+    42,
+    -.7,
+    9,
+    '#e9c9ff'
+  );
+
+
+  makeSkillStar(
+    'Leadership',
+    'modal-leadership',
+    46,
+    2.4,
+    -7,
+    '#c9e9ff'
+  );
+
+
+  /* =======================================================
+     OBJECT COUNT
+     ======================================================= */
+
+  hudObjects.textContent =
+    String(interactive.length)
+      .padStart(2,'0');
+
+
+  /* =======================================================
+     LABELS
+     ======================================================= */
+
+  var labelHost =
+    document.getElementById(
+      'labels'
+    );
+
+  var labelEls = {};
+
+  function ensureLabel(
+    id,
+    text,
+    isSun
+  ){
+
+    var el =
+      document.createElement(
+        'div'
       );
 
-      scene.add(mesh);
-      scene.add(glow);
+    el.className =
+      'label3d' +
+      (isSun?' sun-label':'');
 
-      var p = {
-        group: {
-          position: mesh.position
-        },
-        name: name,
-        modal: modal,
-        isStatic:true
-      };
+    el.textContent =
+      text;
 
-      interactive.push({
-        mesh: mesh,
-        obj: p,
-        isSun:false
-      });
-
-      return p;
-    }
-
-    makeSkillStar(
-      'Graphic Design',
-      'modal-graphic',
-      42,
-      -0.7,
-      9,
-      '#e9c9ff'
+    labelHost.appendChild(
+      el
     );
 
-    makeSkillStar(
-      'Leadership',
-      'modal-leadership',
-      46,
-      2.4,
-      -7,
-      '#c9e9ff'
-    );
+    labelEls[id] =
+      el;
+  }
 
-    /* ---------- labels ---------- */
 
-    var labelHost =
-      document.getElementById('labels');
+  ensureLabel(
+    'sun',
+    'John Nafuh',
+    true
+  );
 
-    var labelEls = {};
 
-    function ensureLabel(
-      id,
-      text,
-      isSun
-    ){
-
-      var el =
-        document.createElement('div');
-
-      el.className =
-        'label3d' +
-        (isSun ? ' sun-label' : '');
-
-      el.textContent = text;
-
-      labelHost.appendChild(el);
-
-      labelEls[id] = el;
-    }
-
-    ensureLabel(
-      'sun',
-      'John Nafuh',
-      true
-    );
-
-    planets.forEach(function(p,i){
+  planets.forEach(
+    function(p,i){
 
       ensureLabel(
         'planet'+i,
@@ -1622,13 +2945,18 @@
 
       p._labelId =
         'planet'+i;
-    });
+    }
+  );
 
-    interactive
-      .filter(function(o){
+
+  interactive
+    .filter(
+      function(o){
         return o.obj.isStatic;
-      })
-      .forEach(function(o,i){
+      }
+    )
+    .forEach(
+      function(o,i){
 
         ensureLabel(
           'star'+i,
@@ -1638,305 +2966,577 @@
 
         o.obj._labelId =
           'star'+i;
-      });
+      }
+    );
 
-    var v =
-      new THREE.Vector3();
 
-    function updateLabel(
-      id,
-      worldPos
-    ){
+  var v =
+    new THREE.Vector3();
 
-      v.copy(worldPos)
-        .project(camera);
 
-      var el =
-        labelEls[id];
+  function updateLabel(
+    id,
+    worldPos
+  ){
 
-      if(!el) return;
+    v.copy(worldPos)
+      .project(camera);
 
-      if(v.z > 1){
-        el.style.opacity = '0';
+    var el =
+      labelEls[id];
+
+    if(!el){
+      return;
+    }
+
+    if(v.z>1){
+
+      el.style.opacity='0';
+
+      return;
+    }
+
+    var x =
+      (v.x*.5+.5)*
+      window.innerWidth;
+
+    var y =
+      (-v.y*.5+.5)*
+      window.innerHeight;
+
+    el.style.left =
+      x+'px';
+
+    el.style.top =
+      y+'px';
+
+    el.style.opacity='1';
+  }
+
+
+  /* =======================================================
+     TARGET SYSTEM
+     ======================================================= */
+
+  var selectedObject = null;
+
+  function objectPosition(obj){
+
+    if(obj.isSun){
+      return sunMesh.position;
+    }
+
+    return obj.group.position;
+  }
+
+
+  function getObjectType(obj){
+
+    if(obj.isSun){
+      return 'CENTRAL NODE / CREATOR';
+    }
+
+    if(obj.isStatic){
+      return 'SKILL CONSTELLATION';
+    }
+
+    return 'PROJECT PLANET';
+  }
+
+
+  function acquireTarget(obj){
+
+    selectedObject =
+      obj;
+
+    targetReadout.classList.add(
+      'active'
+    );
+
+    targetReticle.classList.add(
+      'active'
+    );
+
+    targetName.textContent =
+      obj.name;
+
+    targetMeta.textContent =
+      getObjectType(obj) +
+      ' · STATUS ACTIVE';
+
+    cameraMode.textContent =
+      'TARGET LOCK';
+
+    positionTargetReticle();
+
+    setTimeout(
+      function(){
+
+        if(selectedObject===obj){
+
+          cameraMode.textContent =
+            'ORBIT';
+        }
+
+      },
+      1400
+    );
+  }
+
+
+  function clearTarget(){
+
+    selectedObject =
+      null;
+
+    targetReadout.classList.remove(
+      'active'
+    );
+
+    targetReticle.classList.remove(
+      'active'
+    );
+
+    cameraMode.textContent =
+      'ORBIT';
+  }
+
+
+  function positionTargetReticle(){
+
+    if(!selectedObject){
+      return;
+    }
+
+    var pos =
+      objectPosition(
+        selectedObject
+      );
+
+    v.copy(pos)
+      .project(camera);
+
+    if(v.z>1){
+
+      targetReticle.style.display =
+        'none';
+
+      return;
+    }
+
+    var x =
+      (v.x*.5+.5)*
+      window.innerWidth;
+
+    var y =
+      (-v.y*.5+.5)*
+      window.innerHeight;
+
+    targetReticle.style.display =
+      'block';
+
+    targetReticle.style.left =
+      x+'px';
+
+    targetReticle.style.top =
+      y+'px';
+  }
+
+
+  /* =======================================================
+     CAMERA TWEEN
+     ======================================================= */
+
+  var tweening =
+    false;
+
+
+  function easeInOutCubic(t){
+
+    return t<.5
+      ?4*t*t*t
+      :1-Math.pow(-2*t+2,3)/2;
+  }
+
+
+  function tweenCamera(
+    targetPos,
+    lookAt,
+    duration,
+    onDone
+  ){
+
+    tweening =
+      true;
+
+    controls.enabled =
+      false;
+
+    var startPos =
+      camera.position.clone();
+
+    var startTarget =
+      controls.target.clone();
+
+    var t0 =
+      performance.now();
+
+
+    function step(now){
+
+      var t =
+        Math.min(
+          1,
+          (now-t0)/duration
+        );
+
+      var e =
+        easeInOutCubic(t);
+
+      camera.position.lerpVectors(
+        startPos,
+        targetPos,
+        e
+      );
+
+      controls.target.lerpVectors(
+        startTarget,
+        lookAt,
+        e
+      );
+
+      controls.update();
+
+      if(t<1){
+
+        requestAnimationFrame(
+          step
+        );
+
+      }else{
+
+        tweening =
+          false;
+
+        controls.enabled =
+          true;
+
+        if(onDone){
+          onDone();
+        }
+      }
+    }
+
+    requestAnimationFrame(
+      step
+    );
+  }
+
+
+  /* =======================================================
+     SUN REFERENCE
+     ======================================================= */
+
+  var sunRef = {
+
+    group:{
+      position:
+        new THREE.Vector3(
+          0,
+          0,
+          0
+        )
+    },
+
+    modal:'modal-about',
+
+    radius:5
+  };
+
+
+  /* =======================================================
+     FLY TO TARGET
+     ======================================================= */
+
+  function flyTo(obj){
+
+    acquireTarget(
+      obj
+    );
+
+    var pos =
+      obj.group.position.clone();
+
+    var camDist =
+      obj.isStatic
+
+        ?10
+
+        :(
+          obj===sunRef
+            ?16
+            :(obj.radius*4.4+7)
+        );
+
+
+    var dir =
+      pos.clone();
+
+
+    if(dir.length()<.01){
+
+      dir.set(
+        0,
+        .2,
+        1
+      );
+    }
+
+
+    dir.normalize();
+
+
+    var newPos =
+      pos.clone()
+        .add(
+          dir.multiplyScalar(
+            camDist
+          )
+        )
+        .add(
+          new THREE.Vector3(
+            0,
+            camDist*.26,
+            0
+          )
+        );
+
+
+    tweenCamera(
+      newPos,
+      pos,
+      1000,
+      function(){
+
+        openModal(
+          obj.modal
+        );
+
+      }
+    );
+  }
+
+
+  /* =======================================================
+     RESET
+     ======================================================= */
+
+  function resetView(){
+
+    clearTarget();
+
+    tweenCamera(
+      new THREE.Vector3(
+        0,
+        20,
+        46
+      ),
+
+      new THREE.Vector3(
+        0,
+        0,
+        0
+      ),
+
+      900
+    );
+  }
+
+
+  /* =======================================================
+     RAYCASTER
+     ======================================================= */
+
+  var raycaster =
+    new THREE.Raycaster();
+
+  var pointerDown =
+    null;
+
+
+  canvas.addEventListener(
+    'pointerdown',
+    function(e){
+
+      pointerDown = {
+        x:e.clientX,
+        y:e.clientY
+      };
+
+      canvas.classList.add(
+        'dragging'
+      );
+    }
+  );
+
+
+  canvas.addEventListener(
+    'pointerup',
+    function(e){
+
+      canvas.classList.remove(
+        'dragging'
+      );
+
+      if(!pointerDown){
         return;
       }
 
-      var x =
-        (v.x*0.5+0.5) *
-        window.innerWidth;
+      var dx =
+        e.clientX-
+        pointerDown.x;
 
-      var y =
-        (-v.y*0.5+0.5) *
-        window.innerHeight;
+      var dy =
+        e.clientY-
+        pointerDown.y;
 
-      el.style.left =
-        x+'px';
+      pointerDown =
+        null;
 
-      el.style.top =
-        y+'px';
 
-      el.style.opacity = '1';
-    }
-
-    /* ---------- camera tween ---------- */
-
-    var tweening = false;
-
-    function easeInOutCubic(t){
-
-      return t < 0.5
-        ? 4*t*t*t
-        : 1-Math.pow(-2*t+2,3)/2;
-    }
-
-    function tweenCamera(
-      targetPos,
-      lookAt,
-      duration,
-      onDone
-    ){
-
-      tweening = true;
-      controls.enabled = false;
-
-      var startPos =
-        camera.position.clone();
-
-      var startTarget =
-        controls.target.clone();
-
-      var t0 =
-        performance.now();
-
-      function step(now){
-
-        var t =
-          Math.min(
-            1,
-            (now-t0)/duration
-          );
-
-        var e =
-          easeInOutCubic(t);
-
-        camera.position.lerpVectors(
-          startPos,
-          targetPos,
-          e
-        );
-
-        controls.target.lerpVectors(
-          startTarget,
-          lookAt,
-          e
-        );
-
-        controls.update();
-
-        if(t < 1){
-          requestAnimationFrame(step);
-        }else{
-          tweening = false;
-          controls.enabled = true;
-
-          if(onDone){
-            onDone();
-          }
-        }
+      if(
+        Math.sqrt(
+          dx*dx+
+          dy*dy
+        )>6
+      ){
+        return;
       }
 
-      requestAnimationFrame(step);
-    }
 
-    function flyTo(obj){
+      var mouse =
+        new THREE.Vector2(
+          (e.clientX/
+            window.innerWidth)*2-1,
 
-      var pos =
-        obj.group.position.clone();
+          -(e.clientY/
+            window.innerHeight)*2+1
+        );
 
-      var camDist =
-        obj.isStatic
-          ? 10
-          : (
-              obj===sunRef
-                ? 16
-                : (obj.radius*4.4+7)
+
+      raycaster.setFromCamera(
+        mouse,
+        camera
+      );
+
+
+      var meshes =
+        interactive.map(
+          function(o){
+            return o.mesh;
+          }
+        );
+
+
+      var hits =
+        raycaster.intersectObjects(
+          meshes
+        );
+
+
+      if(hits.length){
+
+        var hitMesh =
+          hits[0].object;
+
+
+        var found =
+          interactive.find(
+            function(o){
+              return o.mesh===
+                hitMesh;
+            }
+          );
+
+
+        if(found){
+
+          if(found.isSun){
+
+            flyTo(
+              sunRef
             );
 
-      var dir =
-        pos.clone();
+          }else{
 
-      if(dir.length() < 0.01){
-        dir.set(0,0.2,1);
-      }
+            flyTo(
+              found.obj
+            );
 
-      dir.normalize();
-
-      var newPos =
-        pos.clone()
-          .add(
-            dir.multiplyScalar(camDist)
-          )
-          .add(
-            new THREE.Vector3(
-              0,
-              camDist*0.26,
-              0
-            )
-          );
-
-      tweenCamera(
-        newPos,
-        pos,
-        1000,
-        function(){
-          openModal(obj.modal);
-        }
-      );
-    }
-
-    var sunRef = {
-      group: {
-        position:
-          new THREE.Vector3(0,0,0)
-      },
-      modal:'modal-about',
-      radius:5
-    };
-
-    function resetView(){
-
-      tweenCamera(
-        new THREE.Vector3(0,20,46),
-        new THREE.Vector3(0,0,0),
-        900
-      );
-    }
-
-    /* ---------- interaction: click vs drag ---------- */
-
-    var raycaster =
-      new THREE.Raycaster();
-
-    var pointerDown = null;
-
-    canvas.addEventListener(
-      'pointerdown',
-      function(e){
-
-        pointerDown = {
-          x:e.clientX,
-          y:e.clientY
-        };
-
-        canvas.classList.add(
-          'dragging'
-        );
-      }
-    );
-
-    canvas.addEventListener(
-      'pointerup',
-      function(e){
-
-        canvas.classList.remove(
-          'dragging'
-        );
-
-        if(!pointerDown){
-          return;
-        }
-
-        var dx =
-          e.clientX-pointerDown.x;
-
-        var dy =
-          e.clientY-pointerDown.y;
-
-        pointerDown = null;
-
-        if(
-          Math.sqrt(dx*dx+dy*dy) > 6
-        ){
-          return;
-        }
-
-        var mouse =
-          new THREE.Vector2(
-            (e.clientX/window.innerWidth)*2-1,
-            -(e.clientY/window.innerHeight)*2+1
-          );
-
-        raycaster.setFromCamera(
-          mouse,
-          camera
-        );
-
-        var meshes =
-          interactive.map(function(o){
-            return o.mesh;
-          });
-
-        var hits =
-          raycaster.intersectObjects(
-            meshes
-          );
-
-        if(hits.length){
-
-          var hitMesh =
-            hits[0].object;
-
-          var found =
-            interactive.find(function(o){
-              return o.mesh === hitMesh;
-            });
-
-          if(found){
-
-            if(found.isSun){
-              flyTo(sunRef);
-            }else{
-              flyTo(found.obj);
-            }
           }
         }
       }
-    );
-
-    /* ---------- modal helpers ---------- */
-
-    function openModal(id){
-
-      var m =
-        document.getElementById(id);
-
-      if(m){
-        m.classList.add('open');
-      }
     }
+  );
 
-    function closeAllModals(){
 
-      document
-        .querySelectorAll('.modal-backdrop')
-        .forEach(function(m){
-          m.classList.remove('open');
-        });
+  /* =======================================================
+     MODAL HELPERS
+     ======================================================= */
+
+  function openModal(id){
+
+    var m =
+      document.getElementById(
+        id
+      );
+
+    if(m){
+      m.classList.add(
+        'open'
+      );
     }
+  }
+
+
+  function closeAllModals(){
 
     document
-      .querySelectorAll('[data-close]')
-      .forEach(function(btn){
+      .querySelectorAll(
+        '.modal-backdrop'
+      )
+      .forEach(
+        function(m){
+
+          m.classList.remove(
+            'open'
+          );
+        }
+      );
+  }
+
+
+  document
+    .querySelectorAll(
+      '[data-close]'
+    )
+    .forEach(
+      function(btn){
 
         btn.addEventListener(
           'click',
           closeAllModals
         );
-      });
+      }
+    );
 
-    document
-      .querySelectorAll('.modal-backdrop')
-      .forEach(function(m){
+
+  document
+    .querySelectorAll(
+      '.modal-backdrop'
+    )
+    .forEach(
+      function(m){
 
         m.addEventListener(
           'click',
@@ -1947,37 +3547,65 @@
             }
           }
         );
-      });
-
-    window.addEventListener(
-      'keydown',
-      function(e){
-
-        if(e.key==='Escape'){
-          closeAllModals();
-        }
       }
     );
 
-    document
-      .getElementById('comet')
-      .addEventListener(
-        'click',
-        function(){
-          openModal('modal-contact');
-        }
-      );
 
-    document
-      .getElementById('reset-view')
-      .addEventListener(
-        'click',
-        resetView
-      );
+  window.addEventListener(
+    'keydown',
+    function(e){
 
-    document
-      .querySelectorAll('#nav button')
-      .forEach(function(btn){
+      if(e.key==='Escape'){
+
+        closeAllModals();
+
+        clearTarget();
+      }
+    }
+  );
+
+
+  /* =======================================================
+     COMET
+     ======================================================= */
+
+  document
+    .getElementById('comet')
+    .addEventListener(
+      'click',
+      function(){
+
+        clearTarget();
+
+        openModal(
+          'modal-contact'
+        );
+      }
+    );
+
+
+  /* =======================================================
+     ORIGINAL RESET
+     ======================================================= */
+
+  document
+    .getElementById('reset-view')
+    .addEventListener(
+      'click',
+      resetView
+    );
+
+
+  /* =======================================================
+     ORIGINAL NAV
+     ======================================================= */
+
+  document
+    .querySelectorAll(
+      '#nav button'
+    )
+    .forEach(
+      function(btn){
 
         btn.addEventListener(
           'click',
@@ -1986,150 +3614,329 @@
             var target =
               btn.dataset.nav;
 
-            if(target === 'about'){
-              flyTo(sunRef);
 
-            }else if(target === 'projects'){
+            if(
+              target==='about'
+            ){
+
+              flyTo(
+                sunRef
+              );
+
+
+            }else if(
+              target==='projects'
+            ){
 
               resetView();
-              openModal('modal-projects');
 
-            }else if(target === 'contact'){
+              openModal(
+                'modal-projects'
+              );
 
-              openModal('modal-contact');
+
+            }else if(
+              target==='contact'
+            ){
+
+              openModal(
+                'modal-contact'
+              );
+
             }
+
           }
-        );
-      });
-
-    /* ---------- resize ---------- */
-
-    window.addEventListener(
-      'resize',
-      function(){
-
-        camera.aspect =
-          window.innerWidth /
-          window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-          window.innerWidth,
-          window.innerHeight
         );
       }
     );
 
-    /* ---------- animate ---------- */
 
-    var clock =
-      new THREE.Clock();
+  /* =======================================================
+     HUD COMMANDS
+     ======================================================= */
 
-    function animate(){
+  document
+    .querySelectorAll(
+      '.hud-command'
+    )
+    .forEach(
+      function(btn){
 
-      requestAnimationFrame(
-        animate
+        btn.addEventListener(
+          'click',
+          function(){
+
+            var command =
+              btn.dataset.command;
+
+
+            document
+              .querySelectorAll(
+                '.hud-command'
+              )
+              .forEach(
+                function(b){
+                  b.classList.remove(
+                    'active'
+                  );
+                }
+              );
+
+            btn.classList.add(
+              'active'
+            );
+
+
+            if(
+              command==='system'
+            ){
+
+              resetView();
+
+
+            }else if(
+              command==='objects'
+            ){
+
+              openModal(
+                'modal-projects'
+              );
+
+
+            }else if(
+              command==='projects'
+            ){
+
+              openModal(
+                'modal-projects'
+              );
+
+
+            }else if(
+              command==='contact'
+            ){
+
+              openModal(
+                'modal-contact'
+              );
+
+
+            }else if(
+              command==='reset'
+            ){
+
+              resetView();
+
+            }
+
+          }
+        );
+      }
+    );
+
+
+  /* =======================================================
+     RESIZE
+     ======================================================= */
+
+  window.addEventListener(
+    'resize',
+    function(){
+
+      camera.aspect =
+        window.innerWidth/
+        window.innerHeight;
+
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
       );
 
-      var dt =
-        Math.min(
-          0.05,
-          clock.getDelta()
+      positionTargetReticle();
+    }
+  );
+
+
+  /* =======================================================
+     ANIMATION
+     ======================================================= */
+
+  var clock =
+    new THREE.Clock();
+
+
+  function animate(){
+
+    requestAnimationFrame(
+      animate
+    );
+
+
+    var dt =
+      Math.min(
+        .05,
+        clock.getDelta()
+      );
+
+
+    if(!tweening){
+
+      controls.update();
+
+    }
+
+
+    planets.forEach(
+      function(p){
+
+        p.angle +=
+          p.speed*dt;
+
+
+        var x =
+          Math.cos(
+            p.angle
+          )*
+          p.distance;
+
+
+        var z =
+          Math.sin(
+            p.angle
+          )*
+          p.distance;
+
+
+        var y =
+          Math.sin(
+            p.angle*1.7
+          )*
+          p.distance*.02;
+
+
+        p.group.position.set(
+          x,
+          y,
+          z
         );
 
-      if(!tweening){
-        controls.update();
+
+        p.mesh.rotation.y +=
+          .25*dt;
+
+
+        updateLabel(
+          p._labelId,
+          p.group.position
+        );
+
       }
+    );
 
-      planets.forEach(
-        function(p){
 
-          p.angle +=
-            p.speed*dt;
+    updateLabel(
+      'sun',
+      sunMesh.position
+    );
 
-          var x =
-            Math.cos(p.angle) *
-            p.distance;
 
-          var z =
-            Math.sin(p.angle) *
-            p.distance;
-
-          var y =
-            Math.sin(p.angle*1.7) *
-            p.distance*0.02;
-
-          p.group.position.set(
-            x,
-            y,
-            z
-          );
-
-          p.mesh.rotation.y +=
-            0.25*dt;
-
-          updateLabel(
-            p._labelId,
-            p.group.position
-          );
-        }
-      );
-
-      updateLabel(
-        'sun',
-        sunMesh.position
-      );
-
-      interactive
-        .filter(function(o){
+    interactive
+      .filter(
+        function(o){
           return o.obj.isStatic;
-        })
-        .forEach(function(o){
+        }
+      )
+      .forEach(
+        function(o){
 
           updateLabel(
             o.obj._labelId,
             o.obj.group.position
           );
-        });
 
-      renderer.render(
-        scene,
-        camera
+        }
       );
+
+
+    /* ---------- target reticle ---------- */
+
+    if(selectedObject){
+
+      positionTargetReticle();
+
     }
 
-    animate();
 
-    document
-      .getElementById('loading')
-      .style.opacity = '0';
+    /* ---------- camera telemetry ---------- */
 
-    setTimeout(
-      function(){
+    var dist =
+      camera.position.distanceTo(
+        controls.target
+      );
 
-        document
-          .getElementById('loading')
-          .style.display = 'none';
+    cameraDistance.textContent =
+      dist.toFixed(1);
 
-      },
-      500
+    cameraAltitude.textContent =
+      camera.position.y.toFixed(1);
+
+
+    renderer.render(
+      scene,
+      camera
     );
 
-    setTimeout(
-      function(){
-
-        var h =
-          document.getElementById('hint');
-
-        if(h){
-          h.style.opacity = '0';
-        }
-
-      },
-      7000
-    );
   }
+
+
+  animate();
+
+
+  /* =======================================================
+     REMOVE LOADING SCREEN
+     ======================================================= */
+
+  document
+    .getElementById('loading')
+    .style.opacity='0';
+
+
+  setTimeout(
+    function(){
+
+      document
+        .getElementById('loading')
+        .style.display='none';
+
+    },
+    700
+  );
+
+
+  /* =======================================================
+     HIDE OLD HINT
+     ======================================================= */
+
+  setTimeout(
+    function(){
+
+      var h =
+        document.getElementById(
+          'hint'
+        );
+
+      if(h){
+        h.style.opacity='0';
+      }
+
+    },
+    7000
+  );
+
+}
+
 })();
 </script>
 
