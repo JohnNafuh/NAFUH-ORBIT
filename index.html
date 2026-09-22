@@ -67,6 +67,7 @@ a{
 
 /* =========================================================
    LOADING
+   KEPT IN THE SAME STYLE
 ========================================================= */
 
 #loading-screen{
@@ -572,7 +573,7 @@ a{
   left:22px;
   top:145px;
 
-  width:220px;
+  width:240px;
 
   padding:13px 15px;
 
@@ -1149,6 +1150,53 @@ a{
 
 
 /* =========================================================
+   SOLAR CORE INFORMATION
+========================================================= */
+
+.sun-stat{
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.sun-stat::after{
+
+  content:"";
+
+  position:absolute;
+
+  right:-20px;
+  bottom:-30px;
+
+  width:80px;
+  height:80px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,185,70,.20),
+      rgba(255,130,30,0)
+    );
+}
+
+.sun-highlight{
+
+  border-color:
+    rgba(241,174,65,.16);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,170,45,.055),
+      rgba(45,85,110,.025)
+    );
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 
@@ -1235,7 +1283,7 @@ a{
     left:12px;
     top:112px;
 
-    width:185px;
+    width:190px;
 
     padding:10px 12px;
   }
@@ -1322,6 +1370,7 @@ a{
 
     grid-template-columns:1fr;
   }
+
 }
 
 </style>
@@ -1572,7 +1621,7 @@ a{
 
   <div id="hint">
 
-    Drag to orbit · scroll or pinch to zoom · click a planet or star
+    Drag to orbit · scroll or pinch to zoom · click the Sun or a project planet
 
   </div>
 
@@ -1650,7 +1699,7 @@ a{
 
 
 <!-- =========================================================
-     ABOUT
+     ABOUT / SUN
 ========================================================= -->
 
 <div
@@ -1664,7 +1713,7 @@ a{
     </button>
 
     <div class="modal-kicker">
-      Central Node / Creator
+      Central Star / Creator Node
     </div>
 
     <div class="modal-title">
@@ -1673,22 +1722,34 @@ a{
 
     <div class="modal-copy">
 
-      A technology-focused entrepreneur and builder exploring the intersection
-      of finance, design, software and digital products. NAFUH ORBIT is a
-      visual representation of that ecosystem.
+      The central node of NAFUH ORBIT. This system represents a growing
+      ecosystem of technology, finance, design and digital products built
+      around a single creative and entrepreneurial core.
 
     </div>
 
     <div class="modal-grid">
 
-      <div class="info-box">
+      <div class="info-box sun-stat sun-highlight">
 
         <div class="info-label">
-          Role
+          System Role
         </div>
 
         <div class="info-value">
-          Entrepreneur / Builder
+          Central Node
+        </div>
+
+      </div>
+
+      <div class="info-box sun-stat">
+
+        <div class="info-label">
+          Classification
+        </div>
+
+        <div class="info-value">
+          Creator / Builder
         </div>
 
       </div>
@@ -1696,7 +1757,7 @@ a{
       <div class="info-box">
 
         <div class="info-label">
-          Focus
+          Core
         </div>
 
         <div class="info-value">
@@ -1720,7 +1781,19 @@ a{
       <div class="info-box">
 
         <div class="info-label">
-          Current Sector
+          Active Systems
+        </div>
+
+        <div class="info-value">
+          03 Project Planets
+        </div>
+
+      </div>
+
+      <div class="info-box">
+
+        <div class="info-label">
+          Primary Sectors
         </div>
 
         <div class="info-value">
@@ -2496,9 +2569,21 @@ renderer.setSize(
 );
 
 renderer.setClearColor(
-  0x020712,
+  0x010611,
   1
 );
+
+/*
+  Better astronomical rendering.
+*/
+renderer.outputEncoding =
+  THREE.sRGBEncoding;
+
+renderer.toneMapping =
+  THREE.ACESFilmicToneMapping;
+
+renderer.toneMappingExposure =
+  1.12;
 
 
 var controls =
@@ -2513,7 +2598,7 @@ controls.dampingFactor=.055;
 
 controls.minDistance=8;
 
-controls.maxDistance=72;
+controls.maxDistance=85;
 
 controls.enablePan=false;
 
@@ -2526,10 +2611,13 @@ controls.zoomSpeed=.7;
    LIGHTING
 ========================================================= */
 
+/*
+  Cool space fill.
+*/
 var ambientLight =
   new THREE.AmbientLight(
-    0x9bc9e8,
-    .16
+    0x9fcfff,
+    .20
   );
 
 scene.add(
@@ -2537,11 +2625,29 @@ scene.add(
 );
 
 
+/*
+  Very subtle sky/ground separation.
+*/
+var hemisphereLight =
+  new THREE.HemisphereLight(
+    0x6fa9d8,
+    0x02040a,
+    .18
+  );
+
+scene.add(
+  hemisphereLight
+);
+
+
+/*
+  Warm central solar illumination.
+*/
 var sunLight =
   new THREE.PointLight(
-    0xffe4ad,
-    3.0,
-    180
+    0xffdf9b,
+    3.5,
+    190
   );
 
 sunLight.position.set(
@@ -2611,22 +2717,27 @@ function makeTexture(type){
 
     sunGradient.addColorStop(
       0,
-      '#fffbe0'
+      '#fffde8'
     );
 
     sunGradient.addColorStop(
-      .25,
-      '#ffe58a'
+      .20,
+      '#fff1a6'
     );
 
     sunGradient.addColorStop(
-      .6,
-      '#f5a52f'
+      .48,
+      '#ffc94d'
+    );
+
+    sunGradient.addColorStop(
+      .75,
+      '#ef861f'
     );
 
     sunGradient.addColorStop(
       1,
-      '#8b3c08'
+      '#7e2905'
     );
 
     ctx.fillStyle=
@@ -2642,7 +2753,7 @@ function makeTexture(type){
 
     for(
       var s=0;
-      s<700;
+      s<900;
       s++
     ){
 
@@ -2656,11 +2767,11 @@ function makeTexture(type){
         Math.random()*7+.5;
 
       ctx.fillStyle =
-        Math.random()>.5
+        Math.random()>.48
 
-        ?'rgba(255,245,180,.18)'
+        ?'rgba(255,250,195,.18)'
 
-        :'rgba(110,40,0,.16)';
+        :'rgba(100,35,0,.14)';
 
       ctx.beginPath();
 
@@ -2683,8 +2794,33 @@ function makeTexture(type){
 
   }else if(type==='ocean'){
 
+    var oceanGradient=
+      ctx.createRadialGradient(
+        180,
+        140,
+        20,
+        300,
+        300,
+        400
+      );
+
+    oceanGradient.addColorStop(
+      0,
+      '#185d86'
+    );
+
+    oceanGradient.addColorStop(
+      .45,
+      '#0a385c'
+    );
+
+    oceanGradient.addColorStop(
+      1,
+      '#03172d'
+    );
+
     ctx.fillStyle=
-      '#092a4d';
+      oceanGradient;
 
     ctx.fillRect(
       0,
@@ -2696,7 +2832,7 @@ function makeTexture(type){
 
     for(
       var o=0;
-      o<1200;
+      o<1350;
       o++
     ){
 
@@ -2715,9 +2851,9 @@ function makeTexture(type){
       ctx.fillStyle =
         Math.random()>.48
 
-        ?'rgba(55,160,195,.45)'
+        ?'rgba(72,191,216,.42)'
 
-        :'rgba(15,65,95,.5)';
+        :'rgba(8,55,87,.55)';
 
       ctx.beginPath();
 
@@ -2727,6 +2863,55 @@ function makeTexture(type){
         ow,
         oh,
         Math.random()*Math.PI,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+    }
+
+
+    for(
+      var cloud=0;
+      cloud<40;
+      cloud++
+    ){
+
+      var cx=
+        Math.random()*w;
+
+      var cy=
+        Math.random()*h;
+
+      var cg=
+        ctx.createRadialGradient(
+          cx,
+          cy,
+          0,
+          cx,
+          cy,
+          60
+        );
+
+      cg.addColorStop(
+        0,
+        'rgba(120,220,230,.16)'
+      );
+
+      cg.addColorStop(
+        1,
+        'rgba(0,0,0,0)'
+      );
+
+      ctx.fillStyle=cg;
+
+      ctx.beginPath();
+
+      ctx.arc(
+        cx,
+        cy,
+        60,
         0,
         Math.PI*2
       );
@@ -2752,27 +2937,27 @@ function makeTexture(type){
 
     goldGradient.addColorStop(
       0,
-      '#2b1703'
+      '#211103'
     );
 
     goldGradient.addColorStop(
       .25,
-      '#8c5a12'
+      '#7d500d'
     );
 
     goldGradient.addColorStop(
       .5,
-      '#e5bd54'
+      '#e6bd54'
     );
 
     goldGradient.addColorStop(
       .72,
-      '#70430a'
+      '#704108'
     );
 
     goldGradient.addColorStop(
       1,
-      '#1d0d02'
+      '#160902'
     );
 
     ctx.fillStyle=
@@ -2788,7 +2973,7 @@ function makeTexture(type){
 
     for(
       var g=0;
-      g<100;
+      g<110;
       g++
     ){
 
@@ -2833,7 +3018,43 @@ function makeTexture(type){
   }else if(type==='volcanic'){
 
     ctx.fillStyle=
-      '#180706';
+      '#0d0909';
+
+    ctx.fillRect(
+      0,
+      0,
+      w,
+      h
+    );
+
+
+    var volcanicGlow=
+      ctx.createRadialGradient(
+        250,
+        250,
+        10,
+        250,
+        250,
+        320
+      );
+
+    volcanicGlow.addColorStop(
+      0,
+      '#431712'
+    );
+
+    volcanicGlow.addColorStop(
+      .45,
+      '#21100e'
+    );
+
+    volcanicGlow.addColorStop(
+      1,
+      '#070708'
+    );
+
+    ctx.fillStyle=
+      volcanicGlow;
 
     ctx.fillRect(
       0,
@@ -2859,11 +3080,11 @@ function makeTexture(type){
         Math.random()*14+2;
 
       ctx.fillStyle =
-        Math.random()>.7
+        Math.random()>.76
 
-        ?'rgba(240,75,30,.7)'
+        ?'rgba(245,78,32,.72)'
 
-        :'rgba(70,20,14,.8)';
+        :'rgba(58,22,18,.82)';
 
       ctx.beginPath();
 
@@ -2887,7 +3108,7 @@ function makeTexture(type){
     ){
 
       ctx.strokeStyle=
-        'rgba(255,110,50,.25)';
+        'rgba(255,110,50,.24)';
 
       ctx.lineWidth=
         Math.random()*2+1;
@@ -2931,13 +3152,13 @@ function makeTexture(type){
 
 
   /* =====================================================
-     BLUE / VIOLET NEBULA
+     SPACE NEBULA
   ===================================================== */
 
   }else if(type==='nebula'){
 
     ctx.fillStyle=
-      '#020712';
+      '#010611';
 
     ctx.fillRect(
       0,
@@ -2947,9 +3168,12 @@ function makeTexture(type){
     );
 
 
+    /*
+      Large-scale blue atmospheric clouds.
+    */
     for(
       var n=0;
-      n<650;
+      n<750;
       n++
     ){
 
@@ -2960,20 +3184,22 @@ function makeTexture(type){
         Math.random()*h;
 
       var nr=
-        Math.random()*85+15;
+        Math.random()*110+20;
 
 
       var colors=[
 
-        'rgba(30,110,190,.10)',
+        'rgba(24,102,185,.105)',
 
-        'rgba(54,75,190,.09)',
+        'rgba(42,76,190,.095)',
 
-        'rgba(91,65,180,.08)',
+        'rgba(62,61,178,.075)',
 
-        'rgba(50,150,190,.07)',
+        'rgba(25,145,190,.080)',
 
-        'rgba(105,70,180,.055)'
+        'rgba(93,71,190,.060)',
+
+        'rgba(35,82,150,.075)'
 
       ];
 
@@ -3000,8 +3226,8 @@ function makeTexture(type){
       );
 
       ng.addColorStop(
-        .45,
-        'rgba(30,80,150,.025)'
+        .35,
+        'rgba(20,80,150,.025)'
       );
 
       ng.addColorStop(
@@ -3026,6 +3252,53 @@ function makeTexture(type){
       ctx.fill();
 
     }
+
+
+    /*
+      A very subtle Milky-Way style band.
+    */
+    var band=
+      ctx.createLinearGradient(
+        0,
+        h*.35,
+        w,
+        h*.70
+      );
+
+    band.addColorStop(
+      0,
+      'rgba(35,95,170,0)'
+    );
+
+    band.addColorStop(
+      .30,
+      'rgba(50,105,190,.025)'
+    );
+
+    band.addColorStop(
+      .50,
+      'rgba(100,120,220,.055)'
+    );
+
+    band.addColorStop(
+      .70,
+      'rgba(35,95,180,.025)'
+    );
+
+    band.addColorStop(
+      1,
+      'rgba(35,95,170,0)'
+    );
+
+    ctx.fillStyle=
+      band;
+
+    ctx.fillRect(
+      0,
+      0,
+      w,
+      h
+    );
 
   }
 
@@ -3061,8 +3334,8 @@ function createStars(
   ){
 
     var radius=
-      90+
-      Math.random()*280;
+      95+
+      Math.random()*285;
 
     var theta=
       Math.random()*
@@ -3132,16 +3405,16 @@ function createStars(
 
 var starsA=
   createStars(
-    4500,
+    5200,
     .11,
-    .72
+    .78
   );
 
 var starsB=
   createStars(
-    2200,
+    2600,
     .22,
-    .42
+    .45
   );
 
 
@@ -3168,7 +3441,7 @@ var nebulaMaterial=
 
     transparent:true,
 
-    opacity:.64
+    opacity:.72
 
   });
 
@@ -3185,14 +3458,58 @@ scene.add(
 
 
 /* =========================================================
+   SYSTEM BACKDROP
+========================================================= */
+
+/*
+  Extremely faint circular solar-system plane.
+  It helps visually establish the orbital architecture.
+*/
+
+var systemPlaneGeometry=
+  new THREE.CircleGeometry(
+    58,
+    96
+  );
+
+var systemPlaneMaterial=
+  new THREE.MeshBasicMaterial({
+
+    color:0x0b3152,
+
+    transparent:true,
+
+    opacity:.025,
+
+    side:THREE.DoubleSide,
+
+    depthWrite:false
+
+  });
+
+var systemPlane=
+  new THREE.Mesh(
+    systemPlaneGeometry,
+    systemPlaneMaterial
+  );
+
+systemPlane.rotation.x=
+  -Math.PI/2;
+
+scene.add(
+  systemPlane
+);
+
+
+/* =========================================================
    SUN
 ========================================================= */
 
 var sunGeometry=
   new THREE.SphereGeometry(
-    5,
-    64,
-    64
+    5.2,
+    72,
+    72
   );
 
 
@@ -3205,15 +3522,15 @@ var sunMaterial=
 
     map:sunTexture,
 
-    emissive:0xf39b22,
+    emissive:0xf7a52b,
 
     emissiveMap:sunTexture,
 
-    emissiveIntensity:1.5,
+    emissiveIntensity:1.65,
 
-    roughness:.72,
+    roughness:.68,
 
-    metalness:.05
+    metalness:.02
 
   });
 
@@ -3236,7 +3553,7 @@ scene.add(
 
 
 /* =========================================================
-   SUN GLOW
+   SUN CORONA
 ========================================================= */
 
 function createGlowTexture(){
@@ -3246,8 +3563,8 @@ function createGlowTexture(){
       'canvas'
     );
 
-  c.width=256;
-  c.height=256;
+  c.width=512;
+  c.height=512;
 
   var ctx=
     c.getContext('2d');
@@ -3255,33 +3572,38 @@ function createGlowTexture(){
 
   var gradient=
     ctx.createRadialGradient(
-      128,
-      128,
+      256,
+      256,
       5,
-      128,
-      128,
-      128
+      256,
+      256,
+      256
     );
 
 
   gradient.addColorStop(
     0,
-    'rgba(255,248,200,1)'
+    'rgba(255,255,225,1)'
   );
 
   gradient.addColorStop(
-    .18,
-    'rgba(255,211,100,.70)'
+    .12,
+    'rgba(255,239,157,.92)'
   );
 
   gradient.addColorStop(
-    .42,
-    'rgba(255,160,40,.30)'
+    .28,
+    'rgba(255,194,65,.48)'
   );
 
   gradient.addColorStop(
-    .68,
-    'rgba(255,105,20,.10)'
+    .48,
+    'rgba(255,140,30,.20)'
+  );
+
+  gradient.addColorStop(
+    .70,
+    'rgba(255,90,20,.06)'
   );
 
   gradient.addColorStop(
@@ -3296,8 +3618,8 @@ function createGlowTexture(){
   ctx.fillRect(
     0,
     0,
-    256,
-    256
+    512,
+    512
   );
 
 
@@ -3317,7 +3639,10 @@ var glowSprite=
 
       transparent:true,
 
-      depthWrite:false
+      depthWrite:false,
+
+      blending:
+        THREE.AdditiveBlending
 
     })
 
@@ -3325,13 +3650,49 @@ var glowSprite=
 
 
 glowSprite.scale.set(
-  18,
-  18,
+  19,
+  19,
   1
 );
 
 sunMesh.add(
   glowSprite
+);
+
+
+/*
+  Secondary softer corona.
+*/
+var outerGlow=
+  new THREE.Sprite(
+
+    new THREE.SpriteMaterial({
+
+      map:
+        createGlowTexture(),
+
+      transparent:true,
+
+      depthWrite:false,
+
+      opacity:.25,
+
+      blending:
+        THREE.AdditiveBlending
+
+    })
+
+  );
+
+
+outerGlow.scale.set(
+  30,
+  30,
+  1
+);
+
+sunMesh.add(
+  outerGlow
 );
 
 
@@ -3418,12 +3779,12 @@ function createOrbitRing(
 
   for(
     var i=0;
-    i<=128;
+    i<=192;
     i++
   ){
 
     var a=
-      (i/128)*
+      (i/192)*
       Math.PI*2;
 
 
@@ -3454,11 +3815,16 @@ function createOrbitRing(
   var material=
     new THREE.LineBasicMaterial({
 
-      color:0x6eb9e8,
+      color:0x65bce9,
 
       transparent:true,
 
-      opacity:.12
+      opacity:
+        radius===14
+        ? .18
+        : radius===22
+        ? .145
+        : .115
 
     });
 
@@ -3507,8 +3873,8 @@ projects.forEach(
     var geometry=
       new THREE.SphereGeometry(
         project.radius,
-        48,
-        48
+        56,
+        56
       );
 
 
@@ -3520,7 +3886,10 @@ projects.forEach(
             project.texture
           ),
 
-        roughness:.72,
+        roughness:
+          project.texture==='gold'
+          ? .56
+          : .78,
 
         metalness:
           project.texture==='gold'
@@ -3542,6 +3911,49 @@ projects.forEach(
     );
 
 
+    /*
+      Subtle atmospheric shell for the blue planet.
+    */
+    if(
+      project.texture==='ocean'
+    ){
+
+      var atmosphere=
+        new THREE.Mesh(
+
+          new THREE.SphereGeometry(
+            project.radius*1.07,
+            40,
+            40
+          ),
+
+          new THREE.MeshBasicMaterial({
+
+            color:0x45c7ed,
+
+            transparent:true,
+
+            opacity:.055,
+
+            side:
+              THREE.BackSide,
+
+            depthWrite:false
+
+          })
+
+        );
+
+      group.add(
+        atmosphere
+      );
+
+    }
+
+
+    /*
+      Crown Capital ring.
+    */
     if(
       project.texture==='gold'
     ){
@@ -3550,18 +3962,18 @@ projects.forEach(
         new THREE.RingGeometry(
           project.radius*1.45,
           project.radius*1.55,
-          64
+          72
         );
 
 
       var ringMaterial=
         new THREE.MeshBasicMaterial({
 
-          color:0xc99531,
+          color:0xe0ad42,
 
           transparent:true,
 
-          opacity:.45,
+          opacity:.48,
 
           side:
             THREE.DoubleSide
@@ -3615,6 +4027,113 @@ projects.forEach(
 
 
 /* =========================================================
+   ASTEROID BELT
+========================================================= */
+
+var asteroidCount=520;
+
+var asteroidGeometry=
+  new THREE.BufferGeometry();
+
+var asteroidPositions=
+  new Float32Array(
+    asteroidCount*3
+  );
+
+
+for(
+  var a=0;
+  a<asteroidCount;
+  a++
+){
+
+  /*
+    Belt sits outside RECLUSE.
+  */
+  var beltRadius=
+    34+
+    Math.random()*5.5;
+
+  var beltAngle=
+    Math.random()*
+    Math.PI*2;
+
+  var beltY=
+    (Math.random()-.5)*
+    1.6;
+
+  asteroidPositions[a*3]=
+    Math.cos(beltAngle)*
+    beltRadius;
+
+  asteroidPositions[a*3+1]=
+    beltY;
+
+  asteroidPositions[a*3+2]=
+    Math.sin(beltAngle)*
+    beltRadius;
+
+}
+
+
+asteroidGeometry.setAttribute(
+  'position',
+  new THREE.BufferAttribute(
+    asteroidPositions,
+    3
+  )
+);
+
+
+var asteroidMaterial=
+  new THREE.PointsMaterial({
+
+    color:0xa4c4d3,
+
+    size:.075,
+
+    transparent:true,
+
+    opacity:.38,
+
+    sizeAttenuation:true
+
+  });
+
+
+var asteroidBelt=
+  new THREE.Points(
+    asteroidGeometry,
+    asteroidMaterial
+  );
+
+scene.add(
+  asteroidBelt
+);
+
+
+/*
+  Belt orbit marker.
+*/
+createOrbitRing(
+  36.5
+);
+
+
+/* =========================================================
+   OUTER SYSTEM RING
+========================================================= */
+
+createOrbitRing(
+  42
+);
+
+createOrbitRing(
+  46
+);
+
+
+/* =========================================================
    SKILL CONSTELLATIONS
 ========================================================= */
 
@@ -3664,8 +4183,8 @@ skills.forEach(
 
         new THREE.SphereGeometry(
           .55,
-          24,
-          24
+          28,
+          28
         ),
 
         new THREE.MeshBasicMaterial({
@@ -3692,6 +4211,42 @@ skills.forEach(
 
     scene.add(
       mesh
+    );
+
+
+    /*
+      Skill glow.
+    */
+    var skillGlow=
+      new THREE.Sprite(
+
+        new THREE.SpriteMaterial({
+
+          map:
+            createGlowTexture(),
+
+          transparent:true,
+
+          opacity:.13,
+
+          depthWrite:false,
+
+          blending:
+            THREE.AdditiveBlending
+
+        })
+
+      );
+
+
+    skillGlow.scale.set(
+      3,
+      3,
+      1
+    );
+
+    mesh.add(
+      skillGlow
     );
 
 
@@ -3731,7 +4286,7 @@ var sunObj={
 
   modal:'modal-about',
 
-  radius:5,
+  radius:5.2,
 
   isSun:true,
 
@@ -3824,7 +4379,7 @@ function getObjectType(
 
   if(obj.isSun){
 
-    return 'CENTRAL NODE / CREATOR';
+    return 'CENTRAL STAR / CREATOR NODE';
 
   }
 
@@ -3969,7 +4524,6 @@ function positionTargetReticle(){
   targetReticle.style.top=
     y+'px';
 
-
   targetReticle.classList.add(
     'active'
   );
@@ -4087,6 +4641,7 @@ function tweenCamera(
   requestAnimationFrame(
     step
   );
+
 }
 
 
@@ -4264,19 +4819,10 @@ function getPointerPosition(
 
 
   var clientX=
-    event.touches
-
-    ?event.touches[0].clientX
-
-    :event.clientX;
-
+    event.clientX;
 
   var clientY=
-    event.touches
-
-    ?event.touches[0].clientY
-
-    :event.clientY;
+    event.clientY;
 
 
   pointer.x=
@@ -4788,11 +5334,11 @@ function animate(){
   ===================================================== */
 
   starsA.rotation.y+=
-    delta*.001;
+    delta*.0012;
 
 
   starsB.rotation.y-=
-    delta*.0005;
+    delta*.00055;
 
 
   /* =====================================================
@@ -4800,7 +5346,18 @@ function animate(){
   ===================================================== */
 
   nebula.rotation.y+=
-    delta*.0003;
+    delta*.00022;
+
+  nebula.rotation.x+=
+    delta*.000035;
+
+
+  /* =====================================================
+     ASTEROID BELT
+  ===================================================== */
+
+  asteroidBelt.rotation.y+=
+    delta*.004;
 
 
   /* =====================================================
@@ -4809,6 +5366,22 @@ function animate(){
 
   sunMesh.rotation.y+=
     delta*.025;
+
+
+  /*
+    Subtle living corona.
+  */
+  glowSprite.material.opacity=
+    .88+
+    Math.sin(
+      performance.now()*.0012
+    )*.08;
+
+  outerGlow.material.opacity=
+    .21+
+    Math.sin(
+      performance.now()*.0008
+    )*.035;
 
 
   /* =====================================================
