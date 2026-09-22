@@ -1636,6 +1636,70 @@ sunLight.position.set(0,0,0);
 scene.add(sunLight);
 
 
+/* =====================================================
+   NASA / JPL PLANETARY TEXTURE ASSETS
+   ===================================================== */
+
+var NASA_TEXTURES={
+
+  earth:
+    'https://space.jpl.nasa.gov/tmaps/pix/ear0xuu2.jpg',
+
+  jupiter:
+    'https://space.jpl.nasa.gov/tmaps/pix/jup0vss1.jpg',
+
+  mars:
+    'https://space.jpl.nasa.gov/tmaps/pix/mar0kuu2.jpg',
+
+  saturn:
+    'https://space.jpl.nasa.gov/tmaps/pix/sat0fds1.jpg'
+
+};
+
+
+var textureLoader=new THREE.TextureLoader();
+
+textureLoader.setCrossOrigin('anonymous');
+
+
+function loadPlanetTexture(type){
+
+  var url=NASA_TEXTURES[type];
+
+  if(!url){
+    return null;
+  }
+
+  var texture=textureLoader.load(
+    url,
+    function(loadedTexture){
+
+      loadedTexture.encoding=THREE.sRGBEncoding;
+
+      loadedTexture.anisotropy=
+        renderer.capabilities.getMaxAnisotropy();
+
+      loadedTexture.needsUpdate=true;
+
+    },
+    undefined,
+    function(error){
+
+      console.warn(
+        'NASA/JPL texture failed to load:',
+        type,
+        error
+      );
+
+    }
+  );
+
+  texture.encoding=THREE.sRGBEncoding;
+
+  return texture;
+}
+
+
 var textureCanvas=document.createElement('canvas');
 
 textureCanvas.width=512;
@@ -1686,358 +1750,6 @@ function makeTexture(type){
 
       ctx.beginPath();
       ctx.arc(sx,sy,sr,0,Math.PI*2);
-      ctx.fill();
-    }
-
-
-  /* =====================================================
-     EARTH — RECLUSE
-  ===================================================== */
-
-  }else if(type==='earth'){
-
-    var earthGradient=ctx.createRadialGradient(
-      175,145,20,
-      290,290,390
-    );
-
-    earthGradient.addColorStop(0,'#438fc0');
-    earthGradient.addColorStop(.30,'#17618d');
-    earthGradient.addColorStop(.58,'#0b3c62');
-    earthGradient.addColorStop(.82,'#062541');
-    earthGradient.addColorStop(1,'#010b18');
-
-    ctx.fillStyle=earthGradient;
-    ctx.fillRect(0,0,w,h);
-
-
-    /* Ocean variation */
-
-    for(var e=0;e<700;e++){
-
-      var ex=Math.random()*w;
-      var ey=Math.random()*h;
-      var er=Math.random()*20+3;
-
-      ctx.fillStyle=
-        Math.random()>.5
-        ?'rgba(18,101,137,.32)'
-        :'rgba(2,31,55,.32)';
-
-      ctx.beginPath();
-      ctx.ellipse(
-        ex,
-        ey,
-        er*2.2,
-        er*.55,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-      ctx.fill();
-    }
-
-
-    /* Continents */
-
-    for(var land=0;land<55;land++){
-
-      var lx=Math.random()*w;
-      var ly=Math.random()*h;
-
-      var landGradient=ctx.createRadialGradient(
-        lx,
-        ly,
-        0,
-        lx,
-        ly,
-        Math.random()*45+20
-      );
-
-      landGradient.addColorStop(
-        0,
-        'rgba(104,139,72,.90)'
-      );
-
-      landGradient.addColorStop(
-        .55,
-        'rgba(67,105,61,.72)'
-      );
-
-      landGradient.addColorStop(
-        1,
-        'rgba(39,75,53,0)'
-      );
-
-      ctx.fillStyle=landGradient;
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        lx,
-        ly,
-        Math.random()*35+18,
-        Math.random()*18+8,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-    }
-
-
-    /* Earth cloud bands */
-
-    for(var cloud=0;cloud<115;cloud++){
-
-      var ccx=Math.random()*w;
-      var ccy=Math.random()*h;
-      var cw=Math.random()*75+20;
-      var ch=Math.random()*7+2;
-
-      ctx.fillStyle=
-        'rgba(235,247,245,'+
-        (Math.random()*.18+.08)+')';
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        ccx,
-        ccy,
-        cw,
-        ch,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-    }
-
-
-  /* =====================================================
-     JUPITER — CROWN CAPITAL
-  ===================================================== */
-
-  }else if(type==='jupiter'){
-
-    var jupiterGradient=ctx.createLinearGradient(
-      0,0,w,h
-    );
-
-    jupiterGradient.addColorStop(0,'#4b2d17');
-    jupiterGradient.addColorStop(.12,'#b77c42');
-    jupiterGradient.addColorStop(.23,'#ead5ad');
-    jupiterGradient.addColorStop(.34,'#9a5d32');
-    jupiterGradient.addColorStop(.45,'#e8c58f');
-    jupiterGradient.addColorStop(.57,'#704126');
-    jupiterGradient.addColorStop(.69,'#d8ae78');
-    jupiterGradient.addColorStop(.82,'#8b5130');
-    jupiterGradient.addColorStop(1,'#29150b');
-
-    ctx.fillStyle=jupiterGradient;
-    ctx.fillRect(0,0,w,h);
-
-
-    /* Jupiter's atmospheric bands */
-
-    for(var j=0;j<150;j++){
-
-      var jy=Math.random()*h;
-
-      var bandColors=[
-        'rgba(250,225,183,.20)',
-        'rgba(80,37,19,.28)',
-        'rgba(191,126,69,.20)',
-        'rgba(255,236,190,.13)',
-        'rgba(93,46,26,.25)'
-      ];
-
-      ctx.strokeStyle=
-        bandColors[
-          Math.floor(Math.random()*bandColors.length)
-        ];
-
-      ctx.lineWidth=Math.random()*9+2;
-
-      ctx.beginPath();
-
-      ctx.moveTo(0,jy);
-
-      ctx.bezierCurveTo(
-        w*.20,
-        jy+Math.random()*24-12,
-        w*.42,
-        jy+Math.random()*28-14,
-        w*.64,
-        jy+Math.random()*24-12
-      );
-
-      ctx.bezierCurveTo(
-        w*.78,
-        jy+Math.random()*24-12,
-        w*.90,
-        jy+Math.random()*22-11,
-        w,
-        jy+Math.random()*20-10
-      );
-
-      ctx.stroke();
-    }
-
-
-    /* Turbulent atmospheric details */
-
-    for(var storm=0;storm<600;storm++){
-
-      var stx=Math.random()*w;
-      var sty=Math.random()*h;
-
-      ctx.fillStyle=
-        Math.random()>.5
-        ?'rgba(255,225,175,.13)'
-        :'rgba(52,24,13,.14)';
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        stx,
-        sty,
-        Math.random()*24+5,
-        Math.random()*5+1,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-    }
-
-
-    /* Great Red Spot inspired storm */
-
-    var spotX=365;
-    var spotY=335;
-
-    var spot=ctx.createRadialGradient(
-      spotX,
-      spotY,
-      4,
-      spotX,
-      spotY,
-      58
-    );
-
-    spot.addColorStop(0,'rgba(137,55,35,.80)');
-    spot.addColorStop(.45,'rgba(168,76,48,.60)');
-    spot.addColorStop(.72,'rgba(103,49,34,.35)');
-    spot.addColorStop(1,'rgba(80,37,24,0)');
-
-    ctx.fillStyle=spot;
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-      spotX,
-      spotY,
-      62,
-      34,
-      -.12,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-
-  /* =====================================================
-     SATURN — FIN-DASH
-  ===================================================== */
-
-  }else if(type==='saturn'){
-
-    var saturnGradient=ctx.createLinearGradient(
-      0,0,w,h
-    );
-
-    saturnGradient.addColorStop(0,'#4c3b27');
-    saturnGradient.addColorStop(.13,'#b79a6d');
-    saturnGradient.addColorStop(.24,'#e3d0a8');
-    saturnGradient.addColorStop(.35,'#9c8058');
-    saturnGradient.addColorStop(.47,'#ead9b2');
-    saturnGradient.addColorStop(.58,'#a8895c');
-    saturnGradient.addColorStop(.70,'#d8c394');
-    saturnGradient.addColorStop(.82,'#8b704c');
-    saturnGradient.addColorStop(1,'#352a1d');
-
-    ctx.fillStyle=saturnGradient;
-    ctx.fillRect(0,0,w,h);
-
-
-    /* Soft Saturn atmospheric bands */
-
-    for(var sb=0;sb<95;sb++){
-
-      var sy=Math.random()*h;
-
-      ctx.strokeStyle=
-        Math.random()>.5
-        ?'rgba(255,239,200,.19)'
-        :'rgba(82,62,38,.18)';
-
-      ctx.lineWidth=Math.random()*7+1;
-
-      ctx.beginPath();
-
-      ctx.moveTo(0,sy);
-
-      ctx.bezierCurveTo(
-        w*.22,
-        sy+Math.random()*16-8,
-        w*.48,
-        sy+Math.random()*18-9,
-        w*.70,
-        sy+Math.random()*16-8
-      );
-
-      ctx.bezierCurveTo(
-        w*.84,
-        sy+Math.random()*14-7,
-        w*.94,
-        sy+Math.random()*14-7,
-        w,
-        sy
-      );
-
-      ctx.stroke();
-    }
-
-
-    /* Fine atmospheric haze */
-
-    for(var sh=0;sh<450;sh++){
-
-      var shx=Math.random()*w;
-      var shy=Math.random()*h;
-
-      ctx.fillStyle=
-        Math.random()>.5
-        ?'rgba(255,239,203,.10)'
-        :'rgba(74,54,34,.10)';
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        shx,
-        shy,
-        Math.random()*28+5,
-        Math.random()*4+1,
-        Math.random()*Math.PI,
-        0,
-        Math.PI*2
-      );
-
       ctx.fill();
     }
 
@@ -2151,6 +1863,7 @@ function makeTexture(type){
 
     ctx.fillStyle=band;
     ctx.fillRect(0,0,w,h);
+
   }
 
   var texture=new THREE.CanvasTexture(textureCanvas);
@@ -2664,7 +2377,10 @@ var projects=[
     distance:14,
     radius:1.9,
     speed:.085,
+
+    /* NASA/JPL Saturn global texture */
     texture:'saturn',
+
     modal:'modal-fin',
     type:'PERSONAL FINANCE'
   },
@@ -2674,7 +2390,10 @@ var projects=[
     distance:22,
     radius:2.3,
     speed:.055,
+
+    /* NASA/JPL Jupiter global texture */
     texture:'jupiter',
+
     modal:'modal-crown',
     type:'FINANCIAL SYSTEM'
   },
@@ -2684,7 +2403,10 @@ var projects=[
     distance:30,
     radius:2.5,
     speed:.04,
+
+    /* NASA/JPL Earth global texture */
     texture:'earth',
+
     modal:'modal-recluse',
     type:'STREETWEAR SYSTEM'
   }
@@ -2760,9 +2482,14 @@ projects.forEach(
       56
     );
 
+    /*
+      The procedural planet paintings have been removed.
+      The sphere now uses the actual NASA/JPL global map.
+    */
+
     var material=new THREE.MeshStandardMaterial({
 
-      map:makeTexture(project.texture),
+      map:loadPlanetTexture(project.texture),
 
       roughness:
         project.texture==='jupiter'
@@ -3053,6 +2780,7 @@ skills.forEach(
     interactive.push({
 
       mesh:mesh,
+
       obj:skill
 
     });
