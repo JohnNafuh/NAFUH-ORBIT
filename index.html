@@ -15,7 +15,6 @@
   margin:0;
   padding:0;
 }
-
 html,body{
   width:100%;
   height:100%;
@@ -24,15 +23,11 @@ html,body{
   color:#eef7ff;
   font-family:Sora,Arial,sans-serif;
 }
-
 body{
   user-select:none;
   -webkit-user-select:none;
 }
-
-button,a{
-  font-family:inherit;
-}
+button,a{font-family:inherit}
 
 #scene-canvas{
   position:fixed;
@@ -43,14 +38,7 @@ button,a{
   z-index:1;
   cursor:grab;
 }
-
-#scene-canvas:active{
-  cursor:grabbing;
-}
-
-/* =========================================================
-   LOADING
-========================================================= */
+#scene-canvas:active{cursor:grabbing}
 
 #loading-screen{
   position:fixed;
@@ -65,17 +53,12 @@ button,a{
   justify-content:center;
   transition:opacity .8s ease,visibility .8s ease;
 }
-
 #loading-screen.hidden{
   opacity:0;
   visibility:hidden;
   pointer-events:none;
 }
-
-.loading-wrap{
-  width:min(440px,80vw);
-}
-
+.loading-wrap{width:min(440px,80vw)}
 .loading-top{
   display:flex;
   justify-content:space-between;
@@ -86,7 +69,6 @@ button,a{
   letter-spacing:2.5px;
   text-transform:uppercase;
 }
-
 .loading-title{
   font-family:Fraunces,serif;
   font-size:clamp(25px,5vw,42px);
@@ -94,7 +76,6 @@ button,a{
   margin-bottom:8px;
   color:#eef8ff;
 }
-
 .loading-sub{
   color:rgba(169,204,230,.46);
   font-size:10px;
@@ -102,7 +83,6 @@ button,a{
   text-transform:uppercase;
   margin-bottom:24px;
 }
-
 .loading-line{
   height:1px;
   width:100%;
@@ -110,7 +90,6 @@ button,a{
   position:relative;
   overflow:hidden;
 }
-
 .loading-progress{
   position:absolute;
   left:0;
@@ -121,7 +100,6 @@ button,a{
   box-shadow:0 0 12px rgba(91,196,245,.65);
   transition:width .25s ease;
 }
-
 .loading-status{
   margin-top:12px;
   color:rgba(142,190,220,.36);
@@ -130,27 +108,16 @@ button,a{
   text-transform:uppercase;
 }
 
-/* =========================================================
-   HUD
-========================================================= */
-
 #mission-hud{
   position:fixed;
   inset:0;
   z-index:10;
   pointer-events:none;
 }
-
-#mission-hud>*{
-  pointer-events:auto;
-}
+#mission-hud>*{pointer-events:auto}
 
 .hud-panel{
-  background:linear-gradient(
-    145deg,
-    rgba(5,17,29,.72),
-    rgba(3,10,20,.56)
-  );
+  background:linear-gradient(145deg,rgba(5,17,29,.72),rgba(3,10,20,.56));
   border:1px solid rgba(112,190,230,.15);
   box-shadow:
     0 12px 40px rgba(0,0,0,.28),
@@ -167,14 +134,12 @@ button,a{
   padding:14px 16px;
   border-left:2px solid rgba(94,202,245,.85);
 }
-
 .system-name{
   font-size:11px;
   font-weight:600;
   letter-spacing:2.6px;
   color:#e9f7ff;
 }
-
 .system-sub{
   margin-top:5px;
   color:rgba(148,194,220,.42);
@@ -182,7 +147,6 @@ button,a{
   letter-spacing:1.8px;
   text-transform:uppercase;
 }
-
 .system-status{
   display:flex;
   align-items:center;
@@ -192,7 +156,6 @@ button,a{
   font-size:7px;
   letter-spacing:1.5px;
 }
-
 .status-dot{
   width:6px;
   height:6px;
@@ -209,7 +172,6 @@ button,a{
   min-width:170px;
   text-align:right;
 }
-
 .data-row{
   display:flex;
   justify-content:space-between;
@@ -220,14 +182,8 @@ button,a{
   text-transform:uppercase;
   color:rgba(151,197,223,.38);
 }
-
-.data-row:last-child{
-  margin-bottom:0;
-}
-
-.data-value{
-  color:rgba(191,228,247,.76);
-}
+.data-row:last-child{margin-bottom:0}
+.data-value{color:rgba(191,228,247,.76)}
 
 #main-nav{
   position:absolute;
@@ -243,7 +199,6 @@ button,a{
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
-
 .nav-btn{
   border:0;
   background:transparent;
@@ -256,7 +211,6 @@ button,a{
   cursor:pointer;
   transition:.25s ease;
 }
-
 .nav-btn:hover{
   color:#eaf8ff;
   background:rgba(76,176,224,.10);
@@ -278,16 +232,11 @@ button,a{
   backdrop-filter:blur(12px);
   transition:.2s ease;
 }
-
 #reset-view:hover{
   color:#ecfaff;
   border-color:rgba(102,203,244,.45);
   background:rgba(55,144,190,.10);
 }
-
-/* =========================================================
-   TARGET
-========================================================= */
 
 #target-reticle{
   position:absolute;
@@ -299,12 +248,10 @@ button,a{
   transition:opacity .25s ease;
   pointer-events:none;
 }
-
 #target-reticle.active{
   opacity:1;
   visibility:visible;
 }
-
 .reticle-corner{
   position:absolute;
   width:16px;
@@ -313,30 +260,10 @@ button,a{
   border-style:solid;
   filter:drop-shadow(0 0 5px rgba(76,207,255,.45));
 }
-
-.reticle-corner.tl{
-  top:0;
-  left:0;
-  border-width:1px 0 0 1px;
-}
-
-.reticle-corner.tr{
-  top:0;
-  right:0;
-  border-width:1px 1px 0 0;
-}
-
-.reticle-corner.bl{
-  bottom:0;
-  left:0;
-  border-width:0 0 1px 1px;
-}
-
-.reticle-corner.br{
-  bottom:0;
-  right:0;
-  border-width:0 1px 1px 0;
-}
+.reticle-corner.tl{top:0;left:0;border-width:1px 0 0 1px}
+.reticle-corner.tr{top:0;right:0;border-width:1px 1px 0 0}
+.reticle-corner.bl{bottom:0;left:0;border-width:0 0 1px 1px}
+.reticle-corner.br{bottom:0;right:0;border-width:0 1px 1px 0}
 
 .reticle-cross-h,
 .reticle-cross-v{
@@ -344,14 +271,12 @@ button,a{
   background:rgba(106,216,249,.48);
   box-shadow:0 0 5px rgba(80,200,245,.35);
 }
-
 .reticle-cross-h{
   width:22px;
   height:1px;
   left:26px;
   top:36px;
 }
-
 .reticle-cross-v{
   width:1px;
   height:22px;
@@ -371,13 +296,11 @@ button,a{
   transition:.3s ease;
   border-left:2px solid rgba(83,205,247,.75);
 }
-
 #target-readout.active{
   opacity:1;
   transform:translateX(0);
   visibility:visible;
 }
-
 .target-header{
   color:rgba(99,203,239,.55);
   font-size:7px;
@@ -385,14 +308,12 @@ button,a{
   text-transform:uppercase;
   margin-bottom:7px;
 }
-
 .target-name{
   font-family:Fraunces,serif;
   font-size:22px;
   line-height:1;
   color:#edfaff;
 }
-
 .target-meta{
   margin-top:7px;
   color:rgba(157,202,225,.46);
@@ -402,10 +323,6 @@ button,a{
   text-transform:uppercase;
 }
 
-/* =========================================================
-   CAMERA / BOTTOM
-========================================================= */
-
 #camera-readout{
   position:absolute;
   right:22px;
@@ -414,14 +331,12 @@ button,a{
   min-width:155px;
   text-align:right;
 }
-
 .camera-label{
   color:rgba(136,188,215,.35);
   font-size:6px;
   letter-spacing:1.5px;
   text-transform:uppercase;
 }
-
 #camera-mode{
   color:rgba(191,228,246,.70);
   font-size:8px;
@@ -445,20 +360,17 @@ button,a{
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
 }
-
 .bottom-group{
   display:flex;
   align-items:center;
   gap:17px;
 }
-
 .hud-stat{
   color:rgba(139,187,211,.34);
   font-size:6.5px;
   letter-spacing:1.4px;
   text-transform:uppercase;
 }
-
 .hud-stat strong{
   color:rgba(185,228,247,.72);
   font-weight:500;
@@ -487,13 +399,11 @@ button,a{
   opacity:.25;
   pointer-events:none;
 }
-
 #axis-marker:before,
 #axis-marker:after{
   content:"";
   position:absolute;
 }
-
 #axis-marker:before{
   width:30px;
   height:1px;
@@ -501,7 +411,6 @@ button,a{
   top:0;
   background:rgba(106,196,235,.32);
 }
-
 #axis-marker:after{
   width:1px;
   height:30px;
@@ -509,10 +418,6 @@ button,a{
   top:-15px;
   background:rgba(106,196,235,.32);
 }
-
-/* =========================================================
-   MODALS
-========================================================= */
 
 .modal{
   position:fixed;
@@ -529,22 +434,16 @@ button,a{
   visibility:hidden;
   transition:.25s ease;
 }
-
 .modal.active{
   opacity:1;
   visibility:visible;
 }
-
 .modal-card{
   position:relative;
   width:min(620px,94vw);
   max-height:88vh;
   overflow:auto;
-  background:linear-gradient(
-    145deg,
-    rgba(7,18,31,.96),
-    rgba(3,10,19,.96)
-  );
+  background:linear-gradient(145deg,rgba(7,18,31,.96),rgba(3,10,19,.96));
   border:1px solid rgba(102,186,225,.17);
   box-shadow:
     0 30px 100px rgba(0,0,0,.70),
@@ -553,19 +452,13 @@ button,a{
   transform:translateY(15px) scale(.98);
   transition:.3s ease;
 }
-
 .modal.active .modal-card{
   transform:translateY(0) scale(1);
 }
-
-.modal-card::-webkit-scrollbar{
-  width:4px;
-}
-
+.modal-card::-webkit-scrollbar{width:4px}
 .modal-card::-webkit-scrollbar-thumb{
   background:rgba(92,181,222,.25);
 }
-
 .close-modal{
   position:absolute;
   top:14px;
@@ -578,12 +471,10 @@ button,a{
   cursor:pointer;
   font-size:16px;
 }
-
 .close-modal:hover{
   color:#ecfaff;
   border-color:rgba(105,205,242,.40);
 }
-
 .modal-kicker{
   color:rgba(96,197,236,.48);
   font-size:7px;
@@ -591,7 +482,6 @@ button,a{
   text-transform:uppercase;
   margin-bottom:10px;
 }
-
 .modal-title{
   font-family:Fraunces,serif;
   font-size:clamp(32px,6vw,55px);
@@ -599,27 +489,23 @@ button,a{
   margin-bottom:18px;
   color:#eef8ff;
 }
-
 .modal-copy{
   color:rgba(164,204,224,.60);
   font-size:12px;
   line-height:1.9;
   margin-bottom:22px;
 }
-
 .modal-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:8px;
   margin-bottom:22px;
 }
-
 .info-box{
   padding:13px;
   border:1px solid rgba(94,173,216,.10);
   background:rgba(61,137,177,.035);
 }
-
 .info-label{
   color:rgba(131,185,212,.30);
   font-size:6px;
@@ -627,18 +513,15 @@ button,a{
   text-transform:uppercase;
   margin-bottom:5px;
 }
-
 .info-value{
   color:rgba(201,231,244,.76);
   font-size:9px;
 }
-
 .modal-actions{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
-
 .modal-btn{
   display:inline-flex;
   align-items:center;
@@ -655,7 +538,6 @@ button,a{
   transition:.2s ease;
   cursor:pointer;
 }
-
 .modal-btn:hover{
   color:#f2fbff;
   background:rgba(71,174,224,.11);
@@ -666,7 +548,6 @@ button,a{
   display:grid;
   gap:9px;
 }
-
 .project-item{
   display:flex;
   justify-content:space-between;
@@ -678,18 +559,15 @@ button,a{
   cursor:pointer;
   transition:.2s ease;
 }
-
 .project-item:hover{
   background:rgba(65,164,211,.08);
   border-color:rgba(102,199,238,.25);
 }
-
 .project-item-name{
   font-family:Fraunces,serif;
   font-size:20px;
   color:#eaf7ff;
 }
-
 .project-item-type{
   margin-top:4px;
   color:rgba(135,187,211,.34);
@@ -697,17 +575,12 @@ button,a{
   letter-spacing:1.5px;
   text-transform:uppercase;
 }
-
 .project-arrow{
   color:rgba(106,199,236,.48);
   font-size:16px;
 }
 
-.sun-stat{
-  position:relative;
-  overflow:hidden;
-}
-
+.sun-stat{position:relative;overflow:hidden}
 .sun-stat:after{
   content:"";
   position:absolute;
@@ -716,126 +589,72 @@ button,a{
   width:80px;
   height:80px;
   border-radius:50%;
-  background:radial-gradient(
-    circle,
-    rgba(255,185,70,.20),
-    rgba(255,130,30,0)
-  );
+  background:radial-gradient(circle,rgba(255,185,70,.20),rgba(255,130,30,0));
 }
-
 .sun-highlight{
   border-color:rgba(241,174,65,.16);
-  background:linear-gradient(
-    145deg,
-    rgba(255,170,45,.055),
-    rgba(45,85,110,.025)
-  );
+  background:linear-gradient(145deg,rgba(255,170,45,.055),rgba(45,85,110,.025));
 }
-
-/* =========================================================
-   SPACECRAFT MODAL
-========================================================= */
-
-.spacecraft-highlight{
-  border-color:rgba(77,210,255,.22);
-  background:
-    radial-gradient(
-      circle at 90% 20%,
-      rgba(42,190,255,.12),
-      transparent 45%
-    ),
-    rgba(47,133,180,.045);
-}
-
-.agro-kicker{
-  color:rgba(88,219,255,.72);
-}
-
-.agro-status{
-  color:#74e7b2;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media(max-width:700px){
-
   #system-id{
     top:12px;
     left:12px;
     min-width:0;
     padding:10px 12px;
   }
-
   .system-name{
     font-size:8px;
     letter-spacing:2px;
   }
-
   .system-sub{
     font-size:5.5px;
     letter-spacing:1.2px;
   }
-
   .system-status{
     margin-top:8px;
     font-size:5.5px;
   }
-
   #system-data{
     top:12px;
     right:12px;
     min-width:130px;
     padding:10px;
   }
-
   .data-row{
     gap:10px;
     font-size:5.5px;
     margin-bottom:5px;
   }
-
   #main-nav{
     top:auto;
     bottom:78px;
     left:50%;
   }
-
   .nav-btn{
     padding:8px 10px;
     font-size:6px;
   }
-
   #reset-view{
     top:68px;
     right:12px;
     font-size:5.5px;
     padding:7px 9px;
   }
-
   #target-readout{
     left:12px;
     top:112px;
     width:190px;
     padding:10px 12px;
   }
-
-  .target-name{
-    font-size:18px;
-  }
-
-  .target-meta{
-    font-size:5.5px;
-  }
-
+  .target-name{font-size:18px}
+  .target-meta{font-size:5.5px}
   #camera-readout{
     right:12px;
     bottom:132px;
     min-width:125px;
     padding:8px 10px;
   }
-
   #bottom-hud{
     left:12px;
     right:12px;
@@ -843,16 +662,11 @@ button,a{
     height:38px;
     padding:0 10px;
   }
-
-  .bottom-group{
-    gap:9px;
-  }
-
+  .bottom-group{gap:9px}
   .hud-stat{
     font-size:5px;
     letter-spacing:.9px;
   }
-
   #hint{
     bottom:124px;
     width:90%;
@@ -860,227 +674,115 @@ button,a{
     line-height:1.6;
     font-size:5.5px;
   }
-
-  .modal{
-    padding:12px;
-  }
-
-  .modal-card{
-    padding:25px 20px;
-  }
-
-  .modal-title{
-    font-size:38px;
-  }
-
-  .modal-copy{
-    font-size:11px;
-  }
-
-  .modal-grid{
-    grid-template-columns:1fr;
-  }
+  .modal{padding:12px}
+  .modal-card{padding:25px 20px}
+  .modal-title{font-size:38px}
+  .modal-copy{font-size:11px}
+  .modal-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =======================================================
-     LOADING
-======================================================= -->
-
 <div id="loading-screen">
-
   <div class="loading-wrap">
-
     <div class="loading-top">
       <span>NAFUH ORBIT</span>
       <span id="loading-percent">00%</span>
     </div>
 
-    <div class="loading-title">
-      Digital Exploration System
-    </div>
+    <div class="loading-title">Digital Exploration System</div>
 
     <div class="loading-sub">
       Initializing orbital environment
     </div>
 
     <div class="loading-line">
-      <div
-        class="loading-progress"
-        id="loading-progress">
-      </div>
+      <div class="loading-progress" id="loading-progress"></div>
     </div>
 
-    <div
-      class="loading-status"
-      id="loading-status">
+    <div class="loading-status" id="loading-status">
       Establishing navigation system...
     </div>
-
   </div>
-
 </div>
 
 <canvas id="scene-canvas"></canvas>
 
-<!-- =======================================================
-     HUD
-======================================================= -->
-
 <div id="mission-hud">
 
   <div id="system-id" class="hud-panel">
-
-    <div class="system-name">
-      NAFUH ORBIT
-    </div>
-
-    <div class="system-sub">
-      Digital Exploration System
-    </div>
+    <div class="system-name">NAFUH ORBIT</div>
+    <div class="system-sub">Digital Exploration System</div>
 
     <div class="system-status">
-
       <span class="status-dot"></span>
-
-      <span>
-        SYSTEM STATUS: ONLINE
-      </span>
-
+      <span>SYSTEM STATUS: ONLINE</span>
     </div>
-
   </div>
 
-
   <div id="system-data" class="hud-panel">
-
     <div class="data-row">
       <span>Objects</span>
-      <span
-        class="data-value"
-        id="hud-objects">
-        07
-      </span>
+      <span class="data-value" id="hud-objects">06</span>
     </div>
 
     <div class="data-row">
       <span>Projects</span>
-      <span class="data-value">
-        04
-      </span>
+      <span class="data-value">03</span>
     </div>
 
     <div class="data-row">
       <span>Sector</span>
-      <span class="data-value">
-        ORBITAL-01
-      </span>
+      <span class="data-value">ORBITAL-01</span>
     </div>
 
     <div class="data-row">
       <span>System</span>
-      <span class="data-value">
-        NFO-2026
-      </span>
+      <span class="data-value">NFO-2026</span>
     </div>
-
   </div>
 
-
   <nav id="main-nav">
-
-    <button
-      class="nav-btn"
-      id="nav-about">
-      About
-    </button>
-
-    <button
-      class="nav-btn"
-      id="nav-projects">
-      Projects
-    </button>
-
-    <button
-      class="nav-btn"
-      id="nav-contact">
-      Contact
-    </button>
-
+    <button class="nav-btn" id="nav-about">About</button>
+    <button class="nav-btn" id="nav-projects">Projects</button>
+    <button class="nav-btn" id="nav-contact">Contact</button>
   </nav>
 
-
-  <button id="reset-view">
-    Reset View
-  </button>
-
+  <button id="reset-view">Reset View</button>
 
   <div id="target-reticle">
-
     <div class="reticle-corner tl"></div>
     <div class="reticle-corner tr"></div>
     <div class="reticle-corner bl"></div>
     <div class="reticle-corner br"></div>
-
     <div class="reticle-cross-h"></div>
     <div class="reticle-cross-v"></div>
-
   </div>
 
-
-  <div
-    id="target-readout"
-    class="hud-panel">
-
-    <div class="target-header">
-      Target Acquired
-    </div>
-
-    <div
-      class="target-name"
-      id="target-name">
-      —
-    </div>
-
-    <div
-      class="target-meta"
-      id="target-meta">
+  <div id="target-readout" class="hud-panel">
+    <div class="target-header">Target Acquired</div>
+    <div class="target-name" id="target-name">—</div>
+    <div class="target-meta" id="target-meta">
       Awaiting object data...
     </div>
-
   </div>
 
-
-  <div
-    id="camera-readout"
-    class="hud-panel">
-
-    <div class="camera-label">
-      Navigation Mode
-    </div>
-
-    <div id="camera-mode">
-      ORBIT
-    </div>
-
+  <div id="camera-readout" class="hud-panel">
+    <div class="camera-label">Navigation Mode</div>
+    <div id="camera-mode">ORBIT</div>
   </div>
-
 
   <div id="axis-marker"></div>
 
-
   <div id="hint">
-    Drag to orbit · scroll or pinch to zoom · click a celestial object or spacecraft
+    Drag to orbit · scroll or pinch to zoom · click the Sun or a project planet
   </div>
-
 
   <div id="bottom-hud">
 
     <div class="bottom-group">
-
       <div class="hud-stat">
         <strong>ROT</strong> CAMERA
       </div>
@@ -1092,61 +794,35 @@ button,a{
       <div class="hud-stat">
         <strong>SELECT</strong> OBJECT
       </div>
-
     </div>
 
-
     <div class="bottom-group">
-
       <div class="hud-stat">
-
         <strong>FPS</strong>
-
-        <span id="fps-value">
-          60
-        </span>
-
+        <span id="fps-value">60</span>
       </div>
 
       <div class="hud-stat">
-
         <strong>RANGE</strong>
-
-        <span id="range-value">
-          —
-        </span>
-
+        <span id="range-value">—</span>
       </div>
-
     </div>
 
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     ABOUT
-======================================================= -->
+<!-- ABOUT -->
 
 <div class="modal" id="modal-about">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
-    <div class="modal-kicker">
-      About / Creator
-    </div>
+    <div class="modal-kicker">About / Creator</div>
 
-    <div class="modal-title">
-      John Nafuh
-    </div>
+    <div class="modal-title">John Nafuh</div>
 
     <div class="modal-copy">
-
       I’m John Nafuh, a computer scientist and creative professional based in Abuja, Nigeria.
       I work across coding, web design, and graphic design, combining technology and creativity
       to turn ideas into meaningful digital experiences.
@@ -1158,70 +834,40 @@ button,a{
 
       I’m driven by the desire to push my creative limits, experiment with new ideas,
       and transform simple concepts into something profound.
-
     </div>
 
     <div class="modal-grid">
 
       <div class="info-box sun-highlight">
-
-        <div class="info-label">
-          Name
-        </div>
-
-        <div class="info-value">
-          John Nafuh
-        </div>
-
+        <div class="info-label">Name</div>
+        <div class="info-value">John Nafuh</div>
       </div>
 
       <div class="info-box"></div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Profession
-        </div>
-
-        <div class="info-value">
-          Computer Scientist
-        </div>
-
+        <div class="info-label">Profession</div>
+        <div class="info-value">Computer Scientist</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Founder
-        </div>
-
-        <div class="info-value">
-          RECLUSE
-        </div>
-
+        <div class="info-label">Founder</div>
+        <div class="info-value">RECLUSE</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Creative Focus
-        </div>
-
-        <div class="info-value">
-          Coding / Web / Graphic Design
-        </div>
-
+        <div class="info-label">Creative Focus</div>
+        <div class="info-value">Coding / Web / Graphic Design</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         GitHub
       </a>
 
@@ -1230,878 +876,405 @@ button,a{
       </button>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     CROWN
-======================================================= -->
+<!-- CROWN -->
 
 <div class="modal" id="modal-crown">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Financial Intelligence
     </div>
 
-    <div class="modal-title">
-      Crown Capital
-    </div>
+    <div class="modal-title">Crown Capital</div>
 
     <div class="modal-copy">
-
       CrownCapital is a digital investment platform designed to help users
       organize and monitor their investment portfolios through a streamlined
       online experience. With intuitive navigation, structured investment
       data, and a professional financial interface, CrownCapital makes it
       easier to review holdings, track portfolio activity, and manage
       investment information in one place.
-
     </div>
 
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Investment
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Investment</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Platform
-        </div>
-
-        <div class="info-value">
-          Digital Investment
-        </div>
-
+        <div class="info-label">Platform</div>
+        <div class="info-value">Digital Investment</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Core
-        </div>
-
-        <div class="info-value">
-          Portfolio Management
-        </div>
-
+        <div class="info-label">Core</div>
+        <div class="info-value">Portfolio Management</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Interface
-        </div>
-
-        <div class="info-value">
-          Financial Platform
-        </div>
-
+        <div class="info-label">Interface</div>
+        <div class="info-value">Financial Platform</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/CrownCapital/index.html"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/CrownCapital/index.html"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
       </a>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     FIN DASH
-======================================================= -->
+<!-- FIN DASH -->
 
 <div class="modal" id="modal-fin">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Personal Finance
     </div>
 
-    <div class="modal-title">
-      Fin-Dash
-    </div>
+    <div class="modal-title">Fin-Dash</div>
 
     <div class="modal-copy">
-
       Fin-Dash is a personal finance management platform built to help users
       organize, analyze, and understand their financial activity. It provides
       a centralized dashboard for tracking transactions, expenses, balances,
       and financial trends, transforming financial data into clear and
       actionable insights.
-
     </div>
 
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Personal Finance
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Personal Finance</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Core
-        </div>
-
-        <div class="info-value">
-          Financial Management
-        </div>
-
+        <div class="info-label">Core</div>
+        <div class="info-value">Financial Management</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Dashboard
-        </div>
-
-        <div class="info-value">
-          Transactions / Expenses / Balances
-        </div>
-
+        <div class="info-label">Dashboard</div>
+        <div class="info-value">Transactions / Expenses / Balances</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Output
-        </div>
-
-        <div class="info-value">
-          Financial Insights
-        </div>
-
+        <div class="info-label">Output</div>
+        <div class="info-value">Financial Insights</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/Fin-dash/"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/Fin-dash/"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
       </a>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     RECLUSE
-======================================================= -->
+<!-- RECLUSE -->
 
 <div class="modal" id="modal-recluse">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
     <div class="modal-kicker">
       Project Planet / Streetwear
     </div>
 
-    <div class="modal-title">
-      RECLUSE
-    </div>
+    <div class="modal-title">RECLUSE</div>
 
     <div class="modal-copy">
-
       RECLUSE is a bold streetwear brand built on dark minimalism, sharp
       visuals, and unapologetic attitude. Its website brings each collection
       to life through refined product presentation and a seamless shopping
       experience made for those who move differently.
-
     </div>
 
     <div class="modal-grid">
 
       <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Streetwear
-        </div>
-
+        <div class="info-label">Category</div>
+        <div class="info-value">Streetwear</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Identity
-        </div>
-
-        <div class="info-value">
-          Dark Minimalism
-        </div>
-
+        <div class="info-label">Identity</div>
+        <div class="info-value">Dark Minimalism</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Visuals
-        </div>
-
-        <div class="info-value">
-          Sharp / Unapologetic
-        </div>
-
+        <div class="info-label">Visuals</div>
+        <div class="info-value">Sharp / Unapologetic</div>
       </div>
 
       <div class="info-box">
-
-        <div class="info-label">
-          Experience
-        </div>
-
-        <div class="info-value">
-          Digital Commerce
-        </div>
-
+        <div class="info-label">Experience</div>
+        <div class="info-value">Digital Commerce</div>
       </div>
 
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/recluse52-site/index.html"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/recluse52-site/index.html"
+         target="_blank"
+         rel="noopener noreferrer">
         Launch Project
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         Source
       </a>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     AGRO OPPORTUNITY
-======================================================= -->
-
-<div class="modal" id="modal-agro">
-
-  <div class="modal-card">
-
-    <button class="close-modal">
-      ×
-    </button>
-
-    <div class="modal-kicker agro-kicker">
-      AGRO-01 / Agricultural Intelligence Satellite
-    </div>
-
-    <div class="modal-title">
-      Agro Opportunity
-    </div>
-
-    <div class="modal-copy">
-
-      Agro Opportunity is a location-based agricultural intelligence platform
-      designed to transform local consumption data into actionable agribusiness
-      opportunities.
-
-      <br><br>
-
-      The platform analyzes livestock and farm-produce consumption patterns
-      by geographic location, identifies potential supply gaps, and highlights
-      underserved markets where new agricultural businesses can emerge and grow.
-
-    </div>
-
-    <div class="modal-grid">
-
-      <div class="info-box spacecraft-highlight">
-
-        <div class="info-label">
-          Mission
-        </div>
-
-        <div class="info-value">
-          AGRO-01
-        </div>
-
-      </div>
-
-      <div class="info-box spacecraft-highlight">
-
-        <div class="info-label">
-          Status
-        </div>
-
-        <div class="info-value agro-status">
-          ACTIVE
-        </div>
-
-      </div>
-
-      <div class="info-box">
-
-        <div class="info-label">
-          Category
-        </div>
-
-        <div class="info-value">
-          Agricultural Intelligence
-        </div>
-
-      </div>
-
-      <div class="info-box">
-
-        <div class="info-label">
-          Intelligence
-        </div>
-
-        <div class="info-value">
-          Location-Based Analysis
-        </div>
-
-      </div>
-
-      <div class="info-box">
-
-        <div class="info-label">
-          Core
-        </div>
-
-        <div class="info-value">
-          Consumption / Supply Gaps
-        </div>
-
-      </div>
-
-      <div class="info-box">
-
-        <div class="info-label">
-          Output
-        </div>
-
-        <div class="info-value">
-          Agribusiness Opportunities
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <a
-        class="modal-btn"
-        href="https://johnnafuh.github.io/Agro-opportunity/"
-        target="_blank"
-        rel="noopener noreferrer">
-        Launch Project
-      </a>
-
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
-        Source
-      </a>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =======================================================
-     PROJECTS
-======================================================= -->
+<!-- PROJECTS -->
 
 <div class="modal" id="modal-projects">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
-    <div class="modal-kicker">
-      Orbital Registry
-    </div>
+    <div class="modal-kicker">Orbital Registry</div>
 
-    <div class="modal-title">
-      Projects
-    </div>
+    <div class="modal-title">Projects</div>
 
     <div class="modal-copy">
-
-      Four active project environments are registered inside
-      the NAFUH ORBIT system. Select a project from the registry
-      or directly from the 3D environment.
-
+      Three active project environments orbit the central NAFUH node.
+      Select an object from the registry or directly from the 3D system.
     </div>
 
     <div class="project-list">
 
-      <div
-        class="project-item"
-        data-fly="fin">
-
+      <div class="project-item" data-fly="fin">
         <div>
-
-          <div class="project-item-name">
-            Fin-Dash
-          </div>
-
+          <div class="project-item-name">Fin-Dash</div>
           <div class="project-item-type">
             Personal Finance / Dashboard
           </div>
-
         </div>
-
-        <div class="project-arrow">
-          →
-        </div>
-
+        <div class="project-arrow">→</div>
       </div>
 
-
-      <div
-        class="project-item"
-        data-fly="crown">
-
+      <div class="project-item" data-fly="crown">
         <div>
-
-          <div class="project-item-name">
-            Crown Capital
-          </div>
-
+          <div class="project-item-name">Crown Capital</div>
           <div class="project-item-type">
             Finance / Investment
           </div>
-
         </div>
-
-        <div class="project-arrow">
-          →
-        </div>
-
+        <div class="project-arrow">→</div>
       </div>
 
-
-      <div
-        class="project-item"
-        data-fly="recluse">
-
+      <div class="project-item" data-fly="recluse">
         <div>
-
-          <div class="project-item-name">
-            RECLUSE
-          </div>
-
+          <div class="project-item-name">RECLUSE</div>
           <div class="project-item-type">
             Streetwear / Digital Commerce
           </div>
-
         </div>
-
-        <div class="project-arrow">
-          →
-        </div>
-
-      </div>
-
-
-      <div
-        class="project-item"
-        data-fly="agro">
-
-        <div>
-
-          <div class="project-item-name">
-            Agro Opportunity
-          </div>
-
-          <div class="project-item-type">
-            Agricultural Intelligence / Satellite
-          </div>
-
-        </div>
-
-        <div class="project-arrow">
-          →
-        </div>
-
+        <div class="project-arrow">→</div>
       </div>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     CONTACT
-======================================================= -->
+<!-- CONTACT -->
 
 <div class="modal" id="modal-contact">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
-    <div class="modal-kicker">
-      Communication Node
-    </div>
+    <div class="modal-kicker">Communication Node</div>
 
-    <div class="modal-title">
-      Contact
-    </div>
+    <div class="modal-title">Contact</div>
 
     <div class="modal-copy">
-
       Open a communication channel for projects, collaborations,
       opportunities or general enquiries.
-
     </div>
 
     <div class="modal-actions">
 
-      <a
-        class="modal-btn"
-        href="mailto:johnnafuh@gmail.com">
+      <a class="modal-btn"
+         href="mailto:johnnafuh@gmail.com">
         Email
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://wa.me/2347038547668"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://wa.me/2347038547668"
+         target="_blank"
+         rel="noopener noreferrer">
         WhatsApp
       </a>
 
-      <a
-        class="modal-btn"
-        href="https://github.com/JohnNafuh"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="modal-btn"
+         href="https://github.com/JohnNafuh"
+         target="_blank"
+         rel="noopener noreferrer">
         GitHub
       </a>
 
     </div>
-
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     DESIGN
-======================================================= -->
+<!-- DESIGN -->
 
 <div class="modal" id="modal-design">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
-    <div class="modal-kicker">
-      Skill Constellation
-    </div>
+    <div class="modal-kicker">Skill Constellation</div>
 
-    <div class="modal-title">
-      Graphic Design
-    </div>
+    <div class="modal-title">Graphic Design</div>
 
     <div class="modal-copy">
-
       Graphic designing is one of my creative skills, allowing me to turn
       ideas into visual concepts, identities, compositions and digital
       experiences.
-
     </div>
 
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     LEADERSHIP
-======================================================= -->
+<!-- LEADERSHIP -->
 
 <div class="modal" id="modal-leadership">
-
   <div class="modal-card">
 
-    <button class="close-modal">
-      ×
-    </button>
+    <button class="close-modal">×</button>
 
-    <div class="modal-kicker">
-      Skill Constellation
-    </div>
+    <div class="modal-kicker">Skill Constellation</div>
 
-    <div class="modal-title">
-      Leadership
-    </div>
+    <div class="modal-title">Leadership</div>
 
     <div class="modal-copy">
-
       Leadership is one of my skills, helping me guide ideas, coordinate
       execution, work with people and move projects from concept toward
       meaningful results.
-
     </div>
 
   </div>
-
 </div>
 
-
-<!-- =======================================================
-     THREE.JS
-======================================================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-
-
 <script>
-
 (function(){
 
 'use strict';
-
 
 /* =========================================================
    DOM
 ========================================================= */
 
-var canvas=
-  document.getElementById(
-    'scene-canvas'
-  );
+var canvas=document.getElementById('scene-canvas');
 
-var loadingScreen=
-  document.getElementById(
-    'loading-screen'
-  );
+var loadingScreen=document.getElementById('loading-screen');
+var loadingProgress=document.getElementById('loading-progress');
+var loadingPercent=document.getElementById('loading-percent');
+var loadingStatus=document.getElementById('loading-status');
 
-var loadingProgress=
-  document.getElementById(
-    'loading-progress'
-  );
+var targetReticle=document.getElementById('target-reticle');
+var targetReadout=document.getElementById('target-readout');
+var targetName=document.getElementById('target-name');
+var targetMeta=document.getElementById('target-meta');
 
-var loadingPercent=
-  document.getElementById(
-    'loading-percent'
-  );
-
-var loadingStatus=
-  document.getElementById(
-    'loading-status'
-  );
-
-var targetReticle=
-  document.getElementById(
-    'target-reticle'
-  );
-
-var targetReadout=
-  document.getElementById(
-    'target-readout'
-  );
-
-var targetName=
-  document.getElementById(
-    'target-name'
-  );
-
-var targetMeta=
-  document.getElementById(
-    'target-meta'
-  );
-
-var cameraMode=
-  document.getElementById(
-    'camera-mode'
-  );
-
-var rangeValue=
-  document.getElementById(
-    'range-value'
-  );
-
-var fpsValue=
-  document.getElementById(
-    'fps-value'
-  );
-
-var hudObjects=
-  document.getElementById(
-    'hud-objects'
-  );
+var cameraMode=document.getElementById('camera-mode');
+var rangeValue=document.getElementById('range-value');
+var fpsValue=document.getElementById('fps-value');
+var hudObjects=document.getElementById('hud-objects');
 
 
 /* =========================================================
-   LOADING
+   LOADING SYSTEM
 ========================================================= */
 
 var loadSteps=[
-
-  [10,'Booting navigation core...'],
-
-  [22,'Generating stellar field...'],
-
-  [38,'Constructing planetary bodies...'],
-
-  [52,'Mapping orbital trajectories...'],
-
-  [67,'Initializing spacecraft systems...'],
-
-  [82,'Loading AGRO-01 satellite...'],
-
-  [93,'Activating mission HUD...'],
-
+  [12,'Booting navigation core...'],
+  [27,'Generating stellar field...'],
+  [43,'Constructing planetary bodies...'],
+  [61,'Mapping orbital trajectories...'],
+  [78,'Calibrating camera system...'],
+  [91,'Activating mission HUD...'],
   [100,'SYSTEM READY']
-
 ];
 
 var loadIndex=0;
 
 function updateLoading(){
 
-  if(
-    loadIndex>=
-    loadSteps.length
-  ){
+  if(loadIndex>=loadSteps.length){
 
-    setTimeout(
-      function(){
-
-        loadingScreen.classList.add(
-          'hidden'
-        );
-
-      },
-      700
-    );
+    setTimeout(function(){
+      loadingScreen.classList.add('hidden');
+    },500);
 
     return;
   }
 
-  var step=
-    loadSteps[
-      loadIndex
-    ];
+  var step=loadSteps[loadIndex];
 
-  loadingProgress.style.width=
-    step[0]+'%';
-
+  loadingProgress.style.width=step[0]+'%';
   loadingPercent.textContent=
-    String(
-      step[0]
-    ).padStart(2,'0')+
-    '%';
+    String(step[0]).padStart(2,'0')+'%';
 
-  loadingStatus.textContent=
-    step[1];
+  loadingStatus.textContent=step[1];
 
   loadIndex++;
 
-  setTimeout(
-    updateLoading,
-    220
-  );
+  setTimeout(updateLoading,170);
 }
 
 updateLoading();
@@ -2111,40 +1284,30 @@ updateLoading();
    THREE.JS CORE
 ========================================================= */
 
-var scene=
-  new THREE.Scene();
+var scene=new THREE.Scene();
 
-var camera=
-  new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth/
-    window.innerHeight,
-    .1,
-    1200
-  );
-
-camera.position.set(
-  0,
-  27,
-  70
+var camera=new THREE.PerspectiveCamera(
+  50,
+  window.innerWidth/window.innerHeight,
+  .1,
+  1200
 );
 
-var renderer=
-  new THREE.WebGLRenderer({
+/*
+  Wider starting view so the complete orbital system
+  reads immediately as a solar system.
+*/
 
-    canvas:canvas,
+camera.position.set(0,27,70);
 
-    antialias:true,
-
-    alpha:false
-
-  });
+var renderer=new THREE.WebGLRenderer({
+  canvas:canvas,
+  antialias:true,
+  alpha:false
+});
 
 renderer.setPixelRatio(
-  Math.min(
-    window.devicePixelRatio||1,
-    2
-  )
+  Math.min(window.devicePixelRatio||1,2)
 );
 
 renderer.setSize(
@@ -2152,350 +1315,224 @@ renderer.setSize(
   window.innerHeight
 );
 
-renderer.setClearColor(
-  0x000208,
-  1
-);
+renderer.setClearColor(0x000208,1);
 
-renderer.outputEncoding=
-  THREE.sRGBEncoding;
+renderer.outputEncoding=THREE.sRGBEncoding;
 
-renderer.toneMapping=
-  THREE.ACESFilmicToneMapping;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
 
-renderer.toneMappingExposure=
-  1.18;
+renderer.toneMappingExposure=1.18;
 
 
 /* =========================================================
-   CONTROLS
+   CAMERA CONTROLS
 ========================================================= */
 
-var controls=
-  new THREE.OrbitControls(
-    camera,
-    renderer.domElement
-  );
+var controls=new THREE.OrbitControls(
+  camera,
+  renderer.domElement
+);
 
-controls.enableDamping=
-  true;
+controls.enableDamping=true;
+controls.dampingFactor=.055;
 
-controls.dampingFactor=
-  .055;
+controls.minDistance=8;
+controls.maxDistance=125;
 
-controls.minDistance=
-  8;
+controls.enablePan=false;
 
-controls.maxDistance=
-  125;
-
-controls.enablePan=
-  false;
-
-controls.rotateSpeed=
-  .5;
-
-controls.zoomSpeed=
-  .7;
+controls.rotateSpeed=.5;
+controls.zoomSpeed=.7;
 
 
 /* =========================================================
    LIGHTING
 ========================================================= */
 
-var ambientLight=
-  new THREE.AmbientLight(
-    0x9ccfff,
-    .13
-  );
-
-scene.add(
-  ambientLight
+var ambientLight=new THREE.AmbientLight(
+  0x9ccfff,
+  .13
 );
 
-var hemisphereLight=
-  new THREE.HemisphereLight(
-    0x9bd4ff,
-    0x02040a,
-    .40
-  );
+scene.add(ambientLight);
 
-scene.add(
-  hemisphereLight
+
+/*
+  This prevents planets from having a completely black
+  night side while still keeping the Sun dominant.
+*/
+
+var hemisphereLight=new THREE.HemisphereLight(
+  0x9bd4ff,
+  0x02040a,
+  .40
 );
 
-var sunLight=
-  new THREE.PointLight(
-    0xffe0a0,
-    4.8,
-    240
-  );
+scene.add(hemisphereLight);
 
-sunLight.position.set(
-  0,
-  0,
-  0
+
+/*
+  Strong central light representing the Sun.
+*/
+
+var sunLight=new THREE.PointLight(
+  0xffe0a0,
+  4.8,
+  240
 );
 
-scene.add(
-  sunLight
-);
+sunLight.position.set(0,0,0);
+
+scene.add(sunLight);
 
 
 /* =========================================================
-   TEXTURES
+   PROCEDURAL TEXTURE SYSTEM
+   IMPORTANT:
+   Every texture gets its OWN canvas.
+   This fixes the previous shared-canvas problem.
 ========================================================= */
 
 function makeTexture(type){
 
-  var canvasTexture=
-    document.createElement(
-      'canvas'
-    );
+  var canvasTexture=document.createElement('canvas');
 
-  canvasTexture.width=
-    1024;
+  canvasTexture.width=1024;
+  canvasTexture.height=512;
 
-  canvasTexture.height=
-    512;
+  var ctx=canvasTexture.getContext('2d');
 
-  var ctx=
-    canvasTexture.getContext(
-      '2d'
-    );
+  var w=canvasTexture.width;
+  var h=canvasTexture.height;
 
-  var w=
-    canvasTexture.width;
-
-  var h=
-    canvasTexture.height;
-
-  ctx.clearRect(
-    0,
-    0,
-    w,
-    h
-  );
+  ctx.clearRect(0,0,w,h);
 
 
-  /* SUN */
+  /* =====================================================
+     SUN
+  ===================================================== */
 
   if(type==='sun'){
 
-    var sunGradient=
-      ctx.createRadialGradient(
-        512,
-        256,
-        15,
-        512,
-        256,
-        560
-      );
-
-    sunGradient.addColorStop(
-      0,
-      '#fffef0'
+    var sunGradient=ctx.createRadialGradient(
+      512,256,15,
+      512,256,560
     );
 
-    sunGradient.addColorStop(
-      .16,
-      '#fff7bd'
-    );
+    sunGradient.addColorStop(0,'#fffef0');
+    sunGradient.addColorStop(.16,'#fff7bd');
+    sunGradient.addColorStop(.38,'#ffd85c');
+    sunGradient.addColorStop(.63,'#ff9d25');
+    sunGradient.addColorStop(.84,'#e85d12');
+    sunGradient.addColorStop(1,'#7b2003');
 
-    sunGradient.addColorStop(
-      .38,
-      '#ffd85c'
-    );
+    ctx.fillStyle=sunGradient;
+    ctx.fillRect(0,0,w,h);
 
-    sunGradient.addColorStop(
-      .63,
-      '#ff9d25'
-    );
+    for(var s=0;s<1800;s++){
 
-    sunGradient.addColorStop(
-      .84,
-      '#e85d12'
-    );
-
-    sunGradient.addColorStop(
-      1,
-      '#7b2003'
-    );
-
-    ctx.fillStyle=
-      sunGradient;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-    for(
-      var s=0;
-      s<1800;
-      s++
-    ){
-
-      var sx=
-        Math.random()*w;
-
-      var sy=
-        Math.random()*h;
-
-      var sr=
-        Math.random()*9+.5;
+      var sx=Math.random()*w;
+      var sy=Math.random()*h;
+      var sr=Math.random()*9+.5;
 
       ctx.fillStyle=
         Math.random()>.48
-        ?
-        'rgba(255,255,215,.24)'
-        :
-        'rgba(105,25,0,.16)';
+        ?'rgba(255,255,215,.24)'
+        :'rgba(105,25,0,.16)';
 
       ctx.beginPath();
-
-      ctx.arc(
-        sx,
-        sy,
-        sr,
-        0,
-        Math.PI*2
-      );
-
+      ctx.arc(sx,sy,sr,0,Math.PI*2);
       ctx.fill();
     }
 
+    for(var flare=0;flare<90;flare++){
+
+      var fx=Math.random()*w;
+      var fy=Math.random()*h;
+      var fw=Math.random()*35+8;
+
+      ctx.strokeStyle='rgba(255,241,145,.15)';
+      ctx.lineWidth=Math.random()*2+1;
+
+      ctx.beginPath();
+      ctx.moveTo(fx,fy);
+      ctx.lineTo(fx+fw,fy+(Math.random()-.5)*8);
+      ctx.stroke();
+    }
   }
 
 
-  /* OCEAN */
+  /* =====================================================
+     FIN-DASH — BLUE OCEAN PLANET
+  ===================================================== */
 
   else if(type==='ocean'){
 
-    var oceanGradient=
-      ctx.createLinearGradient(
-        0,
-        0,
-        w,
-        h
-      );
-
-    oceanGradient.addColorStop(
-      0,
-      '#06244a'
+    var oceanGradient=ctx.createLinearGradient(
+      0,0,w,h
     );
 
-    oceanGradient.addColorStop(
-      .28,
-      '#07518b'
-    );
+    oceanGradient.addColorStop(0,'#06244a');
+    oceanGradient.addColorStop(.28,'#07518b');
+    oceanGradient.addColorStop(.52,'#0a76ae');
+    oceanGradient.addColorStop(.75,'#04365f');
+    oceanGradient.addColorStop(1,'#02152e');
 
-    oceanGradient.addColorStop(
-      .52,
-      '#0a76ae'
-    );
+    ctx.fillStyle=oceanGradient;
+    ctx.fillRect(0,0,w,h);
 
-    oceanGradient.addColorStop(
-      .75,
-      '#04365f'
-    );
 
-    oceanGradient.addColorStop(
-      1,
-      '#02152e'
-    );
+    /*
+      Ocean depth bands
+    */
 
-    ctx.fillStyle=
-      oceanGradient;
+    for(var oceanBand=0;oceanBand<35;oceanBand++){
 
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-    for(
-      var oceanBand=0;
-      oceanBand<35;
-      oceanBand++
-    ){
-
-      var oy=
-        Math.random()*h;
+      var oy=Math.random()*h;
 
       ctx.strokeStyle=
         Math.random()>.5
-        ?
-        'rgba(49,196,235,.20)'
-        :
-        'rgba(0,20,70,.28)';
+        ?'rgba(49,196,235,.20)'
+        :'rgba(0,20,70,.28)';
 
-      ctx.lineWidth=
-        Math.random()*8+2;
+      ctx.lineWidth=Math.random()*8+2;
 
       ctx.beginPath();
 
-      for(
-        var ox=0;
-        ox<=w;
-        ox+=20
-      ){
+      for(var ox=0;ox<=w;ox+=20){
 
         var wave=
           oy+
           Math.sin(
-            ox*.018+
-            oceanBand
+            ox*.018+oceanBand
           )*15;
 
         if(ox===0){
-
-          ctx.moveTo(
-            ox,
-            wave
-          );
-
+          ctx.moveTo(ox,wave);
         }else{
-
-          ctx.lineTo(
-            ox,
-            wave
-          );
-
+          ctx.lineTo(ox,wave);
         }
-
       }
 
       ctx.stroke();
     }
 
-    for(
-      var land=0;
-      land<45;
-      land++
-    ){
 
-      var lx=
-        Math.random()*w;
+    /*
+      Continents / project-landmass shapes
+    */
 
-      var ly=
-        Math.random()*h;
+    for(var land=0;land<45;land++){
 
-      var lw=
-        Math.random()*110+25;
-
-      var lh=
-        Math.random()*55+15;
+      var lx=Math.random()*w;
+      var ly=Math.random()*h;
+      var lw=Math.random()*110+25;
+      var lh=Math.random()*55+15;
 
       ctx.fillStyle=
         Math.random()>.4
-        ?
-        'rgba(24,190,177,.60)'
-        :
-        'rgba(10,128,150,.54)';
+        ?'rgba(24,190,177,.60)'
+        :'rgba(10,128,150,.54)';
 
       ctx.beginPath();
 
@@ -2512,14 +1549,38 @@ function makeTexture(type){
       ctx.fill();
     }
 
-    for(
-      var cloud=0;
-      cloud<100;
-      cloud++
-    ){
 
-      ctx.fillStyle=
-        'rgba(220,250,255,.12)';
+    /*
+      Bright cyan atmospheric structures
+    */
+
+    for(var coast=0;coast<75;coast++){
+
+      ctx.fillStyle='rgba(108,235,255,.22)';
+
+      ctx.beginPath();
+
+      ctx.ellipse(
+        Math.random()*w,
+        Math.random()*h,
+        Math.random()*30+5,
+        Math.random()*8+2,
+        Math.random()*Math.PI,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+    }
+
+
+    /*
+      Cloud bands
+    */
+
+    for(var cloud=0;cloud<100;cloud++){
+
+      ctx.fillStyle='rgba(220,250,255,.12)';
 
       ctx.beginPath();
 
@@ -2535,91 +1596,51 @@ function makeTexture(type){
 
       ctx.fill();
     }
-
   }
 
 
-  /* GOLD */
+  /* =====================================================
+     CROWN CAPITAL — GOLD PLANET
+  ===================================================== */
 
   else if(type==='gold'){
 
-    var goldGradient=
-      ctx.createLinearGradient(
-        0,
-        0,
-        w,
-        h
-      );
-
-    goldGradient.addColorStop(
-      0,
-      '#251200'
+    var goldGradient=ctx.createLinearGradient(
+      0,0,w,h
     );
 
-    goldGradient.addColorStop(
-      .20,
-      '#6b3800'
-    );
+    goldGradient.addColorStop(0,'#251200');
+    goldGradient.addColorStop(.20,'#6b3800');
+    goldGradient.addColorStop(.40,'#b97813');
+    goldGradient.addColorStop(.55,'#e0a72d');
+    goldGradient.addColorStop(.72,'#8a5005');
+    goldGradient.addColorStop(1,'#251000');
 
-    goldGradient.addColorStop(
-      .40,
-      '#b97813'
-    );
+    ctx.fillStyle=goldGradient;
+    ctx.fillRect(0,0,w,h);
 
-    goldGradient.addColorStop(
-      .55,
-      '#e0a72d'
-    );
 
-    goldGradient.addColorStop(
-      .72,
-      '#8a5005'
-    );
+    /*
+      Gold planetary bands
+    */
 
-    goldGradient.addColorStop(
-      1,
-      '#251000'
-    );
-
-    ctx.fillStyle=
-      goldGradient;
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-    for(
-      var goldBand=0;
-      goldBand<70;
-      goldBand++
-    ){
+    for(var goldBand=0;goldBand<70;goldBand++){
 
       var gy=
         (goldBand/70)*h+
-        Math.sin(
-          goldBand*.7
-        )*15;
+        Math.sin(goldBand*.7)*15;
 
       ctx.strokeStyle=
         goldBand%3===0
-        ?
-        'rgba(255,221,103,.55)'
-        :
-        'rgba(111,55,0,.36)';
+        ?'rgba(255,221,103,.55)'
+        :'rgba(111,55,0,.36)';
 
       ctx.lineWidth=
         Math.random()*7+2;
 
       ctx.beginPath();
 
-      for(
-        var gx=0;
-        gx<=w;
-        gx+=25
-      ){
+      for(var gx=0;gx<=w;gx+=25){
 
         var gWave=
           gy+
@@ -2629,140 +1650,104 @@ function makeTexture(type){
           )*12;
 
         if(gx===0){
-
-          ctx.moveTo(
-            gx,
-            gWave
-          );
-
+          ctx.moveTo(gx,gWave);
         }else{
-
-          ctx.lineTo(
-            gx,
-            gWave
-          );
-
+          ctx.lineTo(gx,gWave);
         }
-
       }
 
       ctx.stroke();
     }
 
-    for(
-      var nugget=0;
-      nugget<350;
-      nugget++
-    ){
 
-      var nx=
-        Math.random()*w;
+    /*
+      Gold deposits / metallic regions
+    */
 
-      var ny=
-        Math.random()*h;
+    for(var nugget=0;nugget<350;nugget++){
 
-      var nr=
-        Math.random()*5+.5;
+      var nx=Math.random()*w;
+      var ny=Math.random()*h;
+
+      var nr=Math.random()*5+.5;
 
       ctx.fillStyle=
         Math.random()>.35
-        ?
-        'rgba(255,213,76,.62)'
-        :
-        'rgba(70,28,0,.40)';
+        ?'rgba(255,213,76,.62)'
+        :'rgba(70,28,0,.40)';
 
       ctx.beginPath();
-
-      ctx.arc(
-        nx,
-        ny,
-        nr,
-        0,
-        Math.PI*2
-      );
-
+      ctx.arc(nx,ny,nr,0,Math.PI*2);
       ctx.fill();
     }
 
+
+    /*
+      Bright gold veins
+    */
+
+    for(var vein=0;vein<45;vein++){
+
+      ctx.strokeStyle='rgba(255,229,120,.42)';
+      ctx.lineWidth=Math.random()*2+1;
+
+      ctx.beginPath();
+
+      var vx=Math.random()*w;
+      var vy=Math.random()*h;
+
+      ctx.moveTo(vx,vy);
+
+      for(var vs=0;vs<5;vs++){
+
+        vx+=Math.random()*80-40;
+        vy+=Math.random()*40-20;
+
+        ctx.lineTo(vx,vy);
+      }
+
+      ctx.stroke();
+    }
   }
 
 
-  /* VOLCANIC */
+  /* =====================================================
+     RECLUSE — VOLCANIC PLANET
+  ===================================================== */
 
   else if(type==='volcanic'){
 
-    var volcanicGradient=
-      ctx.createLinearGradient(
-        0,
-        0,
-        w,
-        h
-      );
-
-    volcanicGradient.addColorStop(
-      0,
-      '#050304'
+    var volcanicGradient=ctx.createLinearGradient(
+      0,0,w,h
     );
 
-    volcanicGradient.addColorStop(
-      .22,
-      '#160607'
-    );
+    volcanicGradient.addColorStop(0,'#050304');
+    volcanicGradient.addColorStop(.22,'#160607');
+    volcanicGradient.addColorStop(.45,'#451008');
+    volcanicGradient.addColorStop(.62,'#721a08');
+    volcanicGradient.addColorStop(.82,'#220505');
+    volcanicGradient.addColorStop(1,'#030102');
 
-    volcanicGradient.addColorStop(
-      .45,
-      '#451008'
-    );
+    ctx.fillStyle=volcanicGradient;
+    ctx.fillRect(0,0,w,h);
 
-    volcanicGradient.addColorStop(
-      .62,
-      '#721a08'
-    );
 
-    volcanicGradient.addColorStop(
-      .82,
-      '#220505'
-    );
+    /*
+      Dark terrain
+    */
 
-    volcanicGradient.addColorStop(
-      1,
-      '#030102'
-    );
+    for(var rock=0;rock<900;rock++){
 
-    ctx.fillStyle=
-      volcanicGradient;
+      var rx=Math.random()*w;
+      var ry=Math.random()*h;
 
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-    for(
-      var rock=0;
-      rock<900;
-      rock++
-    ){
-
-      var rx=
-        Math.random()*w;
-
-      var ry=
-        Math.random()*h;
-
-      var rw=
-        Math.random()*35+3;
-
-      var rh=
-        Math.random()*15+2;
+      var rw=Math.random()*35+3;
+      var rh=Math.random()*15+2;
 
       ctx.fillStyle=
         Math.random()>.35
-        ?
-        'rgba(30,6,5,.70)'
-        :
-        'rgba(105,25,9,.38)';
+        ?'rgba(30,6,5,.70)'
+        :'rgba(105,25,9,.38)';
 
       ctx.beginPath();
 
@@ -2779,57 +1764,35 @@ function makeTexture(type){
       ctx.fill();
     }
 
-    for(
-      var crack=0;
-      crack<95;
-      crack++
-    ){
 
-      var cx=
-        Math.random()*w;
+    /*
+      Lava fissures
+    */
 
-      var cy=
-        Math.random()*h;
+    for(var crack=0;crack<95;crack++){
+
+      var cx=Math.random()*w;
+      var cy=Math.random()*h;
 
       ctx.strokeStyle=
         Math.random()>.45
-        ?
-        'rgba(255,90,15,.85)'
-        :
-        'rgba(220,35,5,.58)';
+        ?'rgba(255,90,15,.85)'
+        :'rgba(220,35,5,.58)';
 
-      ctx.lineWidth=
-        Math.random()*3+.5;
+      ctx.lineWidth=Math.random()*3+.5;
 
-      ctx.shadowColor=
-        'rgba(255,70,0,.45)';
-
-      ctx.shadowBlur=
-        5;
+      ctx.shadowColor='rgba(255,70,0,.45)';
+      ctx.shadowBlur=5;
 
       ctx.beginPath();
+      ctx.moveTo(cx,cy);
 
-      ctx.moveTo(
-        cx,
-        cy
-      );
+      for(var cs=0;cs<8;cs++){
 
-      for(
-        var cs=0;
-        cs<8;
-        cs++
-      ){
+        cx+=Math.random()*45-22;
+        cy+=Math.random()*30-15;
 
-        cx+=
-          Math.random()*45-22;
-
-        cy+=
-          Math.random()*30-15;
-
-        ctx.lineTo(
-          cx,
-          cy
-        );
+        ctx.lineTo(cx,cy);
       }
 
       ctx.stroke();
@@ -2837,66 +1800,61 @@ function makeTexture(type){
       ctx.shadowBlur=0;
     }
 
+
+    /*
+      Volcanic hotspots
+    */
+
+    for(var lava=0;lava<260;lava++){
+
+      var lvx=Math.random()*w;
+      var lvy=Math.random()*h;
+      var lvr=Math.random()*5+.5;
+
+      ctx.fillStyle=
+        Math.random()>.3
+        ?'rgba(255,76,8,.65)'
+        :'rgba(255,160,30,.35)';
+
+      ctx.beginPath();
+      ctx.arc(lvx,lvy,lvr,0,Math.PI*2);
+      ctx.fill();
+    }
   }
 
 
-  /* NEBULA */
+  /* =====================================================
+     NEBULA
+  ===================================================== */
 
   else if(type==='nebula'){
 
-    ctx.fillStyle=
-      '#000208';
-
-    ctx.fillRect(
-      0,
-      0,
-      w,
-      h
-    );
+    ctx.fillStyle='#000208';
+    ctx.fillRect(0,0,w,h);
 
     var colors=[
-
       'rgba(31,102,210,.16)',
-
       'rgba(72,62,190,.14)',
-
       'rgba(21,137,205,.13)',
-
       'rgba(96,70,190,.10)'
-
     ];
 
-    for(
-      var nc=0;
-      nc<60;
-      nc++
-    ){
+    for(var nc=0;nc<60;nc++){
 
-      var px=
-        Math.random()*w;
+      var px=Math.random()*w;
+      var py=Math.random()*h;
+      var pr=Math.random()*180+70;
 
-      var py=
-        Math.random()*h;
-
-      var pr=
-        Math.random()*180+70;
-
-      var ng=
-        ctx.createRadialGradient(
-          px,
-          py,
-          0,
-          px,
-          py,
-          pr
-        );
+      var ng=ctx.createRadialGradient(
+        px,py,0,
+        px,py,pr
+      );
 
       ng.addColorStop(
         0,
         colors[
           Math.floor(
-            Math.random()*
-            colors.length
+            Math.random()*colors.length
           )
         ]
       );
@@ -2911,8 +1869,7 @@ function makeTexture(type){
         'rgba(0,0,0,0)'
       );
 
-      ctx.fillStyle=
-        ng;
+      ctx.fillStyle=ng;
 
       ctx.beginPath();
 
@@ -2926,31 +1883,26 @@ function makeTexture(type){
 
       ctx.fill();
     }
-
   }
 
 
-  var texture=
-    new THREE.CanvasTexture(
-      canvasTexture
-    );
+  var texture=new THREE.CanvasTexture(
+    canvasTexture
+  );
 
-  texture.encoding=
-    THREE.sRGBEncoding;
+  texture.encoding=THREE.sRGBEncoding;
 
   texture.anisotropy=
-    renderer.capabilities
-      .getMaxAnisotropy();
+    renderer.capabilities.getMaxAnisotropy();
 
-  texture.needsUpdate=
-    true;
+  texture.needsUpdate=true;
 
   return texture;
 }
 
 
 /* =========================================================
-   STARS
+   STAR FIELD
 ========================================================= */
 
 function createStars(
@@ -2962,31 +1914,17 @@ function createStars(
   maxRadius
 ){
 
-  var geometry=
-    new THREE.BufferGeometry();
+  var geometry=new THREE.BufferGeometry();
 
-  var positions=
-    new Float32Array(
-      count*3
-    );
+  var positions=new Float32Array(count*3);
 
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
+  for(var i=0;i<count;i++){
 
     var radius=
       minRadius+
-      Math.random()*
-      (
-        maxRadius-
-        minRadius
-      );
+      Math.random()*(maxRadius-minRadius);
 
-    var theta=
-      Math.random()*
-      Math.PI*2;
+    var theta=Math.random()*Math.PI*2;
 
     var phi=
       Math.acos(
@@ -3006,7 +1944,6 @@ function createStars(
       radius*
       Math.sin(phi)*
       Math.sin(theta);
-
   }
 
   geometry.setAttribute(
@@ -3017,65 +1954,51 @@ function createStars(
     )
   );
 
-  var material=
-    new THREE.PointsMaterial({
+  var material=new THREE.PointsMaterial({
+    color:color,
+    size:size,
+    transparent:true,
+    opacity:opacity,
+    sizeAttenuation:true,
+    depthWrite:false
+  });
 
-      color:color,
-
-      size:size,
-
-      transparent:true,
-
-      opacity:opacity,
-
-      sizeAttenuation:true,
-
-      depthWrite:false
-
-    });
-
-  var stars=
-    new THREE.Points(
-      geometry,
-      material
-    );
-
-  scene.add(
-    stars
+  var stars=new THREE.Points(
+    geometry,
+    material
   );
+
+  scene.add(stars);
 
   return stars;
 }
 
-var starsFar=
-  createStars(
-    9000,
-    .055,
-    .48,
-    0xbfd8e8,
-    180,
-    520
-  );
+var starsFar=createStars(
+  9000,
+  .055,
+  .48,
+  0xbfd8e8,
+  180,
+  520
+);
 
-var starsA=
-  createStars(
-    5200,
-    .105,
-    .78,
-    0xdff5ff,
-    105,
-    370
-  );
+var starsA=createStars(
+  5200,
+  .105,
+  .78,
+  0xdff5ff,
+  105,
+  370
+);
 
-var starsB=
-  createStars(
-    2600,
-    .20,
-    .55,
-    0xffffff,
-    90,
-    320
-  );
+var starsB=createStars(
+  2600,
+  .20,
+  .55,
+  0xffffff,
+  90,
+  320
+);
 
 
 /* =========================================================
@@ -3084,48 +2007,28 @@ var starsB=
 
 function createStarClusters(){
 
-  var clusterGroup=
-    new THREE.Group();
+  var clusterGroup=new THREE.Group();
 
-  for(
-    var c=0;
-    c<24;
-    c++
-  ){
+  for(var c=0;c<24;c++){
 
-    var cluster=
-      new THREE.Group();
+    var cluster=new THREE.Group();
 
     cluster.position.set(
-
       (Math.random()-.5)*430,
-
       (Math.random()-.5)*190,
-
-      -100-
-      Math.random()*260
-
+      -100-Math.random()*260
     );
 
     var count=
       15+
-      Math.floor(
-        Math.random()*28
-      );
+      Math.floor(Math.random()*28);
 
-    var geometry=
-      new THREE.BufferGeometry();
+    var geometry=new THREE.BufferGeometry();
 
     var positions=
-      new Float32Array(
-        count*3
-      );
+      new Float32Array(count*3);
 
-    for(
-      var i=0;
-      i<count;
-      i++
-    ){
+    for(var i=0;i<count;i++){
 
       positions[i*3]=
         (Math.random()-.5)*12;
@@ -3135,7 +2038,6 @@ function createStarClusters(){
 
       positions[i*3+2]=
         (Math.random()-.5)*12;
-
     }
 
     geometry.setAttribute(
@@ -3146,29 +2048,19 @@ function createStarClusters(){
       )
     );
 
-    var material=
-      new THREE.PointsMaterial({
-
-        color:
-          c%3===0
-          ?0xb7ddff
-          :c%3===1
-          ?0xd9eaff
-          :0x9bc7ed,
-
-        size:
-          .12+
-          Math.random()*.08,
-
-        transparent:true,
-
-        opacity:.42,
-
-        sizeAttenuation:true,
-
-        depthWrite:false
-
-      });
+    var material=new THREE.PointsMaterial({
+      color:
+        c%3===0
+        ?0xb7ddff
+        :c%3===1
+        ?0xd9eaff
+        :0x9bc7ed,
+      size:.12+Math.random()*.08,
+      transparent:true,
+      opacity:.42,
+      sizeAttenuation:true,
+      depthWrite:false
+    });
 
     cluster.add(
       new THREE.Points(
@@ -3177,20 +2069,15 @@ function createStarClusters(){
       )
     );
 
-    clusterGroup.add(
-      cluster
-    );
+    clusterGroup.add(cluster);
   }
 
-  scene.add(
-    clusterGroup
-  );
+  scene.add(clusterGroup);
 
   return clusterGroup;
 }
 
-var starClusters=
-  createStarClusters();
+var starClusters=createStarClusters();
 
 
 /* =========================================================
@@ -3199,29 +2086,21 @@ var starClusters=
 
 function createGalaxyDust(){
 
-  var geometry=
-    new THREE.BufferGeometry();
+  var geometry=new THREE.BufferGeometry();
 
   var count=6500;
 
   var positions=
-    new Float32Array(
-      count*3
-    );
+    new Float32Array(count*3);
 
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
+  for(var i=0;i<count;i++){
 
     var radius=
       105+
       Math.random()*280;
 
     var angle=
-      Math.random()*
-      Math.PI*2;
+      Math.random()*Math.PI*2;
 
     var verticalSpread=
       7+
@@ -3238,16 +2117,12 @@ function createGalaxyDust(){
       )*3;
 
     positions[i*3]=
-      Math.cos(angle)*
-      radius;
+      Math.cos(angle)*radius;
 
-    positions[i*3+1]=
-      y;
+    positions[i*3+1]=y;
 
     positions[i*3+2]=
-      Math.sin(angle)*
-      radius;
-
+      Math.sin(angle)*radius;
   }
 
   geometry.setAttribute(
@@ -3258,85 +2133,55 @@ function createGalaxyDust(){
     )
   );
 
-  var material=
-    new THREE.PointsMaterial({
+  var material=new THREE.PointsMaterial({
+    color:0x91bce0,
+    size:.075,
+    transparent:true,
+    opacity:.24,
+    sizeAttenuation:true,
+    depthWrite:false
+  });
 
-      color:0x91bce0,
-
-      size:.075,
-
-      transparent:true,
-
-      opacity:.24,
-
-      sizeAttenuation:true,
-
-      depthWrite:false
-
-    });
-
-  var galaxy=
-    new THREE.Points(
-      geometry,
-      material
-    );
+  var galaxy=new THREE.Points(
+    geometry,
+    material
+  );
 
   galaxy.rotation.z=
-    THREE.MathUtils.degToRad(
-      -11
-    );
+    THREE.MathUtils.degToRad(-11);
 
-  scene.add(
-    galaxy
-  );
+  scene.add(galaxy);
 
   return galaxy;
 }
 
-var galaxyDust=
-  createGalaxyDust();
+var galaxyDust=createGalaxyDust();
 
 
 /* =========================================================
    NEBULA
 ========================================================= */
 
-var nebula=
-  new THREE.Mesh(
-
-    new THREE.SphereGeometry(
-      310,
-      64,
-      64
-    ),
-
-    new THREE.MeshBasicMaterial({
-
-      map:
-        makeTexture(
-          'nebula'
-        ),
-
-      side:
-        THREE.BackSide,
-
-      transparent:true,
-
-      opacity:.72,
-
-      depthWrite:false
-
-    })
-
-  );
-
-scene.add(
-  nebula
+var nebula=new THREE.Mesh(
+  new THREE.SphereGeometry(
+    310,
+    64,
+    64
+  ),
+  new THREE.MeshBasicMaterial({
+    map:makeTexture('nebula'),
+    side:THREE.BackSide,
+    transparent:true,
+    opacity:.72,
+    depthWrite:false
+  })
 );
+
+scene.add(nebula);
 
 
 /* =========================================================
-   NEBULA CLOUDS
+   ADDITIONAL NEBULA SPRITES
 ========================================================= */
 
 function createNebulaCloud(
@@ -3346,82 +2191,38 @@ function createNebulaCloud(
   color
 ){
 
-  var c=
-    document.createElement(
-      'canvas'
-    );
+  var c=document.createElement('canvas');
 
   c.width=512;
   c.height=512;
 
-  var ctx=
-    c.getContext(
-      '2d'
-    );
+  var ctx=c.getContext('2d');
 
-  var gradient=
-    ctx.createRadialGradient(
-      256,
-      256,
-      8,
-      256,
-      256,
-      250
-    );
-
-  gradient.addColorStop(
-    0,
-    color
+  var gradient=ctx.createRadialGradient(
+    256,256,8,
+    256,256,250
   );
 
-  gradient.addColorStop(
-    .35,
-    'rgba(45,90,180,.08)'
+  gradient.addColorStop(0,color);
+  gradient.addColorStop(.35,'rgba(45,90,180,.08)');
+  gradient.addColorStop(1,'rgba(0,0,0,0)');
+
+  ctx.fillStyle=gradient;
+  ctx.fillRect(0,0,512,512);
+
+  var texture=new THREE.CanvasTexture(c);
+
+  var sprite=new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map:texture,
+      transparent:true,
+      opacity:opacity,
+      depthWrite:false,
+      blending:THREE.AdditiveBlending
+    })
   );
 
-  gradient.addColorStop(
-    1,
-    'rgba(0,0,0,0)'
-  );
-
-  ctx.fillStyle=
-    gradient;
-
-  ctx.fillRect(
-    0,
-    0,
-    512,
-    512
-  );
-
-  var texture=
-    new THREE.CanvasTexture(
-      c
-    );
-
-  var sprite=
-    new THREE.Sprite(
-
-      new THREE.SpriteMaterial({
-
-        map:texture,
-
-        transparent:true,
-
-        opacity:opacity,
-
-        depthWrite:false,
-
-        blending:
-          THREE.AdditiveBlending
-
-      })
-
-    );
-
-  sprite.position.copy(
-    position
-  );
+  sprite.position.copy(position);
 
   sprite.scale.set(
     scale.x,
@@ -3429,106 +2230,60 @@ function createNebulaCloud(
     1
   );
 
-  scene.add(
-    sprite
-  );
+  scene.add(sprite);
 
   return sprite;
 }
 
-var nebulaCloudA=
-  createNebulaCloud(
-    new THREE.Vector3(
-      -135,
-      75,
-      -210
-    ),
-    new THREE.Vector3(
-      230,
-      150,
-      1
-    ),
-    .24,
-    'rgba(35,95,190,.34)'
-  );
+var nebulaCloudA=createNebulaCloud(
+  new THREE.Vector3(-135,75,-210),
+  new THREE.Vector3(230,150,1),
+  .24,
+  'rgba(35,95,190,.34)'
+);
 
-var nebulaCloudB=
-  createNebulaCloud(
-    new THREE.Vector3(
-      160,
-      -65,
-      -245
-    ),
-    new THREE.Vector3(
-      270,
-      170,
-      1
-    ),
-    .19,
-    'rgba(68,61,190,.30)'
-  );
+var nebulaCloudB=createNebulaCloud(
+  new THREE.Vector3(160,-65,-245),
+  new THREE.Vector3(270,170,1),
+  .19,
+  'rgba(68,61,190,.30)'
+);
 
-var nebulaCloudC=
-  createNebulaCloud(
-    new THREE.Vector3(
-      45,
-      125,
-      -300
-    ),
-    new THREE.Vector3(
-      190,
-      125,
-      1
-    ),
-    .16,
-    'rgba(25,125,190,.27)'
-  );
+var nebulaCloudC=createNebulaCloud(
+  new THREE.Vector3(45,125,-300),
+  new THREE.Vector3(190,125,1),
+  .16,
+  'rgba(25,125,190,.27)'
+);
 
 
 /* =========================================================
    SUN
 ========================================================= */
 
-var sunGeometry=
-  new THREE.SphereGeometry(
-    5.2,
-    72,
-    72
-  );
-
-var sunTexture=
-  makeTexture(
-    'sun'
-  );
-
-var sunMaterial=
-  new THREE.MeshStandardMaterial({
-
-    map:sunTexture,
-
-    emissive:0xffa52b,
-
-    emissiveMap:
-      sunTexture,
-
-    emissiveIntensity:
-      1.85,
-
-    roughness:.58,
-
-    metalness:.01
-
-  });
-
-var sunMesh=
-  new THREE.Mesh(
-    sunGeometry,
-    sunMaterial
-  );
-
-scene.add(
-  sunMesh
+var sunGeometry=new THREE.SphereGeometry(
+  5.2,
+  72,
+  72
 );
+
+var sunTexture=makeTexture('sun');
+
+var sunMaterial=new THREE.MeshStandardMaterial({
+  map:sunTexture,
+  emissive:0xffa52b,
+  emissiveMap:sunTexture,
+  emissiveIntensity:1.85,
+  roughness:.58,
+  metalness:.01
+});
+
+var sunMesh=new THREE.Mesh(
+  sunGeometry,
+  sunMaterial
+);
+
+scene.add(sunMesh);
 
 
 /* =========================================================
@@ -3537,28 +2292,17 @@ scene.add(
 
 function createGlowTexture(){
 
-  var c=
-    document.createElement(
-      'canvas'
-    );
+  var c=document.createElement('canvas');
 
   c.width=512;
   c.height=512;
 
-  var ctx=
-    c.getContext(
-      '2d'
-    );
+  var ctx=c.getContext('2d');
 
-  var gradient=
-    ctx.createRadialGradient(
-      256,
-      256,
-      5,
-      256,
-      256,
-      256
-    );
+  var gradient=ctx.createRadialGradient(
+    256,256,5,
+    256,256,256
+  );
 
   gradient.addColorStop(
     0,
@@ -3590,8 +2334,7 @@ function createGlowTexture(){
     'rgba(255,50,0,0)'
   );
 
-  ctx.fillStyle=
-    gradient;
+  ctx.fillStyle=gradient;
 
   ctx.fillRect(
     0,
@@ -3600,29 +2343,17 @@ function createGlowTexture(){
     512
   );
 
-  return new THREE.CanvasTexture(
-    c
-  );
+  return new THREE.CanvasTexture(c);
 }
 
-var glowSprite=
-  new THREE.Sprite(
-
-    new THREE.SpriteMaterial({
-
-      map:
-        createGlowTexture(),
-
-      transparent:true,
-
-      depthWrite:false,
-
-      blending:
-        THREE.AdditiveBlending
-
-    })
-
-  );
+var glowSprite=new THREE.Sprite(
+  new THREE.SpriteMaterial({
+    map:createGlowTexture(),
+    transparent:true,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending
+  })
+);
 
 glowSprite.scale.set(
   19,
@@ -3630,30 +2361,17 @@ glowSprite.scale.set(
   1
 );
 
-sunMesh.add(
-  glowSprite
+sunMesh.add(glowSprite);
+
+var outerGlow=new THREE.Sprite(
+  new THREE.SpriteMaterial({
+    map:createGlowTexture(),
+    transparent:true,
+    depthWrite:false,
+    opacity:.22,
+    blending:THREE.AdditiveBlending
+  })
 );
-
-var outerGlow=
-  new THREE.Sprite(
-
-    new THREE.SpriteMaterial({
-
-      map:
-        createGlowTexture(),
-
-      transparent:true,
-
-      depthWrite:false,
-
-      opacity:.22,
-
-      blending:
-        THREE.AdditiveBlending
-
-    })
-
-  );
 
 outerGlow.scale.set(
   31,
@@ -3661,13 +2379,11 @@ outerGlow.scale.set(
   1
 );
 
-sunMesh.add(
-  outerGlow
-);
+sunMesh.add(outerGlow);
 
 
 /* =========================================================
-   PROJECTS
+   PROJECT DEFINITIONS
 ========================================================= */
 
 var projects=[
@@ -3714,7 +2430,7 @@ var interactive=[];
 
 
 /* =========================================================
-   ORBIT RING
+   ORBIT RINGS
 ========================================================= */
 
 function createOrbitRing(
@@ -3726,11 +2442,7 @@ function createOrbitRing(
 
   var points=[];
 
-  for(
-    var i=0;
-    i<=256;
-    i++
-  ){
+  for(var i=0;i<=256;i++){
 
     var a=
       (i/256)*
@@ -3743,33 +2455,24 @@ function createOrbitRing(
         Math.sin(a)*radius
       )
     );
-
   }
 
   var geometry=
     new THREE.BufferGeometry()
-      .setFromPoints(
-        points
-      );
+      .setFromPoints(points);
 
   var material=
     new THREE.LineBasicMaterial({
-
       color:0x5caedc,
-
       transparent:true,
-
       opacity:opacity,
-
       depthWrite:false
-
     });
 
-  var line=
-    new THREE.Line(
-      geometry,
-      material
-    );
+  var line=new THREE.Line(
+    geometry,
+    material
+  );
 
   line.rotation.x=
     rotationX||0;
@@ -3777,9 +2480,7 @@ function createOrbitRing(
   line.rotation.z=
     rotationZ||0;
 
-  scene.add(
-    line
-  );
+  scene.add(line);
 
   return line;
 }
@@ -3790,13 +2491,9 @@ function createOrbitRing(
 ========================================================= */
 
 projects.forEach(
-  function(
-    project,
-    index
-  ){
+  function(project,index){
 
-    var group=
-      new THREE.Group();
+    var group=new THREE.Group();
 
     group.position.set(
       project.distance,
@@ -3804,21 +2501,24 @@ projects.forEach(
       0
     );
 
-    scene.add(
-      group
+    scene.add(group);
+
+
+    var geometry=new THREE.SphereGeometry(
+      project.radius,
+      64,
+      64
     );
 
-    var geometry=
-      new THREE.SphereGeometry(
-        project.radius,
-        64,
-        64
-      );
-
     var planetTexture=
-      makeTexture(
-        project.texture
-      );
+      makeTexture(project.texture);
+
+
+    /*
+      IMPORTANT:
+      The texture is now the project's own texture.
+      It is no longer overwritten by another planet.
+    */
 
     var material=
       new THREE.MeshStandardMaterial({
@@ -3826,123 +2526,92 @@ projects.forEach(
         map:planetTexture,
 
         roughness:
-          project.texture===
-          'gold'
-          ?
-          .68
-          :
-          .78,
+          project.texture==='gold'
+          ? .68
+          : .78,
 
         metalness:
-          project.texture===
-          'gold'
-          ?
-          .10
-          :
-          .015,
+          project.texture==='gold'
+          ? .10
+          : .015,
 
         emissive:
           project.emissive,
 
         emissiveIntensity:
           project.emissiveIntensity
-
       });
 
-    var mesh=
-      new THREE.Mesh(
-        geometry,
-        material
-      );
 
-    group.add(
-      mesh
+    var mesh=new THREE.Mesh(
+      geometry,
+      material
     );
 
+    group.add(mesh);
 
-    if(
-      project.texture===
-      'volcanic'
-    ){
 
-      var atmosphere=
-        new THREE.Mesh(
+    /* =====================================================
+       RECLUSE ATMOSPHERE
+    ===================================================== */
 
-          new THREE.SphereGeometry(
-            project.radius*1.07,
-            48,
-            48
-          ),
+    if(project.texture==='volcanic'){
 
-          new THREE.MeshBasicMaterial({
+      var atmosphere=new THREE.Mesh(
 
-            color:0xff4010,
+        new THREE.SphereGeometry(
+          project.radius*1.07,
+          48,
+          48
+        ),
 
-            transparent:true,
-
-            opacity:.055,
-
-            side:
-              THREE.BackSide,
-
-            depthWrite:false
-
-          })
-
-        );
-
-      group.add(
-        atmosphere
+        new THREE.MeshBasicMaterial({
+          color:0xff4010,
+          transparent:true,
+          opacity:.055,
+          side:THREE.BackSide,
+          depthWrite:false
+        })
       );
 
+      group.add(atmosphere);
     }
 
 
-    if(
-      project.texture===
-      'ocean'
-    ){
+    /* =====================================================
+       FIN-DASH ATMOSPHERE
+    ===================================================== */
 
-      var oceanAtmosphere=
-        new THREE.Mesh(
+    if(project.texture==='ocean'){
 
-          new THREE.SphereGeometry(
-            project.radius*1.08,
-            48,
-            48
-          ),
+      var oceanAtmosphere=new THREE.Mesh(
 
-          new THREE.MeshBasicMaterial({
+        new THREE.SphereGeometry(
+          project.radius*1.08,
+          48,
+          48
+        ),
 
-            color:0x55dfff,
-
-            transparent:true,
-
-            opacity:.08,
-
-            side:
-              THREE.BackSide,
-
-            depthWrite:false
-
-          })
-
-        );
-
-      group.add(
-        oceanAtmosphere
+        new THREE.MeshBasicMaterial({
+          color:0x55dfff,
+          transparent:true,
+          opacity:.08,
+          side:THREE.BackSide,
+          depthWrite:false
+        })
       );
 
+      group.add(oceanAtmosphere);
     }
 
 
-    if(
-      project.texture===
-      'gold'
-    ){
+    /* =====================================================
+       CROWN CAPITAL GOLD RING
+    ===================================================== */
 
-      var ringGroup=
-        new THREE.Group();
+    if(project.texture==='gold'){
+
+      var ringGroup=new THREE.Group();
 
       var ringGeometry=
         new THREE.RingGeometry(
@@ -3960,25 +2629,20 @@ projects.forEach(
 
           opacity:.48,
 
-          side:
-            THREE.DoubleSide,
+          side:THREE.DoubleSide,
 
           depthWrite:false
-
         });
 
-      var ring=
-        new THREE.Mesh(
-          ringGeometry,
-          ringMaterial
-        );
+      var ring=new THREE.Mesh(
+        ringGeometry,
+        ringMaterial
+      );
 
       ring.rotation.x=
         Math.PI/2.35;
 
-      ringGroup.add(
-        ring
-      );
+      ringGroup.add(ring);
 
 
       var innerRingGeometry=
@@ -3997,78 +2661,57 @@ projects.forEach(
 
           opacity:.26,
 
-          side:
-            THREE.DoubleSide,
+          side:THREE.DoubleSide,
 
           depthWrite:false
-
         });
 
-      var innerRing=
-        new THREE.Mesh(
-          innerRingGeometry,
-          innerRingMaterial
-        );
+      var innerRing=new THREE.Mesh(
+        innerRingGeometry,
+        innerRingMaterial
+      );
 
       innerRing.rotation.x=
         Math.PI/2.35;
 
-      ringGroup.add(
-        innerRing
-      );
+      ringGroup.add(innerRing);
 
-      group.add(
-        ringGroup
-      );
-
+      group.add(ringGroup);
     }
 
 
-    project.group=
-      group;
-
-    project.mesh=
-      mesh;
+    project.group=group;
+    project.mesh=mesh;
 
     project.angle=
       index*2.1;
 
+    /*
+      Slightly different inclination gives the
+      system more three-dimensional depth.
+    */
+
     var orbitTilt=
       index===0
-      ?
-      .02
-      :
-      index===1
-      ?
-      -.035
-      :
-      .025;
+      ?0.02
+      :index===1
+      ?-0.035
+      :.025;
 
     createOrbitRing(
       project.distance,
       index===0
-      ?
-      .20
-      :
-      index===1
-      ?
-      .16
-      :
-      .13,
+      ?.20
+      :index===1
+      ?.16
+      :.13,
       orbitTilt,
-      index===1
-      ?
-      .08
-      :
-      -.035
+      index===1?.08:-.035
     );
 
     interactive.push({
-
       mesh:mesh,
-
       obj:project
-
     });
 
   }
@@ -4087,39 +2730,27 @@ function createAsteroidBelt(){
     new THREE.BufferGeometry();
 
   var positions=
-    new Float32Array(
-      count*3
-    );
+    new Float32Array(count*3);
 
-  for(
-    var i=0;
-    i<count;
-    i++
-  ){
+  for(var i=0;i<count;i++){
 
     var radius=
       34+
       Math.random()*5.5;
 
     var angle=
-      Math.random()*
-      Math.PI*2;
+      Math.random()*Math.PI*2;
 
     var y=
-      (Math.random()-.5)*
-      2.4;
+      (Math.random()-.5)*2.4;
 
     positions[i*3]=
-      Math.cos(angle)*
-      radius;
+      Math.cos(angle)*radius;
 
-    positions[i*3+1]=
-      y;
+    positions[i*3+1]=y;
 
     positions[i*3+2]=
-      Math.sin(angle)*
-      radius;
-
+      Math.sin(angle)*radius;
   }
 
   geometry.setAttribute(
@@ -4144,7 +2775,6 @@ function createAsteroidBelt(){
       sizeAttenuation:true,
 
       depthWrite:false
-
     });
 
   var belt=
@@ -4153,547 +2783,133 @@ function createAsteroidBelt(){
       material
     );
 
-  scene.add(
-    belt
-  );
+  scene.add(belt);
 
   return belt;
 }
 
 var asteroidBelt=
   createAsteroidBelt();
-/* =========================================================
-   AGRO-01 NASA SATELLITE
-========================================================= */
 
-var agroSatellite =
-  new THREE.Group();
 
-agroSatellite.name =
-  'AGRO-01';
+/*
+  Outer orbit markers.
+*/
 
-agroSatellite.userData = {
-  name: 'AGRO-01',
-  type: 'AGRICULTURAL INTELLIGENCE SATELLITE'
-};
+createOrbitRing(
+  36.5,
+  .075,
+  .025,
+  .08
+);
 
-scene.add(
-  agroSatellite
+createOrbitRing(
+  42,
+  .09,
+  -.035,
+  -.04
+);
+
+createOrbitRing(
+  46,
+  .075,
+  .025,
+  .06
 );
 
 
 /* =========================================================
-   AGRO ORBIT
+   SKILL CONSTELLATION
 ========================================================= */
 
-var agroOrbit = {
+var skills=[
 
-  distance: 36.5,
+  {
+    name:'Graphic Design',
+    distance:42,
+    y:9,
+    modal:'modal-design'
+  },
 
-  angle: 1.15,
+  {
+    name:'Leadership',
+    distance:46,
+    y:-7,
+    modal:'modal-leadership'
+  }
 
-  speed: .018,
+];
 
-  inclination:
-    THREE.MathUtils.degToRad(16)
+skills.forEach(
+  function(skill,index){
 
-};
+    var angle=
+      index===0
+      ?.55
+      :3.4;
 
+    var mesh=new THREE.Mesh(
 
-/* =========================================================
-   GLTF LOADER
-========================================================= */
+      new THREE.SphereGeometry(
+        .55,
+        32,
+        32
+      ),
 
-var gltfLoader =
-  new THREE.GLTFLoader();
-
-
-/* =========================================================
-   LOAD SATELLITE COMPONENT
-========================================================= */
-
-function loadSatellitePart(
-  path,
-  name,
-  scale
-){
-
-  return new Promise(
-    function(resolve){
-
-      gltfLoader.load(
-
-        path,
-
-        function(gltf){
-
-          var model =
-            gltf.scene;
-
-          model.name =
-            name;
-
-          model.scale.set(
-            scale,
-            scale,
-            scale
-          );
-
-          model.traverse(
-            function(child){
-
-              if(
-                child.isMesh
-              ){
-
-                child.castShadow =
-                  false;
-
-                child.receiveShadow =
-                  false;
-
-                /*
-                  Keep the original NASA
-                  materials intact.
-                */
-
-                if(
-                  child.material
-                ){
-
-                  child.material.roughness =
-                    Math.min(
-                      child.material.roughness || .7,
-                      .85
-                    );
-
-                  child.material.metalness =
-                    Math.max(
-                      child.material.metalness || 0,
-                      .15
-                    );
-
-                  child.material.needsUpdate =
-                    true;
-
-                }
-
-              }
-
-            }
-          );
-
-          resolve(model);
-
-        },
-
-        undefined,
-
-        function(error){
-
-          console.warn(
-            'AGRO-01 model failed to load:',
-            path,
-            error
-          );
-
-          resolve(null);
-
-        }
-
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD ALL THREE NASA COMPONENTS
-========================================================= */
-
-Promise.all([
-
-  loadSatellitePart(
-    'models/satellite-body.glb',
-    'AGRO-01 BODY',
-    2.2
-  ),
-
-  loadSatellitePart(
-    'models/satellite-radio.glb',
-    'AGRO-01 RADIO',
-    2.2
-  ),
-
-  loadSatellitePart(
-    'models/satellite-wings.glb',
-    'AGRO-01 SOLAR WINGS',
-    2.2
-  )
-
-]).then(
-
-  function(parts){
-
-    /*
-      Assemble the spacecraft.
-    */
-
-    parts.forEach(
-      function(part){
-
-        if(part){
-
-          agroSatellite.add(
-            part
-          );
-
-        }
-
-      }
+      new THREE.MeshBasicMaterial({
+        color:0xb8edff
+      })
     );
 
+    mesh.position.set(
 
-    /*
-      Make sure the complete
-      spacecraft is centered.
-    */
+      Math.cos(angle)*
+      skill.distance,
 
-    var box =
-      new THREE.Box3()
-        .setFromObject(
-          agroSatellite
-        );
+      skill.y,
 
-    if(
-      !box.isEmpty()
-    ){
+      Math.sin(angle)*
+      skill.distance
+    );
 
-      var center =
-        new THREE.Vector3();
-
-      box.getCenter(
-        center
-      );
-
-      agroSatellite.children.forEach(
-        function(child){
-
-          child.position.sub(
-            center
-          );
-
-        }
-      );
-
-    }
+    scene.add(mesh);
 
 
-    /* =====================================================
-       SATELLITE GLOW
-    ===================================================== */
-
-    var satelliteGlow =
+    var skillGlow=
       new THREE.Sprite(
 
         new THREE.SpriteMaterial({
-
-          map:
-            createGlowTexture(),
-
+          map:createGlowTexture(),
           transparent:true,
-
-          opacity:.09,
-
+          opacity:.14,
           depthWrite:false,
-
-          blending:
-            THREE.AdditiveBlending
-
+          blending:THREE.AdditiveBlending
         })
-
       );
 
-    satelliteGlow.scale.set(
-      5.8,
-      5.8,
+    skillGlow.scale.set(
+      3,
+      3,
       1
     );
 
-    agroSatellite.add(
-      satelliteGlow
-    );
+    mesh.add(skillGlow);
 
+    skill.mesh=mesh;
 
-    /* =====================================================
-       NAVIGATION BEACON
-    ===================================================== */
+    skill.group={
+      position:mesh.position
+    };
 
-    var beacon =
-      new THREE.PointLight(
-        0x53dfff,
-        .65,
-        7
-      );
-
-    beacon.position.set(
-      0,
-      .5,
-      0
-    );
-
-    agroSatellite.add(
-      beacon
-    );
-
-
-    /*
-      Register the COMPLETE GROUP
-      as one interactive object.
-    */
+    skill.isStatic=true;
 
     interactive.push({
-
-      mesh:
-        agroSatellite,
-
-      obj:
-        agroObj
-
+      mesh:mesh,
+      obj:skill
     });
-
-
-    /*
-      Update HUD object count
-      after satellite finishes loading.
-    */
-
-    hudObjects.textContent =
-      String(
-        interactive.length
-      ).padStart(
-        2,
-        '0'
-      );
-
-  }
-
-);
-
-
-/* =========================================================
-   AGRO OBJECT
-========================================================= */
-
-var agroObj = {
-
-  name:
-    'AGRO-01',
-
-  modal:
-    'modal-agro',
-
-  radius:
-    2.4,
-
-  isSpacecraft:
-    true,
-
-  group: {
-
-    position:
-      agroSatellite.position
-
-  },
-
-  type:
-    'AGRICULTURAL INTELLIGENCE SATELLITE'
-
-};
-
-Promise.all([
-
-  loadSatellitePart(
-    'models/satellite-body.glb',
-    'AGRO-01 BODY',
-    2.2
-  ),
-
-  loadSatellitePart(
-    'models/satellite-radio.glb',
-    'AGRO-01 RADIO',
-    2.2
-  ),
-
-  loadSatellitePart(
-    'models/satellite-wings.glb',
-    'AGRO-01 SOLAR WINGS',
-    2.2
-  )
-
-]).then(
-  function(parts){
-
-    parts.forEach(
-      function(part){
-
-        if(part){
-
-          agroSatellite.add(
-            part
-          );
-
-        }
-
-      }
-    );
-
-
-    /*
-      Center the entire loaded assembly.
-    */
-
-    var box=
-      new THREE.Box3()
-        .setFromObject(
-          agroSatellite
-        );
-
-    if(
-      !box.isEmpty()
-    ){
-
-      var center=
-        new THREE.Vector3();
-
-      box.getCenter(
-        center
-      );
-
-      agroSatellite.children
-        .forEach(
-          function(child){
-
-            child.position.sub(
-              center
-            );
-
-          }
-        );
-
-    }
-
-
-    /*
-      Give the spacecraft a subtle
-      mission halo.
-    */
-
-    var satelliteGlow=
-      new THREE.Sprite(
-
-        new THREE.SpriteMaterial({
-
-          map:
-            createGlowTexture(),
-
-          transparent:true,
-
-          opacity:.09,
-
-          depthWrite:false,
-
-          blending:
-            THREE.AdditiveBlending
-
-        })
-
-      );
-
-    satelliteGlow.scale.set(
-      5.8,
-      5.8,
-      1
-    );
-
-    agroSatellite.add(
-      satelliteGlow
-    );
-
-
-    /*
-      Tiny navigation beacon.
-    */
-
-    var beacon=
-      new THREE.PointLight(
-        0x53dfff,
-        .65,
-        7
-      );
-
-    beacon.position.set(
-      0,
-      .5,
-      0
-    );
-
-    agroSatellite.add(
-      beacon
-    );
-
-
-    /*
-      Add the completed spacecraft
-      to the interactive target system.
-    */
-
-    interactive.push({
-
-      mesh:agroSatellite,
-
-      obj:agroObj
-
-    });
-
-
-    hudObjects.textContent=
-      String(
-        interactive.length
-      ).padStart(
-        2,
-        '0'
-      );
 
   }
 );
-
-
-/* =========================================================
-   AGRO OBJECT
-========================================================= */
-
-var agroObj={
-
-  name:'AGRO-01',
-
-  modal:'modal-agro',
-
-  radius:2.4,
-
-  isSpacecraft:true,
-
-  group:{
-    position:
-      agroSatellite.position
-  },
-
-  type:
-    'AGRICULTURAL INTELLIGENCE SATELLITE'
-
-};
 
 
 /* =========================================================
@@ -4711,8 +2927,7 @@ var sunObj={
   isSun:true,
 
   group:{
-    position:
-      sunMesh.position
+    position:sunMesh.position
   }
 
 };
@@ -4729,190 +2944,111 @@ interactive.push({
 
 
 /*
-  At startup the system has:
-  3 project planets
-  2 skill nodes
-  1 Sun
-
-  AGRO-01 is added when the GLB files finish loading.
+  3 projects + 2 skills + Sun = 6 objects.
 */
 
-
 hudObjects.textContent=
-  String(
-    interactive.length
-  ).padStart(
-    2,
-    '0'
-  );
+  String(interactive.length)
+    .padStart(2,'0');
 
 
 /* =========================================================
    TARGET SYSTEM
 ========================================================= */
 
-var selectedObject=
-  null;
+var selectedObject=null;
 
-function objectPosition(
-  obj
-){
+function objectPosition(obj){
 
   if(!obj){
-
     return new THREE.Vector3();
-
   }
 
   if(obj.isSun){
-
     return sunMesh.position;
-
   }
 
-  if(
-    obj.isSpacecraft
-  ){
-
-    return agroSatellite.position;
-
-  }
-
-  if(
-    obj.group&&
-    obj.group.position
-  ){
-
+  if(obj.group&&obj.group.position){
     return obj.group.position;
-
   }
 
-  if(
-    obj.mesh&&
-    obj.mesh.position
-  ){
-
+  if(obj.mesh&&obj.mesh.position){
     return obj.mesh.position;
-
   }
 
   return new THREE.Vector3();
-
 }
 
+function getObjectType(obj){
 
-function getObjectType(
-  obj
-){
-
-  if(
-    obj.isSun
-  ){
-
+  if(obj.isSun){
     return 'CENTRAL STAR / CREATOR';
-
   }
 
-  if(
-    obj.isSpacecraft
-  ){
-
-    return 'AGRICULTURAL INTELLIGENCE SATELLITE';
-
-  }
-
-  if(
-    obj.isStatic
-  ){
-
+  if(obj.isStatic){
     return 'SKILL CONSTELLATION';
-
   }
 
   return 'PROJECT PLANET';
-
 }
 
-
-function acquireTarget(
-  obj
-){
+function acquireTarget(obj){
 
   if(!obj){
     return;
   }
 
-  selectedObject=
-    obj;
+  selectedObject=obj;
 
-  targetReadout
-    .classList
-    .add(
-      'active'
-    );
+  targetReadout.classList.add(
+    'active'
+  );
 
   targetName.textContent=
     obj.name||
     'UNKNOWN OBJECT';
 
   targetMeta.textContent=
-    getObjectType(
-      obj
-    )+
+    getObjectType(obj)+
     ' · STATUS ACTIVE';
 
   cameraMode.textContent=
     'TARGET LOCK';
 
   positionTargetReticle();
-
 }
-
 
 function clearTarget(){
 
-  selectedObject=
-    null;
+  selectedObject=null;
 
-  targetReadout
-    .classList
-    .remove(
-      'active'
-    );
+  targetReadout.classList.remove(
+    'active'
+  );
 
-  targetReticle
-    .classList
-    .remove(
-      'active'
-    );
+  targetReticle.classList.remove(
+    'active'
+  );
 
-  targetName.textContent=
-    '—';
+  targetName.textContent='—';
 
   targetMeta.textContent=
     'Awaiting object data...';
 
-  cameraMode.textContent=
-    'ORBIT';
+  cameraMode.textContent='ORBIT';
 
-  rangeValue.textContent=
-    '—';
-
+  rangeValue.textContent='—';
 }
-
 
 function positionTargetReticle(){
 
   if(!selectedObject){
 
-    targetReticle
-      .classList
-      .remove(
-        'active'
-      );
+    targetReticle.classList.remove(
+      'active'
+    );
 
     return;
-
   }
 
   var pos=
@@ -4921,50 +3057,30 @@ function positionTargetReticle(){
     );
 
   var projected=
-    pos
-      .clone()
-      .project(
-        camera
-      );
+    pos.clone().project(camera);
 
   if(
-
-    projected.z>1||
-
-    projected.z<-1||
-
-    projected.x<-1.2||
-
-    projected.x>1.2||
-
-    projected.y<-1.2||
-
+    projected.z>1 ||
+    projected.z<-1 ||
+    projected.x<-1.2 ||
+    projected.x>1.2 ||
+    projected.y<-1.2 ||
     projected.y>1.2
-
   ){
 
-    targetReticle
-      .classList
-      .remove(
-        'active'
-      );
+    targetReticle.classList.remove(
+      'active'
+    );
 
     return;
-
   }
 
   var x=
-    (
-      projected.x*.5+
-      .5
-    )*
+    (projected.x*.5+.5)*
     window.innerWidth;
 
   var y=
-    (
-      -projected.y*.5+
-      .5
-    )*
+    (-projected.y*.5+.5)*
     window.innerHeight;
 
   targetReticle.style.left=
@@ -4973,12 +3089,9 @@ function positionTargetReticle(){
   targetReticle.style.top=
     y+'px';
 
-  targetReticle
-    .classList
-    .add(
-      'active'
-    );
-
+  targetReticle.classList.add(
+    'active'
+  );
 }
 
 
@@ -4986,25 +3099,14 @@ function positionTargetReticle(){
    CAMERA TWEEN
 ========================================================= */
 
-var tweening=
-  false;
+var tweening=false;
 
-function easeInOutCubic(
-  t
-){
+function easeInOutCubic(t){
 
   return t<.5
-    ?
-    4*t*t*t
-    :
-    1-
-    Math.pow(
-      -2*t+2,
-      3
-    )/2;
-
+    ?4*t*t*t
+    :1-Math.pow(-2*t+2,3)/2;
 }
-
 
 function tweenCamera(
   targetPos,
@@ -5013,11 +3115,9 @@ function tweenCamera(
   onDone
 ){
 
-  tweening=
-    true;
+  tweening=true;
 
-  controls.enabled=
-    false;
+  controls.enabled=false;
 
   var startPos=
     camera.position.clone();
@@ -5028,24 +3128,17 @@ function tweenCamera(
   var startTime=
     performance.now();
 
-  function step(
-    now
-  ){
+  function step(now){
 
     var t=
       Math.min(
         1,
-        (
-          now-
-          startTime
-        )/
+        (now-startTime)/
         duration
       );
 
     var e=
-      easeInOutCubic(
-        t
-      );
+      easeInOutCubic(t);
 
     camera.position.lerpVectors(
       startPos,
@@ -5069,125 +3162,86 @@ function tweenCamera(
 
     }else{
 
-      tweening=
-        false;
+      tweening=false;
 
-      controls.enabled=
-        true;
+      controls.enabled=true;
 
       controls.update();
 
       if(onDone){
         onDone();
       }
-
     }
-
   }
 
-  requestAnimationFrame(
-    step
-  );
-
+  requestAnimationFrame(step);
 }
 
 
 /* =========================================================
-   FLY TO
+   FLY TO OBJECT
 ========================================================= */
 
-function flyTo(
-  obj
-){
+function flyTo(obj){
 
   if(!obj){
     return;
   }
 
-  acquireTarget(
-    obj
-  );
+  acquireTarget(obj);
 
   var pos=
-    objectPosition(
-      obj
-    ).clone();
+    objectPosition(obj).clone();
 
   var camDist;
 
-  if(
-    obj.isSun
-  ){
+  if(obj.isSun){
 
-    camDist=
-      18;
+    camDist=18;
 
-  }else if(
-    obj.isSpacecraft
-  ){
+  }else if(obj.isStatic){
 
-    camDist=
-      11;
-
-  }else if(
-    obj.isStatic
-  ){
-
-    camDist=
-      10;
+    camDist=10;
 
   }else{
 
     camDist=
       Math.max(
         9,
-        obj.radius*4.4+
-        7
+        obj.radius*4.4+7
       );
-
   }
 
   var viewDir=
     camera.position
       .clone()
-      .sub(
-        pos
-      );
+      .sub(pos);
 
-  if(
-    viewDir.length()<.01
-  ){
+  if(viewDir.length()<.01){
 
     viewDir.set(
       0,
       .25,
       1
     );
-
   }
 
   viewDir.normalize();
 
   var newPos=
     pos.clone().add(
-
       viewDir.multiplyScalar(
         camDist
       )
-
     );
 
   newPos.y+=
     camDist*.12;
 
   tweenCamera(
-
     newPos,
-
     pos,
-
     1100,
-
     function(){
 
       cameraMode.textContent=
@@ -5195,14 +3249,10 @@ function flyTo(
 
       positionTargetReticle();
 
-      openModal(
-        obj.modal
-      );
+      openModal(obj.modal);
 
     }
-
   );
-
 }
 
 
@@ -5229,22 +3279,15 @@ function resetView(){
     );
 
   tweenCamera(
-
     homePos,
-
     homeTarget,
-
     1000,
-
     function(){
 
       cameraMode.textContent=
         'ORBIT';
-
     }
-
   );
-
 }
 
 
@@ -5263,41 +3306,21 @@ var pointerDown={
   y:0
 };
 
-var dragging=
-  false;
+var dragging=false;
 
-
-function getPointerPosition(
-  event
-){
+function getPointerPosition(event){
 
   var rect=
     canvas.getBoundingClientRect();
 
   pointer.x=
-    (
-      (
-        event.clientX-
-        rect.left
-      )/
-      rect.width
-    )*
-    2-
-    1;
+    ((event.clientX-rect.left)/
+    rect.width)*2-1;
 
   pointer.y=
-    -(
-      (
-        event.clientY-
-        rect.top
-      )/
-      rect.height
-    )*
-    2+
-    1;
-
+    -((event.clientY-rect.top)/
+    rect.height)*2+1;
 }
-
 
 function findObject(){
 
@@ -5309,9 +3332,7 @@ function findObject(){
   var meshes=
     interactive.map(
       function(item){
-
         return item.mesh;
-
       }
     );
 
@@ -5321,52 +3342,30 @@ function findObject(){
       true
     );
 
-  if(
-    !hits.length
-  ){
-
+  if(!hits.length){
     return null;
-
   }
 
   var hit=
     hits[0].object;
 
-  for(
-    var i=0;
-    i<interactive.length;
-    i++
-  ){
-
-    var root=
-      interactive[i].mesh;
+  for(var i=0;i<interactive.length;i++){
 
     if(
-      root===hit||
-      root.children.indexOf(
-        hit
-      )!==-1||
-      root.getObjectById(
-        hit.id
-      )
+      interactive[i].mesh===hit ||
+      interactive[i].mesh.children.indexOf(hit)!==-1
     ){
 
       return interactive[i];
-
     }
-
   }
 
   return null;
-
 }
-
 
 canvas.addEventListener(
   'pointerdown',
-  function(
-    event
-  ){
+  function(event){
 
     pointerDown.x=
       event.clientX;
@@ -5374,18 +3373,13 @@ canvas.addEventListener(
     pointerDown.y=
       event.clientY;
 
-    dragging=
-      false;
-
+    dragging=false;
   }
 );
 
-
 canvas.addEventListener(
   'pointermove',
-  function(
-    event
-  ){
+  function(event){
 
     var dx=
       event.clientX-
@@ -5402,20 +3396,14 @@ canvas.addEventListener(
       )>6
     ){
 
-      dragging=
-        true;
-
+      dragging=true;
     }
-
   }
 );
 
-
 canvas.addEventListener(
   'pointerup',
-  function(
-    event
-  ){
+  function(event){
 
     if(
       dragging||
@@ -5423,24 +3411,17 @@ canvas.addEventListener(
     ){
 
       return;
-
     }
 
-    getPointerPosition(
-      event
-    );
+    getPointerPosition(event);
 
     var found=
       findObject();
 
     if(found){
 
-      flyTo(
-        found.obj
-      );
-
+      flyTo(found.obj);
     }
-
   }
 );
 
@@ -5454,10 +3435,7 @@ var modals=
     '.modal'
   );
 
-
-function openModal(
-  id
-){
+function openModal(id){
 
   if(!id){
     return;
@@ -5466,81 +3444,57 @@ function openModal(
   closeAllModals();
 
   var modal=
-    document.getElementById(
-      id
-    );
+    document.getElementById(id);
 
   if(modal){
-
     modal.classList.add(
       'active'
     );
-
   }
-
 }
-
 
 function closeAllModals(){
 
   modals.forEach(
-    function(
-      modal
-    ){
+    function(modal){
 
       modal.classList.remove(
         'active'
       );
-
     }
   );
-
 }
-
 
 document.querySelectorAll(
   '.close-modal,.close-action'
 ).forEach(
-  function(
-    button
-  ){
+  function(button){
 
     button.addEventListener(
       'click',
       function(){
 
         closeAllModals();
-
       }
     );
-
   }
 );
 
-
 modals.forEach(
-  function(
-    modal
-  ){
+  function(modal){
 
     modal.addEventListener(
       'click',
-      function(
-        event
-      ){
+      function(event){
 
         if(
-          event.target===
-          modal
+          event.target===modal
         ){
 
           closeAllModals();
-
         }
-
       }
     );
-
   }
 );
 
@@ -5552,9 +3506,7 @@ modals.forEach(
 document.querySelectorAll(
   '.project-item'
 ).forEach(
-  function(
-    item
-  ){
+  function(item){
 
     item.addEventListener(
       'click',
@@ -5567,49 +3519,20 @@ document.querySelectorAll(
 
         closeAllModals();
 
-        if(
-          target==='fin'
-        ){
-
-          flyTo(
-            projects[0]
-          );
-
+        if(target==='fin'){
+          flyTo(projects[0]);
         }
 
-        if(
-          target==='crown'
-        ){
-
-          flyTo(
-            projects[1]
-          );
-
+        if(target==='crown'){
+          flyTo(projects[1]);
         }
 
-        if(
-          target==='recluse'
-        ){
-
-          flyTo(
-            projects[2]
-          );
-
-        }
-
-        if(
-          target==='agro'
-        ){
-
-          flyTo(
-            agroObj
-          );
-
+        if(target==='recluse'){
+          flyTo(projects[2]);
         }
 
       }
     );
-
   }
 );
 
@@ -5624,13 +3547,10 @@ document.getElementById(
   'click',
   function(){
 
-    flyTo(
-      sunObj
-    );
+    flyTo(sunObj);
 
   }
 );
-
 
 document.getElementById(
   'nav-projects'
@@ -5656,7 +3576,6 @@ document.getElementById(
   }
 );
 
-
 document.getElementById(
   'nav-contact'
 ).addEventListener(
@@ -5671,7 +3590,6 @@ document.getElementById(
 
   }
 );
-
 
 document.getElementById(
   'reset-view'
@@ -5693,30 +3611,20 @@ document.getElementById(
 
 document.addEventListener(
   'keydown',
-  function(
-    event
-  ){
+  function(event){
 
-    if(
-      event.key===
-      'Escape'
-    ){
+    if(event.key==='Escape'){
 
       closeAllModals();
 
       clearTarget();
 
-      if(
-        !tweening
-      ){
+      if(!tweening){
 
         cameraMode.textContent=
           'ORBIT';
-
       }
-
     }
-
   }
 );
 
@@ -5753,12 +3661,10 @@ window.addEventListener(
 var clock=
   new THREE.Clock();
 
-var frameCounter=
-  0;
+var frameCounter=0;
 
 var lastFpsTime=
   performance.now();
-
 
 function animate(){
 
@@ -5770,7 +3676,7 @@ function animate(){
     clock.getDelta();
 
 
-  /* STARS */
+  /* STAR FIELD */
 
   starsFar.rotation.y+=
     delta*.00018;
@@ -5803,26 +3709,23 @@ function animate(){
   nebulaCloudA.position.x=
     -135+
     Math.sin(
-      performance.now()*
-      .000035
+      performance.now()*.000035
     )*4;
 
   nebulaCloudB.position.x=
     160+
     Math.cos(
-      performance.now()*
-      .000028
+      performance.now()*.000028
     )*5;
 
   nebulaCloudC.position.y=
     125+
     Math.sin(
-      performance.now()*
-      .000025
+      performance.now()*.000025
     )*3;
 
 
-  /* ASTEROIDS */
+  /* ASTEROID BELT */
 
   asteroidBelt.rotation.y+=
     delta*.004;
@@ -5836,24 +3739,20 @@ function animate(){
   glowSprite.material.opacity=
     .88+
     Math.sin(
-      performance.now()*
-      .0012
+      performance.now()*.0012
     )*.08;
 
   outerGlow.material.opacity=
     .21+
     Math.sin(
-      performance.now()*
-      .0008
+      performance.now()*.0008
     )*.035;
 
 
-  /* PLANETS */
+  /* PROJECT PLANETS */
 
   projects.forEach(
-    function(
-      project
-    ){
+    function(project){
 
       project.angle+=
         delta*
@@ -5878,65 +3777,10 @@ function animate(){
   );
 
 
-  /* AGRO-01 ORBIT */
-
-  agroOrbit.angle+=
-    delta*
-    agroOrbit.speed;
-
-  var agroX=
-    Math.cos(
-      agroOrbit.angle
-    )*
-    agroOrbit.distance;
-
-  var agroZ=
-    Math.sin(
-      agroOrbit.angle
-    )*
-    agroOrbit.distance;
-
-  var agroY=
-    Math.sin(
-      agroOrbit.angle
-    )*
-    Math.sin(
-      agroOrbit.inclination
-    )*
-    agroOrbit.distance;
-
-  agroSatellite.position.set(
-    agroX,
-    agroY,
-    agroZ
-  );
-
-  /*
-    Spacecraft attitude.
-  */
-
-  agroSatellite.rotation.y+=
-    delta*.045;
-
-  agroSatellite.rotation.x=
-    Math.sin(
-      performance.now()*
-      .0003
-    )*.08;
-
-  agroSatellite.rotation.z=
-    Math.cos(
-      performance.now()*
-      .00024
-    )*.06;
-
-
   /* SKILLS */
 
   skills.forEach(
-    function(
-      skill
-    ){
+    function(skill){
 
       skill.mesh.rotation.y+=
         delta*.02;
@@ -5948,11 +3792,9 @@ function animate(){
   controls.update();
 
 
-  /* TARGET */
+  /* TARGET HUD */
 
-  if(
-    selectedObject
-  ){
+  if(selectedObject){
 
     positionTargetReticle();
 
@@ -5967,20 +3809,15 @@ function animate(){
       );
 
     rangeValue.textContent=
-      distance.toFixed(
-        1
-      );
+      distance.toFixed(1);
 
     targetMeta.textContent=
       getObjectType(
         selectedObject
       )+
       ' · STATUS ACTIVE · RANGE '+
-      distance.toFixed(
-        1
-      )+
+      distance.toFixed(1)+
       ' UNITS';
-
   }
 
 
@@ -5996,16 +3833,11 @@ function animate(){
   ){
 
     fpsValue.textContent=
-      String(
-        frameCounter
-      );
+      String(frameCounter);
 
-    frameCounter=
-      0;
+    frameCounter=0;
 
-    lastFpsTime=
-      now;
-
+    lastFpsTime=now;
   }
 
 
@@ -6013,7 +3845,6 @@ function animate(){
     scene,
     camera
   );
-
 }
 
 animate();
@@ -6032,10 +3863,7 @@ setTimeout(
       );
 
     if(hint){
-
-      hint.style.opacity=
-        '0';
-
+      hint.style.opacity='0';
     }
 
   },
@@ -6043,7 +3871,6 @@ setTimeout(
 );
 
 })();
-
 </script>
 
 </body>
