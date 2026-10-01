@@ -729,12 +729,12 @@ button,a{font-family:inherit}
   <div id="system-data" class="hud-panel">
     <div class="data-row">
       <span>Objects</span>
-      <span class="data-value" id="hud-objects">06</span>
+      <span class="data-value" id="hud-objects">07</span>
     </div>
 
     <div class="data-row">
       <span>Projects</span>
-      <span class="data-value">03</span>
+      <span class="data-value">04</span>
     </div>
 
     <div class="data-row">
@@ -933,14 +933,7 @@ button,a{font-family:inherit}
          href="https://johnnafuh.github.io/CrownCapital/index.html"
          target="_blank"
          rel="noopener noreferrer">
-        Launch Project
-      </a>
-
-      <a class="modal-btn"
-         href="https://github.com/JohnNafuh"
-         target="_blank"
-         rel="noopener noreferrer">
-        Source
+        View Site
       </a>
 
     </div>
@@ -998,14 +991,7 @@ button,a{font-family:inherit}
          href="https://johnnafuh.github.io/Fin-dash/"
          target="_blank"
          rel="noopener noreferrer">
-        Launch Project
-      </a>
-
-      <a class="modal-btn"
-         href="https://github.com/JohnNafuh"
-         target="_blank"
-         rel="noopener noreferrer">
-        Source
+        View Site
       </a>
 
     </div>
@@ -1062,14 +1048,64 @@ button,a{font-family:inherit}
          href="https://johnnafuh.github.io/recluse52-site/index.html"
          target="_blank"
          rel="noopener noreferrer">
-        Launch Project
+        View Site
       </a>
 
+    </div>
+  </div>
+</div>
+
+<!-- SPLITPOT -->
+
+<div class="modal" id="modal-splitpot">
+  <div class="modal-card">
+
+    <button class="close-modal">×</button>
+
+    <div class="modal-kicker">
+      Project Planet / Social Gaming
+    </div>
+
+    <div class="modal-title">SplitPot</div>
+
+    <div class="modal-copy">
+      SplitPot is a mobile-first platform for friendly competition. Two or
+      more players stake equal amounts into a shared pot, play their game
+      on-site or off, and the winner takes the pot. Simple, fair, and built
+      for players who back their skill.
+    </div>
+
+    <div class="modal-grid">
+
+      <div class="info-box">
+        <div class="info-label">Category</div>
+        <div class="info-value">Social Gaming</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Stakes</div>
+        <div class="info-value">Equal Naira Pots</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Games</div>
+        <div class="info-value">On-site / Off-site</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Platform</div>
+        <div class="info-value">Mobile Web</div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
       <a class="modal-btn"
-         href="https://github.com/JohnNafuh"
+         href="https://johnnafuh.github.io/splitpot/"
          target="_blank"
          rel="noopener noreferrer">
-        Source
+        View Site
       </a>
 
     </div>
@@ -1088,7 +1124,7 @@ button,a{font-family:inherit}
     <div class="modal-title">Projects</div>
 
     <div class="modal-copy">
-      Three active project environments orbit the central NAFUH node.
+      Four active project environments orbit the central NAFUH node.
       Select an object from the registry or directly from the 3D system.
     </div>
 
@@ -1119,6 +1155,16 @@ button,a{font-family:inherit}
           <div class="project-item-name">RECLUSE</div>
           <div class="project-item-type">
             Streetwear / Digital Commerce
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </div>
+
+      <div class="project-item" data-fly="splitpot">
+        <div>
+          <div class="project-item-name">SplitPot</div>
+          <div class="project-item-type">
+            Social Gaming / Mobile Web
           </div>
         </div>
         <div class="project-arrow">→</div>
@@ -1826,6 +1872,90 @@ function makeTexture(type){
 
 
   /* =====================================================
+     SPLITPOT — EMERALD PLANET
+  ===================================================== */
+
+  else if(type==='emerald'){
+
+    var emeraldGradient=ctx.createLinearGradient(
+      0,0,w,h
+    );
+
+    emeraldGradient.addColorStop(0,'#021a10');
+    emeraldGradient.addColorStop(.22,'#05442a');
+    emeraldGradient.addColorStop(.45,'#0b7a4a');
+    emeraldGradient.addColorStop(.62,'#14a865');
+    emeraldGradient.addColorStop(.82,'#063a24');
+    emeraldGradient.addColorStop(1,'#021a10');
+
+    ctx.fillStyle=emeraldGradient;
+    ctx.fillRect(0,0,w,h);
+
+
+    /*
+      Swirling emerald bands
+    */
+
+    for(var emBand=0;emBand<55;emBand++){
+
+      var ey=
+        (emBand/55)*h+
+        Math.sin(emBand*.9)*18;
+
+      ctx.strokeStyle=
+        emBand%4===0
+        ?'rgba(120,255,180,.40)'
+        :'rgba(2,40,24,.38)';
+
+      ctx.lineWidth=
+        Math.random()*6+2;
+
+      ctx.beginPath();
+
+      for(var ex=0;ex<=w;ex+=25){
+
+        var eWave=
+          ey+
+          Math.sin(
+            ex*.011+
+            emBand*.9
+          )*16;
+
+        if(ex===0){
+          ctx.moveTo(ex,eWave);
+        }else{
+          ctx.lineTo(ex,eWave);
+        }
+      }
+
+      ctx.stroke();
+    }
+
+
+    /*
+      Glowing crystal points
+    */
+
+    for(var crystal=0;crystal<300;crystal++){
+
+      var cx=Math.random()*w;
+      var cy=Math.random()*h;
+
+      var cr=Math.random()*4+.5;
+
+      ctx.fillStyle=
+        Math.random()>.4
+        ?'rgba(150,255,200,.55)'
+        :'rgba(0,30,18,.45)';
+
+      ctx.beginPath();
+      ctx.arc(cx,cy,cr,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+
+  /* =====================================================
      NEBULA
   ===================================================== */
 
@@ -2424,6 +2554,18 @@ var projects=[
     type:'STREETWEAR SYSTEM',
     emissive:0x420a03,
     emissiveIntensity:.22
+  },
+
+  {
+    name:'SplitPot',
+    distance:52,
+    radius:2.1,
+    speed:.03,
+    texture:'emerald',
+    modal:'modal-splitpot',
+    type:'SOCIAL GAMING SYSTEM',
+    emissive:0x04402a,
+    emissiveIntensity:.24
   }
 
 ];
@@ -2581,6 +2723,33 @@ projects.forEach(
 
 
     /* =====================================================
+       SPLITPOT ATMOSPHERE
+    ===================================================== */
+
+    if(project.texture==='emerald'){
+
+      var emeraldAtmosphere=new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+          project.radius*1.08,
+          48,
+          48
+        ),
+
+        new THREE.MeshBasicMaterial({
+          color:0x3dffa0,
+          transparent:true,
+          opacity:.07,
+          side:THREE.BackSide,
+          depthWrite:false
+        })
+      );
+
+      group.add(emeraldAtmosphere);
+    }
+
+
+    /* =====================================================
        FIN-DASH ATMOSPHERE
     ===================================================== */
 
@@ -2686,7 +2855,7 @@ projects.forEach(
     project.mesh=mesh;
 
     project.angle=
-      index*2.1;
+      index*1.57;
 
     /*
       Slightly different inclination gives the
@@ -2946,7 +3115,7 @@ interactive.push({
 
 
 /*
-  3 projects + 2 skills + Sun = 6 objects.
+  4 projects + 2 skills + Sun = 7 objects.
 */
 
 hudObjects.textContent=
@@ -3531,6 +3700,10 @@ document.querySelectorAll(
 
         if(target==='recluse'){
           flyTo(projects[2]);
+        }
+
+        if(target==='splitpot'){
+          flyTo(projects[3]);
         }
 
       }
