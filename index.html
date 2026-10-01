@@ -729,12 +729,12 @@ button,a{font-family:inherit}
   <div id="system-data" class="hud-panel">
     <div class="data-row">
       <span>Objects</span>
-      <span class="data-value" id="hud-objects">07</span>
+      <span class="data-value" id="hud-objects">08</span>
     </div>
 
     <div class="data-row">
       <span>Projects</span>
-      <span class="data-value">04</span>
+      <span class="data-value">05</span>
     </div>
 
     <div class="data-row">
@@ -1112,6 +1112,63 @@ button,a{font-family:inherit}
   </div>
 </div>
 
+<!-- AGRO OPPORTUNITY -->
+
+<div class="modal" id="modal-agro">
+  <div class="modal-card">
+
+    <button class="close-modal">×</button>
+
+    <div class="modal-kicker">
+      Project Planet / Agricultural Intelligence
+    </div>
+
+    <div class="modal-title">Agro Opportunity</div>
+
+    <div class="modal-copy">
+      Agro Opportunity is a location-based agricultural intelligence
+      platform. It analyzes livestock and farm produce consumption across
+      local markets to estimate demand, surface supply gaps, and point
+      agribusinesses toward their most promising opportunities.
+    </div>
+
+    <div class="modal-grid">
+
+      <div class="info-box">
+        <div class="info-label">Category</div>
+        <div class="info-value">AgriTech</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Analysis</div>
+        <div class="info-value">Location-Based</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Insight</div>
+        <div class="info-value">Demand &amp; Supply Gaps</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Output</div>
+        <div class="info-value">Opportunity Scores</div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <a class="modal-btn"
+         href="https://johnnafuh.github.io/Agro-opportunity/"
+         target="_blank"
+         rel="noopener noreferrer">
+        View Site
+      </a>
+
+    </div>
+  </div>
+</div>
+
 <!-- PROJECTS -->
 
 <div class="modal" id="modal-projects">
@@ -1124,7 +1181,7 @@ button,a{font-family:inherit}
     <div class="modal-title">Projects</div>
 
     <div class="modal-copy">
-      Four active project environments orbit the central NAFUH node.
+      Five active project environments orbit the central NAFUH node.
       Select an object from the registry or directly from the 3D system.
     </div>
 
@@ -1165,6 +1222,16 @@ button,a{font-family:inherit}
           <div class="project-item-name">SplitPot</div>
           <div class="project-item-type">
             Social Gaming / Mobile Web
+          </div>
+        </div>
+        <div class="project-arrow">→</div>
+      </div>
+
+      <div class="project-item" data-fly="agro">
+        <div>
+          <div class="project-item-name">Agro Opportunity</div>
+          <div class="project-item-type">
+            AgriTech / Market Intelligence
           </div>
         </div>
         <div class="project-arrow">→</div>
@@ -1956,6 +2023,87 @@ function makeTexture(type){
 
 
   /* =====================================================
+     AGRO OPPORTUNITY — SATURN-STYLE HARVEST PLANET
+  ===================================================== */
+
+  else if(type==='harvest'){
+
+    var harvestGradient=ctx.createLinearGradient(
+      0,0,0,h
+    );
+
+    harvestGradient.addColorStop(0,'#5a4a26');
+    harvestGradient.addColorStop(.18,'#a88b52');
+    harvestGradient.addColorStop(.35,'#d9c28a');
+    harvestGradient.addColorStop(.50,'#e8d7a4');
+    harvestGradient.addColorStop(.65,'#c9ac6c');
+    harvestGradient.addColorStop(.82,'#8f7a3e');
+    harvestGradient.addColorStop(1,'#4a3f20');
+
+    ctx.fillStyle=harvestGradient;
+    ctx.fillRect(0,0,w,h);
+
+
+    /*
+      Smooth Saturn-style gas bands
+    */
+
+    var bandColors=[
+      'rgba(240,222,170,.35)',
+      'rgba(150,124,64,.30)',
+      'rgba(122,128,62,.22)',
+      'rgba(214,180,110,.30)',
+      'rgba(96,78,38,.25)'
+    ];
+
+    for(var hBand=0;hBand<46;hBand++){
+
+      var hy=
+        (hBand/46)*h;
+
+      ctx.fillStyle=
+        bandColors[hBand%bandColors.length];
+
+      ctx.beginPath();
+      ctx.moveTo(0,hy);
+
+      for(var hx=0;hx<=w;hx+=32){
+
+        ctx.lineTo(
+          hx,
+          hy+Math.sin(hx*.006+hBand*1.3)*3
+        );
+      }
+
+      ctx.lineTo(w,hy+Math.random()*8+5);
+      ctx.lineTo(0,hy+Math.random()*8+5);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+
+    /*
+      Soft storm ovals
+    */
+
+    for(var storm=0;storm<6;storm++){
+
+      ctx.fillStyle='rgba(245,232,190,.20)';
+
+      ctx.beginPath();
+      ctx.ellipse(
+        Math.random()*w,
+        h*.3+Math.random()*h*.4,
+        Math.random()*30+18,
+        Math.random()*7+5,
+        0,0,Math.PI*2
+      );
+      ctx.fill();
+    }
+  }
+
+
+  /* =====================================================
      NEBULA
   ===================================================== */
 
@@ -2566,6 +2714,18 @@ var projects=[
     type:'SOCIAL GAMING SYSTEM',
     emissive:0x04402a,
     emissiveIntensity:.24
+  },
+
+  {
+    name:'Agro Opportunity',
+    distance:64,
+    radius:3.0,
+    speed:.025,
+    texture:'harvest',
+    modal:'modal-agro',
+    type:'AGRI-INTELLIGENCE SYSTEM',
+    emissive:0x3a2c08,
+    emissiveIntensity:.18
   }
 
 ];
@@ -2750,6 +2910,138 @@ projects.forEach(
 
 
     /* =====================================================
+       AGRO OPPORTUNITY ATMOSPHERE + SATURN RINGS
+    ===================================================== */
+
+    if(project.texture==='harvest'){
+
+      var harvestAtmosphere=new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+          project.radius*1.06,
+          48,
+          48
+        ),
+
+        new THREE.MeshBasicMaterial({
+          color:0xffc56a,
+          transparent:true,
+          opacity:.06,
+          side:THREE.BackSide,
+          depthWrite:false
+        })
+      );
+
+      group.add(harvestAtmosphere);
+
+
+      /*
+        Banded ring texture with a Cassini-style gap
+      */
+
+      var ringCanvas=document.createElement('canvas');
+
+      ringCanvas.width=512;
+      ringCanvas.height=8;
+
+      var rctx=ringCanvas.getContext('2d');
+
+      for(var rx=0;rx<512;rx++){
+
+        var t=rx/512;
+
+        var alpha=
+          .25+
+          Math.sin(rx*.35)*.08+
+          Math.random()*.18;
+
+        /* Cassini-style dark gap */
+        if(t>.58&&t<.64){
+          alpha=.03;
+        }
+
+        /* fade inner and outer edges */
+        if(t<.06){
+          alpha*=t/.06;
+        }
+
+        if(t>.92){
+          alpha*=(1-t)/.08;
+        }
+
+        var shade=
+          t<.58
+          ?'226,200,140'
+          :'190,165,110';
+
+        rctx.fillStyle=
+          'rgba('+shade+','+Math.max(alpha,0).toFixed(3)+')';
+
+        rctx.fillRect(rx,0,1,8);
+      }
+
+      var saturnRingTexture=
+        new THREE.CanvasTexture(ringCanvas);
+
+      var innerR=project.radius*1.3;
+      var outerR=project.radius*2.6;
+
+      var saturnRingGeometry=
+        new THREE.RingGeometry(
+          innerR,
+          outerR,
+          160,
+          1
+        );
+
+
+      /*
+        Remap UVs so the texture runs outward
+        from the planet instead of across the ring.
+      */
+
+      var ringPos=
+        saturnRingGeometry.attributes.position;
+
+      var ringUv=
+        saturnRingGeometry.attributes.uv;
+
+      var ringVec=new THREE.Vector3();
+
+      for(var ri=0;ri<ringPos.count;ri++){
+
+        ringVec.fromBufferAttribute(ringPos,ri);
+
+        ringUv.setXY(
+          ri,
+          (ringVec.length()-innerR)/(outerR-innerR),
+          .5
+        );
+      }
+
+      var saturnRing=new THREE.Mesh(
+
+        saturnRingGeometry,
+
+        new THREE.MeshBasicMaterial({
+          map:saturnRingTexture,
+          transparent:true,
+          side:THREE.DoubleSide,
+          depthWrite:false
+        })
+      );
+
+      saturnRing.rotation.x=
+        Math.PI/2.8;
+
+      saturnRing.rotation.y=
+        .22;
+
+      group.add(saturnRing);
+    }
+
+
+    /* =====================================================
        FIN-DASH ATMOSPHERE
     ===================================================== */
 
@@ -2855,7 +3147,7 @@ projects.forEach(
     project.mesh=mesh;
 
     project.angle=
-      index*1.57;
+      index*1.26;
 
     /*
       Slightly different inclination gives the
@@ -3115,7 +3407,7 @@ interactive.push({
 
 
 /*
-  4 projects + 2 skills + Sun = 7 objects.
+  5 projects + 2 skills + Sun = 8 objects.
 */
 
 hudObjects.textContent=
@@ -3704,6 +3996,10 @@ document.querySelectorAll(
 
         if(target==='splitpot'){
           flyTo(projects[3]);
+        }
+
+        if(target==='agro'){
+          flyTo(projects[4]);
         }
 
       }
