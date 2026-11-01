@@ -37,6 +37,9 @@ button,a{font-family:inherit}
   display:block;
   z-index:1;
   cursor:grab;
+  touch-action:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
 }
 #scene-canvas:active{cursor:grabbing}
 
@@ -240,6 +243,11 @@ button,a{font-family:inherit}
 
 #target-reticle{
   position:absolute;
+  left:0;
+  top:0;
+  will-change:transform;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
   width:74px;
   height:74px;
   transform:translate(-50%,-50%);
@@ -258,7 +266,6 @@ button,a{font-family:inherit}
   height:16px;
   border-color:rgba(105,220,255,.85);
   border-style:solid;
-  filter:drop-shadow(0 0 5px rgba(76,207,255,.45));
 }
 .reticle-corner.tl{top:0;left:0;border-width:1px 0 0 1px}
 .reticle-corner.tr{top:0;right:0;border-width:1px 1px 0 0}
@@ -1457,7 +1464,24 @@ controls.maxDistance=125;
 controls.enablePan=false;
 
 controls.rotateSpeed=.5;
-controls.zoomSpeed=.7;
+controls.zoomSpeed=
+  (
+    window.matchMedia&&
+    window.matchMedia('(pointer:coarse)').matches
+  )
+  ?1.25
+  :.7;
+
+/* stop iOS from zooming the page itself during pinch */
+['gesturestart','gesturechange','gestureend'].forEach(
+  function(name){
+    document.addEventListener(
+      name,
+      function(e){e.preventDefault();},
+      {passive:false}
+    );
+  }
+);
 
 
 /* =========================================================
@@ -1541,6 +1565,21 @@ function paintRealPlanet(type,ctx,w,h){
     blob(x+w,y,r,col,a);
   }
 
+  /* soft-edged ellipse, wraps across the texture seam */
+  function softEllipse(x,y,rx,ry,rgb,a){
+    for(var o=-1;o<=1;o++){
+      ctx.save();
+      ctx.translate(x+o*w,y);
+      ctx.scale(1,ry/rx);
+      var gd=ctx.createRadialGradient(0,0,0,0,0,rx);
+      gd.addColorStop(0,'rgba('+rgb+','+a+')');
+      gd.addColorStop(1,'rgba('+rgb+',0)');
+      ctx.fillStyle=gd;
+      ctx.fillRect(-rx,-rx,rx*2,rx*2);
+      ctx.restore();
+    }
+  }
+
   function bands(colors,count,alpha){
     for(var y=0;y<h;y+=2){
       var n=
@@ -1616,37 +1655,47 @@ function paintRealPlanet(type,ctx,w,h){
     return true;
   }
 
-  /* MARS: rust red, darker basins, dusty highlights, pale poles */
+  /* MARS: rusty orange, soft dark markings, dusty plains, pale poles */
   if(type==='volcanic'){
 
-    ctx.fillStyle='#b5532c';
+    var mg=ctx.createLinearGradient(0,0,0,h);
+    mg.addColorStop(0,'#cf7d4c');
+    mg.addColorStop(.5,'#c8532a');
+    mg.addColorStop(1,'#cf7d4c');
+    ctx.fillStyle=mg;
     ctx.fillRect(0,0,w,h);
 
-    for(var m=0;m<30;m++){
-      wblob(
-        rnd()*w,
-        h*(.25+rnd()*.5),
-        20+rnd()*50,
-        '#6b3322',
-        .5
+    for(var md=0;md<34;md++){
+      softEllipse(
+        rnd()*w,h*(.3+rnd()*.4),
+        40+rnd()*90,12+rnd()*22,
+        '88,36,22',.42
       );
     }
 
-    for(var d=0;d<25;d++){
-      wblob(
-        rnd()*w,
-        h*(.2+rnd()*.6),
-        15+rnd()*40,
-        '#d9854f',
-        .35
+    for(var ml=0;ml<30;ml++){
+      softEllipse(
+        rnd()*w,h*(.2+rnd()*.6),
+        60+rnd()*100,20+rnd()*30,
+        '236,168,116',.26
       );
     }
 
-    ctx.fillStyle='#f2ebe4';
-    ctx.globalAlpha=.85;
-    ctx.fillRect(0,0,w,h*.05);
-    ctx.fillRect(0,h*.95,w,h*.05);
-    ctx.globalAlpha=1;
+    for(var mgr=0;mgr<1500;mgr++){
+      wblob(rnd()*w,rnd()*h,1+rnd()*2.5,'#8f4022',.12);
+    }
+
+    var pn=ctx.createLinearGradient(0,0,0,h*.1);
+    pn.addColorStop(0,'rgba(245,240,235,.9)');
+    pn.addColorStop(1,'rgba(245,240,235,0)');
+    ctx.fillStyle=pn;
+    ctx.fillRect(0,0,w,h*.1);
+
+    var ps=ctx.createLinearGradient(0,h*.9,0,h);
+    ps.addColorStop(0,'rgba(245,240,235,0)');
+    ps.addColorStop(1,'rgba(245,240,235,.9)');
+    ctx.fillStyle=ps;
+    ctx.fillRect(0,h*.9,w,h*.1);
 
     return true;
   }
@@ -1734,7 +1783,7 @@ function paintRealPlanet(type,ctx,w,h){
   /* JUPITER: tan, cream and rust bands with the Great Red Spot */
   if(type==='jupiter'){
 
-    bands(['#e8d5b5','#c99a6b','#f0e2c8','#a8714a','#dcc29a','#8f5e3f','#efe0c4'],16,.92);
+    bands(['#e3c9a0','#c07a45','#efd9b3','#9a5a32','#d8b07c','#7d4a2c','#ead2aa'],16,.95);
 
     for(var jt=0;jt<30;jt++){
       ctx.globalAlpha=.2;
@@ -2504,6 +2553,26 @@ function makeTexture(type){
    STAR FIELD
 ========================================================= */
 
+/* Caps the on-screen size of points so stars and belt dust
+   never balloon into blurry squares when the camera is close. */
+function capPointSize(material,maxPx){
+
+  material.onBeforeCompile=function(shader){
+
+    shader.vertexShader=
+      shader.vertexShader.replace(
+        '#include <logdepthbuf_vertex>',
+        'gl_PointSize=min(gl_PointSize,'+
+        maxPx.toFixed(1)+');\n'+
+        '#include <logdepthbuf_vertex>'
+      );
+  };
+
+  material.customProgramCacheKey=function(){
+    return 'capPoints'+maxPx;
+  };
+}
+
 function createStars(
   count,
   size,
@@ -2561,6 +2630,8 @@ function createStars(
     sizeAttenuation:true,
     depthWrite:false
   });
+
+  capPointSize(material,3.2);
 
   var stars=new THREE.Points(
     geometry,
@@ -2661,6 +2732,8 @@ function createStarClusters(){
       depthWrite:false
     });
 
+    capPointSize(material,3.2);
+
     cluster.add(
       new THREE.Points(
         geometry,
@@ -2741,6 +2814,8 @@ function createGalaxyDust(){
     depthWrite:false
   });
 
+  capPointSize(material,3.2);
+
   var galaxy=new THREE.Points(
     geometry,
     material
@@ -2771,7 +2846,7 @@ var nebula=new THREE.Mesh(
     map:makeTexture('nebula'),
     side:THREE.BackSide,
     transparent:true,
-    opacity:.72,
+    opacity:.55,
     depthWrite:false
   })
 );
@@ -2837,21 +2912,21 @@ function createNebulaCloud(
 var nebulaCloudA=createNebulaCloud(
   new THREE.Vector3(-135,75,-210),
   new THREE.Vector3(230,150,1),
-  .24,
+  .09,
   'rgba(150,145,160,.30)'
 );
 
 var nebulaCloudB=createNebulaCloud(
   new THREE.Vector3(160,-65,-245),
   new THREE.Vector3(270,170,1),
-  .19,
+  .07,
   'rgba(140,135,150,.26)'
 );
 
 var nebulaCloudC=createNebulaCloud(
   new THREE.Vector3(45,125,-300),
   new THREE.Vector3(190,125,1),
-  .16,
+  .06,
   'rgba(155,148,140,.24)'
 );
 
@@ -3559,6 +3634,8 @@ function createAsteroidBelt(){
       depthWrite:false
     });
 
+  capPointSize(material,4.5);
+
   var belt=
     new THREE.Points(
       geometry,
@@ -3646,7 +3723,7 @@ skills.forEach(
         emissiveMap:makeTexture(
           index===0?'jupiter':'uranus'
         ),
-        emissiveIntensity:.22,
+        emissiveIntensity:.08,
         roughness:1,
         metalness:0
       })
@@ -3789,6 +3866,13 @@ function acquireTarget(obj){
     return;
   }
 
+  /* allow zooming in closer to whatever is locked */
+  controls.minDistance=
+    Math.max(
+      3,
+      (obj.isSun?5.2:(obj.radius||.55))*2.2
+    );
+
   selectedObject=obj;
 
   targetReadout.classList.add(
@@ -3874,11 +3958,11 @@ function positionTargetReticle(){
     (-projected.y*.5+.5)*
     window.innerHeight;
 
-  targetReticle.style.left=
-    x+'px';
-
-  targetReticle.style.top=
-    y+'px';
+  targetReticle.style.transform=
+    'translate3d('+
+    x.toFixed(1)+'px,'+
+    y.toFixed(1)+'px,0) '+
+    'translate(-50%,-50%)';
 
   targetReticle.classList.add(
     'active'
@@ -4075,6 +4159,8 @@ function resetView(){
     1000,
     function(){
 
+      controls.minDistance=8;
+
       cameraMode.textContent=
         'ORBIT';
     }
@@ -4098,6 +4184,7 @@ var pointerDown={
 };
 
 var dragging=false;
+var activePointers=0;
 
 function getPointerPosition(event){
 
@@ -4155,8 +4242,23 @@ function findObject(){
 }
 
 canvas.addEventListener(
+  'pointercancel',
+  function(){
+    activePointers=0;
+    dragging=true;
+  }
+);
+
+canvas.addEventListener(
   'pointerdown',
   function(event){
+
+    activePointers++;
+
+    if(activePointers>1){
+      dragging=true;
+      return;
+    }
 
     pointerDown.x=
       event.clientX;
@@ -4195,6 +4297,9 @@ canvas.addEventListener(
 canvas.addEventListener(
   'pointerup',
   function(event){
+
+    activePointers=
+      Math.max(0,activePointers-1);
 
     if(
       dragging||
