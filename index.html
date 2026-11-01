@@ -241,6 +241,40 @@ button,a{font-family:inherit}
   background:rgba(55,144,190,.10);
 }
 
+/* soft pulsing border glow, shown only when the view has drifted
+   away from the home position (see updateResetGlow) */
+#reset-view.attention{
+  border-color:rgba(102,203,244,.38);
+}
+#reset-view::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:4px;
+  border:1px solid rgba(120,214,255,.85);
+  box-shadow:
+    0 0 8px rgba(80,200,255,.55),
+    0 0 18px rgba(60,170,240,.28),
+    inset 0 0 8px rgba(80,200,255,.18);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .5s ease;
+  will-change:opacity;
+}
+#reset-view.attention::after{
+  animation:resetGlow 2.6s ease-in-out infinite;
+}
+@keyframes resetGlow{
+  0%,100%{opacity:.25}
+  50%{opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  #reset-view.attention::after{
+    animation:none;
+    opacity:.6;
+  }
+}
+
 #target-reticle{
   position:absolute;
   left:0;
@@ -1471,6 +1505,47 @@ controls.zoomSpeed=
   )
   ?1.25
   :.7;
+
+/* Reset View glows only when the view has drifted from home:
+   zoomed well in/out, orbited around, or locked on an object. */
+var resetViewBtn=document.getElementById('reset-view');
+var homeOffset=new THREE.Vector3(0,27,70);
+var homeDistance=homeOffset.length();
+var resetOffset=new THREE.Vector3();
+
+function updateResetGlow(){
+
+  if(!resetViewBtn){
+    return;
+  }
+
+  resetOffset
+    .copy(camera.position)
+    .sub(controls.target);
+
+  var zoomedAway=
+    Math.abs(
+      resetOffset.length()-homeDistance
+    )>18;
+
+  var orbitedAway=
+    resetOffset.angleTo(homeOffset)>.55;
+
+  var lockedAway=
+    controls.target.length()>3;
+
+  resetViewBtn.classList.toggle(
+    'attention',
+    zoomedAway||orbitedAway||lockedAway
+  );
+}
+
+controls.addEventListener(
+  'change',
+  updateResetGlow
+);
+
+updateResetGlow();
 
 /* stop iOS from zooming the page itself during pinch */
 ['gesturestart','gesturechange','gestureend'].forEach(
