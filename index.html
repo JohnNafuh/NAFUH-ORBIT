@@ -814,7 +814,7 @@ button,a{font-family:inherit}
   <div id="system-data" class="hud-panel">
     <div class="data-row">
       <span>Objects</span>
-      <span class="data-value" id="hud-objects">08</span>
+      <span class="data-value" id="hud-objects">10</span>
     </div>
 
     <div class="data-row">
@@ -1404,6 +1404,46 @@ button,a{font-family:inherit}
       Leadership is one of my skills, helping me guide ideas, coordinate
       execution, work with people and move projects from concept toward
       meaningful results.
+    </div>
+
+  </div>
+</div>
+
+<!-- UI/UX -->
+
+<div class="modal" id="modal-uiux">
+  <div class="modal-card">
+
+    <button class="close-modal">×</button>
+
+    <div class="modal-kicker">Skill Satellite</div>
+
+    <div class="modal-title">UI/UX Design</div>
+
+    <div class="modal-copy">
+      UI/UX design is one of my core skills. I shape interfaces that feel
+      clear and natural to use, thinking through flows, layouts and small
+      details so people can find their way without having to think.
+    </div>
+
+  </div>
+</div>
+
+<!-- WEB DEVELOPMENT -->
+
+<div class="modal" id="modal-webdev">
+  <div class="modal-card">
+
+    <button class="close-modal">×</button>
+
+    <div class="modal-kicker">Skill Satellite</div>
+
+    <div class="modal-title">Web Development</div>
+
+    <div class="modal-copy">
+      Web development is how I turn designs into working products. I build
+      responsive sites and apps and ship them live, taking an idea from the
+      first line of code all the way to a finished website.
     </div>
 
   </div>
@@ -3708,7 +3748,7 @@ projects.forEach(
     project.mesh=mesh;
 
     project.angle=
-      index*1.26;
+      index*2.4;
 
     /*
       Slightly different inclination gives the
@@ -3948,6 +3988,223 @@ skills.forEach(
 
 
 /* =========================================================
+   SKILL SATELLITES (UI/UX + WEB DEVELOPMENT)
+   Small spacecraft orbiting the Sun on tilted orbits.
+========================================================= */
+
+function createPanelTexture(){
+
+  var pc=document.createElement('canvas');
+
+  pc.width=128;
+  pc.height=64;
+
+  var pctx=pc.getContext('2d');
+
+  pctx.fillStyle='#0c2a5c';
+  pctx.fillRect(0,0,128,64);
+
+  pctx.strokeStyle='rgba(120,175,240,.65)';
+  pctx.lineWidth=1;
+
+  for(var gx=0;gx<=128;gx+=16){
+    pctx.beginPath();
+    pctx.moveTo(gx,0);
+    pctx.lineTo(gx,64);
+    pctx.stroke();
+  }
+
+  for(var gy=0;gy<=64;gy+=16){
+    pctx.beginPath();
+    pctx.moveTo(0,gy);
+    pctx.lineTo(128,gy);
+    pctx.stroke();
+  }
+
+  var pt=new THREE.CanvasTexture(pc);
+
+  pt.encoding=THREE.sRGBEncoding;
+
+  return pt;
+}
+
+var panelTexture=createPanelTexture();
+
+function buildSatellite(accent){
+
+  var g=new THREE.Group();
+
+  var foil=new THREE.MeshStandardMaterial({
+    color:0xd9b86a,
+    metalness:.35,
+    roughness:.45,
+    emissive:0x3a2c0c,
+    emissiveIntensity:.5
+  });
+
+  var panelMat=new THREE.MeshStandardMaterial({
+    map:panelTexture,
+    emissive:0x1a3f80,
+    emissiveIntensity:.35,
+    metalness:.2,
+    roughness:.5
+  });
+
+  var steel=new THREE.MeshStandardMaterial({
+    color:0xcfd6dc,
+    metalness:.3,
+    roughness:.4,
+    emissive:0x222a30,
+    emissiveIntensity:.4
+  });
+
+  g.add(
+    new THREE.Mesh(
+      new THREE.BoxGeometry(.5,.5,.7),
+      foil
+    )
+  );
+
+  var left=new THREE.Mesh(
+    new THREE.BoxGeometry(1.3,.03,.55),
+    panelMat
+  );
+
+  left.position.set(-.98,0,0);
+  g.add(left);
+
+  var right=left.clone();
+
+  right.position.set(.98,0,0);
+  g.add(right);
+
+  var dish=new THREE.Mesh(
+    new THREE.SphereGeometry(
+      .24,16,8,
+      0,Math.PI*2,
+      0,Math.PI/2
+    ),
+    steel
+  );
+
+  dish.rotation.x=Math.PI/2;
+  dish.position.set(0,0,.46);
+  g.add(dish);
+
+  var mast=new THREE.Mesh(
+    new THREE.CylinderGeometry(.012,.012,.38,6),
+    steel
+  );
+
+  mast.position.set(0,.42,-.1);
+  g.add(mast);
+
+  var beacon=new THREE.Mesh(
+    new THREE.SphereGeometry(.06,10,10),
+    new THREE.MeshBasicMaterial({color:accent})
+  );
+
+  beacon.position.set(0,.64,-.1);
+  g.add(beacon);
+
+  /* generous invisible tap target */
+  var hit=new THREE.Mesh(
+    new THREE.SphereGeometry(1.5,8,8),
+    new THREE.MeshBasicMaterial({
+      visible:false
+    })
+  );
+
+  g.add(hit);
+
+  g.scale.setScalar(1.1);
+
+  g.userData.beacon=beacon;
+
+  return g;
+}
+
+var satellites=[
+
+  {
+    name:'UI/UX Design',
+    modal:'modal-uiux',
+    radius:10,
+    tiltX:.55,
+    tiltZ:.25,
+    speed:.14,
+    angle:.8,
+    accent:0x7be0ff
+  },
+
+  {
+    name:'Web Development',
+    modal:'modal-webdev',
+    radius:11.2,
+    tiltX:-.6,
+    tiltZ:-.3,
+    speed:-.11,
+    angle:3.9,
+    accent:0xffc56a
+  }
+
+];
+
+var satTmp=new THREE.Vector3();
+var satFollow=new THREE.Vector3();
+
+function placeSatellite(sat){
+
+  satTmp
+    .set(
+      Math.cos(sat.angle)*sat.radius,
+      0,
+      Math.sin(sat.angle)*sat.radius
+    )
+    .applyEuler(sat.euler);
+
+  sat.mesh.position.copy(satTmp);
+}
+
+satellites.forEach(
+  function(sat){
+
+    sat.euler=
+      new THREE.Euler(
+        sat.tiltX,
+        0,
+        sat.tiltZ
+      );
+
+    sat.mesh=buildSatellite(sat.accent);
+
+    scene.add(sat.mesh);
+
+    createOrbitRing(
+      sat.radius,
+      .1,
+      sat.tiltX,
+      sat.tiltZ
+    );
+
+    placeSatellite(sat);
+
+    sat.group={
+      position:sat.mesh.position
+    };
+
+    sat.isStatic=true;
+    sat.isSatellite=true;
+
+    interactive.push({
+      mesh:sat.mesh,
+      obj:sat
+    });
+  }
+);
+
+
+/* =========================================================
    SUN OBJECT
 ========================================================= */
 
@@ -3979,7 +4236,7 @@ interactive.push({
 
 
 /*
-  5 projects + 2 skills + Sun = 8 objects.
+  5 projects + 2 skills + 2 satellites + Sun = 10 objects.
 */
 
 hudObjects.textContent=
@@ -4018,6 +4275,10 @@ function getObjectType(obj){
 
   if(obj.isSun){
     return 'CENTRAL STAR / CREATOR';
+  }
+
+  if(obj.isSatellite){
+    return 'SKILL SATELLITE';
   }
 
   if(obj.isStatic){
@@ -4991,6 +5252,52 @@ function animate(){
 
     }
   );
+
+
+  /* SATELLITES */
+
+  satellites.forEach(
+    function(sat){
+
+      sat.angle+=
+        delta*sat.speed;
+
+      placeSatellite(sat);
+
+      sat.mesh.rotation.y+=
+        delta*.45;
+
+      sat.mesh.userData.beacon.scale.setScalar(
+        .7+
+        Math.max(
+          0,
+          Math.sin(
+            performance.now()*.004+
+            sat.angle*3
+          )
+        )*.9
+      );
+    }
+  );
+
+  /* keep a locked satellite in view as it orbits */
+
+  if(
+    selectedObject&&
+    selectedObject.isSatellite&&
+    !tweening
+  ){
+
+    satFollow
+      .copy(selectedObject.group.position)
+      .sub(controls.target);
+
+    camera.position.add(satFollow);
+
+    controls.target.copy(
+      selectedObject.group.position
+    );
+  }
 
 
   /* SKILLS */
