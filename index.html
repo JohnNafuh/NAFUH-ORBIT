@@ -1699,6 +1699,127 @@ function paintRealPlanet(type,ctx,w,h){
     return true;
   }
 
+
+  /* SUN: granulated photosphere with sunspots */
+  if(type==='sun'){
+
+    ctx.fillStyle='#ffb830';
+    ctx.fillRect(0,0,w,h);
+
+    for(var g=0;g<140;g++){
+      wblob(rnd()*w,rnd()*h,25+rnd()*40,
+        rnd()>.5?'#ffd25a':'#f08a1e',.14);
+    }
+
+    for(var gr=0;gr<2600;gr++){
+      wblob(rnd()*w,rnd()*h,2+rnd()*6,
+        rnd()>.45?'#ffe27a':'#e0701a',.22);
+    }
+
+    for(var f=0;f<260;f++){
+      wblob(rnd()*w,rnd()*h,2+rnd()*5,'#fff3b0',.25);
+    }
+
+    for(var sp=0;sp<7;sp++){
+      var sx=rnd()*w;
+      var sy=h*(.35+rnd()*.3);
+      var sr=5+rnd()*9;
+      wblob(sx,sy,sr*1.9,'#a04a10',.45);
+      wblob(sx,sy,sr,'#4a1a05',.8);
+    }
+
+    return true;
+  }
+
+  /* JUPITER: tan, cream and rust bands with the Great Red Spot */
+  if(type==='jupiter'){
+
+    bands(['#e8d5b5','#c99a6b','#f0e2c8','#a8714a','#dcc29a','#8f5e3f','#efe0c4'],16,.92);
+
+    for(var jt=0;jt<30;jt++){
+      ctx.globalAlpha=.2;
+      ctx.fillStyle=rnd()>.5?'#fff4dc':'#7a4a2c';
+      ctx.beginPath();
+      ctx.ellipse(rnd()*w,h*(.1+rnd()*.8),30+rnd()*70,2+rnd()*4,0,0,Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha=1;
+    }
+
+    ctx.fillStyle='#e9d8bc';
+    ctx.beginPath();
+    ctx.ellipse(w*.3,h*.63,64,34,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#b4502e';
+    ctx.beginPath();
+    ctx.ellipse(w*.3,h*.63,52,26,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#c9694a';
+    ctx.beginPath();
+    ctx.ellipse(w*.3,h*.63,30,14,0,0,Math.PI*2);
+    ctx.fill();
+
+    return true;
+  }
+
+  /* URANUS: smooth pale cyan */
+  if(type==='uranus'){
+
+    var ug=ctx.createLinearGradient(0,0,0,h);
+    ug.addColorStop(0,'#bfeaec');
+    ug.addColorStop(.5,'#a3dde2');
+    ug.addColorStop(1,'#bfeaec');
+    ctx.fillStyle=ug;
+    ctx.fillRect(0,0,w,h);
+
+    bands(['#9fd8de','#b4e4e8','#a9dde2'],8,.35);
+
+    return true;
+  }
+
+  /* DEEP SPACE: faint, neutral Milky Way band instead of coloured clouds */
+  if(type==='nebula'){
+
+    function soft(x,y,r,rgb,a){
+      for(var o=-1;o<=1;o++){
+        var gx=x+o*w;
+        var gd=ctx.createRadialGradient(gx,y,0,gx,y,r);
+        gd.addColorStop(0,'rgba('+rgb+','+a+')');
+        gd.addColorStop(1,'rgba('+rgb+',0)');
+        ctx.fillStyle=gd;
+        ctx.fillRect(gx-r,y-r,r*2,r*2);
+      }
+    }
+
+    function bandY(x){
+      return h*.5+Math.sin((x/w)*Math.PI*2)*h*.18;
+    }
+
+    for(var mw=0;mw<320;mw++){
+      var mx=rnd()*w;
+      soft(mx,bandY(mx)+(rnd()-.5)*h*.12,30+rnd()*60,'214,204,190',.035);
+    }
+
+    for(var core=0;core<80;core++){
+      var cxm=rnd()*w;
+      soft(cxm,bandY(cxm)+(rnd()-.5)*h*.06,20+rnd()*35,'235,222,200',.04);
+    }
+
+    for(var dl=0;dl<70;dl++){
+      var dx=rnd()*w;
+      soft(dx,bandY(dx)+(rnd()-.5)*h*.07,14+rnd()*30,'0,0,0',.14);
+    }
+
+    for(var ms=0;ms<900;ms++){
+      var sx2=rnd()*w;
+      ctx.globalAlpha=.25+rnd()*.5;
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(sx2,bandY(sx2)+(rnd()-.5)*h*.22,1,1);
+      ctx.globalAlpha=1;
+    }
+
+    return true;
+  }
+
   return false;
 }
 
@@ -2455,7 +2576,7 @@ var starsFar=createStars(
   9000,
   .055,
   .48,
-  0xbfd8e8,
+  0xe6e2da,
   180,
   520
 );
@@ -2464,7 +2585,7 @@ var starsA=createStars(
   5200,
   .105,
   .78,
-  0xdff5ff,
+  0xfff4e6,
   105,
   370
 );
@@ -2612,7 +2733,7 @@ function createGalaxyDust(){
   );
 
   var material=new THREE.PointsMaterial({
-    color:0x91bce0,
+    color:0xd6dae6,
     size:.075,
     transparent:true,
     opacity:.24,
@@ -2717,21 +2838,21 @@ var nebulaCloudA=createNebulaCloud(
   new THREE.Vector3(-135,75,-210),
   new THREE.Vector3(230,150,1),
   .24,
-  'rgba(35,95,190,.34)'
+  'rgba(150,145,160,.30)'
 );
 
 var nebulaCloudB=createNebulaCloud(
   new THREE.Vector3(160,-65,-245),
   new THREE.Vector3(270,170,1),
   .19,
-  'rgba(68,61,190,.30)'
+  'rgba(140,135,150,.26)'
 );
 
 var nebulaCloudC=createNebulaCloud(
   new THREE.Vector3(45,125,-300),
   new THREE.Vector3(190,125,1),
   .16,
-  'rgba(25,125,190,.27)'
+  'rgba(155,148,140,.24)'
 );
 
 
@@ -3425,7 +3546,7 @@ function createAsteroidBelt(){
   var material=
     new THREE.PointsMaterial({
 
-      color:0xa8c3d1,
+      color:0x9a8f80,
 
       size:.075,
 
@@ -3517,8 +3638,17 @@ skills.forEach(
         32
       ),
 
-      new THREE.MeshBasicMaterial({
-        color:0xb8edff
+      new THREE.MeshStandardMaterial({
+        map:makeTexture(
+          index===0?'jupiter':'uranus'
+        ),
+        emissive:0xffffff,
+        emissiveMap:makeTexture(
+          index===0?'jupiter':'uranus'
+        ),
+        emissiveIntensity:.22,
+        roughness:1,
+        metalness:0
       })
     );
 
