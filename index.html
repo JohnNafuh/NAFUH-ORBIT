@@ -1508,6 +1508,200 @@ scene.add(sunLight);
    This fixes the previous shared-canvas problem.
 ========================================================= */
 
+
+/* =========================================================
+   REALISTIC PLANET PAINTING
+   Replaces the stylised texture types with real-world looks:
+   ocean=Earth, gold=Venus, volcanic=Mars,
+   emerald=Neptune, harvest=Saturn
+========================================================= */
+
+function paintRealPlanet(type,ctx,w,h){
+
+  var seed=11;
+
+  function rnd(){
+    seed=(seed*16807)%2147483647;
+    return seed/2147483647;
+  }
+
+  function blob(x,y,r,col,a){
+    ctx.globalAlpha=a;
+    ctx.fillStyle=col;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+
+  /* draw blobs across the seam so the texture wraps cleanly */
+  function wblob(x,y,r,col,a){
+    blob(x,y,r,col,a);
+    blob(x-w,y,r,col,a);
+    blob(x+w,y,r,col,a);
+  }
+
+  function bands(colors,count,alpha){
+    for(var y=0;y<h;y+=2){
+      var n=
+        Math.sin(y*.05)*.6+
+        Math.sin(y*.17+1.3)*.3+
+        (rnd()-.5)*.25;
+      var t=(y/h)*count+n;
+      var idx=((Math.floor(t)%colors.length)+colors.length)%colors.length;
+      ctx.globalAlpha=alpha;
+      ctx.fillStyle=colors[idx];
+      ctx.fillRect(0,y,w,2);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  /* EARTH: blue oceans, green and brown land, ice caps, clouds */
+  if(type==='ocean'){
+
+    var eg=ctx.createLinearGradient(0,0,0,h);
+    eg.addColorStop(0,'#e8f0f4');
+    eg.addColorStop(.12,'#2a6aa8');
+    eg.addColorStop(.5,'#1d5a9c');
+    eg.addColorStop(.88,'#2a6aa8');
+    eg.addColorStop(1,'#e8f0f4');
+    ctx.fillStyle=eg;
+    ctx.fillRect(0,0,w,h);
+
+    var land=['#3f7a34','#5b8c3c','#8a7d4a','#a39257','#4d6f36','#7a6a3c'];
+
+    for(var i=0;i<40;i++){
+      var lx=rnd()*w;
+      var ly=h*(.2+rnd()*.6);
+      var lr=10+rnd()*32;
+      for(var k=0;k<5;k++){
+        wblob(
+          lx+(rnd()-.5)*lr,
+          ly+(rnd()-.5)*lr*.6,
+          lr*(.4+rnd()*.6),
+          land[Math.floor(rnd()*land.length)],
+          .92
+        );
+      }
+    }
+
+    /* polar ice */
+    ctx.fillStyle='#eef4f7';
+    ctx.fillRect(0,0,w,h*.06);
+    ctx.fillRect(0,h*.94,w,h*.06);
+
+    /* clouds */
+    for(var c=0;c<70;c++){
+      wblob(rnd()*w,rnd()*h,8+rnd()*26,'#ffffff',.5);
+    }
+
+    return true;
+  }
+
+  /* VENUS: thick pale yellow-cream haze with faint swirls */
+  if(type==='gold'){
+
+    bands(['#f1dfb0','#e6cc91','#f5e6bd','#dcbd7e','#ecd9a6'],9,.85);
+
+    for(var v=0;v<45;v++){
+      wblob(
+        rnd()*w,
+        rnd()*h,
+        40+rnd()*60,
+        rnd()>.5?'#fff6dc':'#d4b270',
+        .1
+      );
+    }
+
+    return true;
+  }
+
+  /* MARS: rust red, darker basins, dusty highlights, pale poles */
+  if(type==='volcanic'){
+
+    ctx.fillStyle='#b5532c';
+    ctx.fillRect(0,0,w,h);
+
+    for(var m=0;m<30;m++){
+      wblob(
+        rnd()*w,
+        h*(.25+rnd()*.5),
+        20+rnd()*50,
+        '#6b3322',
+        .5
+      );
+    }
+
+    for(var d=0;d<25;d++){
+      wblob(
+        rnd()*w,
+        h*(.2+rnd()*.6),
+        15+rnd()*40,
+        '#d9854f',
+        .35
+      );
+    }
+
+    ctx.fillStyle='#f2ebe4';
+    ctx.globalAlpha=.85;
+    ctx.fillRect(0,0,w,h*.05);
+    ctx.fillRect(0,h*.95,w,h*.05);
+    ctx.globalAlpha=1;
+
+    return true;
+  }
+
+  /* NEPTUNE: deep blue bands with faint white cloud streaks */
+  if(type==='emerald'){
+
+    bands(['#1d3fb0','#2a5ad6','#153585','#3a72e0','#1f4aa8'],7,.9);
+
+    for(var st=0;st<18;st++){
+      ctx.globalAlpha=.18;
+      ctx.fillStyle='#cfe3ff';
+      ctx.beginPath();
+      ctx.ellipse(
+        rnd()*w,
+        h*(.15+rnd()*.7),
+        60+rnd()*100,
+        3+rnd()*3,
+        0,0,Math.PI*2
+      );
+      ctx.fill();
+      ctx.globalAlpha=1;
+    }
+
+    wblob(rnd()*w,h*.4,22,'#0a1d5c',.6);
+
+    return true;
+  }
+
+  /* SATURN: soft pale gold and tan bands */
+  if(type==='harvest'){
+
+    bands(['#e9d7a2','#d9bf85','#f3e6c0','#c8a870','#e2cb93','#f0dfb3'],12,.55);
+
+    for(var sp=0;sp<20;sp++){
+      ctx.globalAlpha=.12;
+      ctx.fillStyle='#fbf3da';
+      ctx.beginPath();
+      ctx.ellipse(
+        rnd()*w,
+        h*(.1+rnd()*.8),
+        40+rnd()*70,
+        2+rnd()*3,
+        0,0,Math.PI*2
+      );
+      ctx.fill();
+      ctx.globalAlpha=1;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 function makeTexture(type){
 
   var canvasTexture=document.createElement('canvas');
@@ -1521,6 +1715,10 @@ function makeTexture(type){
   var h=canvasTexture.height;
 
   ctx.clearRect(0,0,w,h);
+
+  if(paintRealPlanet(type,ctx,w,h)){
+    return new THREE.CanvasTexture(canvasTexture);
+  }
 
 
   /* =====================================================
@@ -2676,8 +2874,8 @@ var projects=[
     texture:'ocean',
     modal:'modal-fin',
     type:'PERSONAL FINANCE',
-    emissive:0x063e68,
-    emissiveIntensity:.25
+    emissive:0x0a2a4a,
+    emissiveIntensity:.05
   },
 
   {
@@ -2688,8 +2886,8 @@ var projects=[
     texture:'gold',
     modal:'modal-crown',
     type:'FINANCIAL SYSTEM',
-    emissive:0x633500,
-    emissiveIntensity:.24
+    emissive:0x3a2e10,
+    emissiveIntensity:.05
   },
 
   {
@@ -2700,8 +2898,8 @@ var projects=[
     texture:'volcanic',
     modal:'modal-recluse',
     type:'STREETWEAR SYSTEM',
-    emissive:0x420a03,
-    emissiveIntensity:.22
+    emissive:0x2a0c04,
+    emissiveIntensity:.05
   },
 
   {
@@ -2712,8 +2910,8 @@ var projects=[
     texture:'emerald',
     modal:'modal-splitpot',
     type:'SOCIAL GAMING SYSTEM',
-    emissive:0x04402a,
-    emissiveIntensity:.24
+    emissive:0x06124a,
+    emissiveIntensity:.05
   },
 
   {
@@ -2724,8 +2922,8 @@ var projects=[
     texture:'harvest',
     modal:'modal-agro',
     type:'AGRI-INTELLIGENCE SYSTEM',
-    emissive:0x3a2c08,
-    emissiveIntensity:.18
+    emissive:0x2a200c,
+    emissiveIntensity:.05
   }
 
 ];
@@ -2870,7 +3068,7 @@ projects.forEach(
         ),
 
         new THREE.MeshBasicMaterial({
-          color:0xff4010,
+          color:0xd98a5a,
           transparent:true,
           opacity:.055,
           side:THREE.BackSide,
@@ -2897,7 +3095,7 @@ projects.forEach(
         ),
 
         new THREE.MeshBasicMaterial({
-          color:0x3dffa0,
+          color:0x5b8cff,
           transparent:true,
           opacity:.07,
           side:THREE.BackSide,
@@ -3056,7 +3254,7 @@ projects.forEach(
         ),
 
         new THREE.MeshBasicMaterial({
-          color:0x55dfff,
+          color:0x6fb4ff,
           transparent:true,
           opacity:.08,
           side:THREE.BackSide,
