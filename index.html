@@ -1416,7 +1416,7 @@ button,a{font-family:inherit}
 
     <button class="close-modal">×</button>
 
-    <div class="modal-kicker">Skill Satellite</div>
+    <div class="modal-kicker">Skill Satellite / Kepler</div>
 
     <div class="modal-title">UI/UX Design</div>
 
@@ -1436,7 +1436,7 @@ button,a{font-family:inherit}
 
     <button class="close-modal">×</button>
 
-    <div class="modal-kicker">Skill Satellite</div>
+    <div class="modal-kicker">Skill Satellite / Seasat</div>
 
     <div class="modal-title">Web Development</div>
 
@@ -3988,8 +3988,9 @@ skills.forEach(
 
 
 /* =========================================================
-   SKILL SATELLITES (UI/UX + WEB DEVELOPMENT)
-   Small spacecraft orbiting the Sun on tilted orbits.
+   SKILL SATELLITES — KEPLER (UI/UX) + SEASAT (WEB DEVELOPMENT)
+   Free-floating spacecraft: they don't orbit anything,
+   they just drift and slowly tumble where they sit.
 ========================================================= */
 
 function createPanelTexture(){
@@ -4028,98 +4029,336 @@ function createPanelTexture(){
   return pt;
 }
 
+function createSlotTexture(){
+
+  var sc=document.createElement('canvas');
+
+  sc.width=256;
+  sc.height=64;
+
+  var sctx=sc.getContext('2d');
+
+  sctx.fillStyle='#dfe3e6';
+  sctx.fillRect(0,0,256,64);
+
+  sctx.fillStyle='rgba(60,70,80,.55)';
+
+  for(var i=0;i<256;i+=8){
+    sctx.fillRect(i,0,2,64);
+  }
+
+  sctx.fillStyle='rgba(60,70,80,.28)';
+
+  for(var j=0;j<64;j+=16){
+    sctx.fillRect(0,j,256,1);
+  }
+
+  var st=new THREE.CanvasTexture(sc);
+
+  st.encoding=THREE.sRGBEncoding;
+
+  return st;
+}
+
 var panelTexture=createPanelTexture();
+var slotTexture=createSlotTexture();
 
-function buildSatellite(accent){
+function satMaterials(){
 
+  return {
+
+    foil:new THREE.MeshStandardMaterial({
+      color:0xd9b86a,
+      metalness:.4,
+      roughness:.4,
+      emissive:0x3a2c0c,
+      emissiveIntensity:.55
+    }),
+
+    white:new THREE.MeshStandardMaterial({
+      color:0xe6eaee,
+      metalness:.2,
+      roughness:.5,
+      emissive:0x2a3036,
+      emissiveIntensity:.5
+    }),
+
+    dark:new THREE.MeshStandardMaterial({
+      color:0x2a2f36,
+      metalness:.3,
+      roughness:.6,
+      emissive:0x101418,
+      emissiveIntensity:.5
+    }),
+
+    panel:new THREE.MeshStandardMaterial({
+      map:panelTexture,
+      emissive:0xffffff,
+      emissiveMap:panelTexture,
+      emissiveIntensity:.18,
+      metalness:.2,
+      roughness:.5
+    })
+  };
+}
+
+function satAdd(group,mesh,x,y,z){
+
+  mesh.position.set(x,y,z);
+
+  group.add(mesh);
+
+  return mesh;
+}
+
+function satBeacon(group,color,x,y,z){
+
+  var b=new THREE.Mesh(
+    new THREE.SphereGeometry(.07,10,10),
+    new THREE.MeshBasicMaterial({color:color})
+  );
+
+  satAdd(group,b,x,y,z);
+
+  group.userData.beacon=b;
+}
+
+function satHitSphere(group,radius,x,y,z){
+
+  /* generous invisible tap target */
+  satAdd(
+    group,
+    new THREE.Mesh(
+      new THREE.SphereGeometry(radius,8,8),
+      new THREE.MeshBasicMaterial({visible:false})
+    ),
+    x,y,z
+  );
+}
+
+/* KEPLER: hexagonal bus, long sunshade barrel, aperture
+   plate, three fanned solar wings and a side dish. */
+
+function buildKepler(){
+
+  var m=satMaterials();
   var g=new THREE.Group();
 
-  var foil=new THREE.MeshStandardMaterial({
-    color:0xd9b86a,
-    metalness:.35,
-    roughness:.45,
-    emissive:0x3a2c0c,
-    emissiveIntensity:.5
-  });
+  satAdd(g,
+    new THREE.Mesh(
+      new THREE.CylinderGeometry(.55,.55,1.1,6),
+      m.foil
+    ),0,0,0);
 
-  var panelMat=new THREE.MeshStandardMaterial({
-    map:panelTexture,
-    emissive:0x1a3f80,
-    emissiveIntensity:.35,
+  satAdd(g,
+    new THREE.Mesh(
+      new THREE.CylinderGeometry(.62,.62,.35,6),
+      m.dark
+    ),0,-.72,0);
+
+  satAdd(g,
+    new THREE.Mesh(
+      new THREE.CylinderGeometry(.72,.6,.95,32,1,true),
+      new THREE.MeshStandardMaterial({
+        color:0xcfd5da,
+        metalness:.2,
+        roughness:.55,
+        emissive:0x2a3036,
+        emissiveIntensity:.45,
+        side:THREE.DoubleSide
+      })
+    ),0,1.0,0);
+
+  var rim=new THREE.Mesh(
+    new THREE.TorusGeometry(.72,.03,8,32),
+    m.white
+  );
+
+  rim.rotation.x=Math.PI/2;
+
+  satAdd(g,rim,0,1.47,0);
+
+  var plate=new THREE.Mesh(
+    new THREE.CircleGeometry(.58,32),
+    new THREE.MeshStandardMaterial({
+      color:0x0a1830,
+      emissive:0x1d5fb0,
+      emissiveIntensity:.7,
+      roughness:.2,
+      side:THREE.DoubleSide
+    })
+  );
+
+  plate.rotation.x=-Math.PI/2;
+
+  satAdd(g,plate,0,.58,0);
+
+  /* three solar wings fanned at 120 degrees */
+  for(var i=0;i<3;i++){
+
+    var a=i*Math.PI*2/3;
+
+    var wing=new THREE.Mesh(
+      new THREE.BoxGeometry(.95,.03,1.2),
+      m.panel
+    );
+
+    wing.rotation.order='YXZ';
+    wing.rotation.y=a;
+    wing.rotation.x=.1;
+
+    satAdd(g,wing,
+      Math.sin(a)*1.2,
+      -.62,
+      Math.cos(a)*1.2
+    );
+  }
+
+  /* high-gain antenna on a boom, in the gap between wings */
+  var boom=new THREE.Mesh(
+    new THREE.CylinderGeometry(.02,.02,.5,6),
+    m.white
+  );
+
+  boom.rotation.x=Math.PI/2;
+
+  satAdd(g,boom,0,-.15,-.8);
+
+  var dish=new THREE.Mesh(
+    new THREE.SphereGeometry(.24,16,8,0,Math.PI*2,0,Math.PI/2),
+    m.white
+  );
+
+  dish.rotation.x=-Math.PI/2;
+
+  satAdd(g,dish,0,-.15,-1.05);
+
+  satBeacon(g,0x7be0ff,0,1.52,.72);
+
+  satHitSphere(g,2.0,0,0,0);
+
+  g.scale.setScalar(1.3);
+
+  return g;
+}
+
+/* SEASAT: long bus, slotted radar antenna underneath,
+   big rear solar panel on a mast, nose dish, whip antennas. */
+
+function buildSeasat(){
+
+  var m=satMaterials();
+  var g=new THREE.Group();
+
+  var bus=new THREE.Mesh(
+    new THREE.CylinderGeometry(.34,.34,1.5,16),
+    m.white
+  );
+
+  bus.rotation.z=Math.PI/2;
+
+  satAdd(g,bus,0,0,0);
+
+  var band=new THREE.Mesh(
+    new THREE.CylinderGeometry(.36,.36,.25,16),
+    m.foil
+  );
+
+  band.rotation.z=Math.PI/2;
+
+  satAdd(g,band,-.35,0,0);
+
+  var engine=new THREE.Mesh(
+    new THREE.CylinderGeometry(.26,.34,.3,16),
+    m.dark
+  );
+
+  engine.rotation.z=Math.PI/2;
+
+  satAdd(g,engine,-.9,0,0);
+
+  /* slotted SAR antenna */
+  var antennaMat=new THREE.MeshStandardMaterial({
+    map:slotTexture,
+    emissive:0x7bd0ff,
+    emissiveIntensity:.1,
     metalness:.2,
     roughness:.5
   });
 
-  var steel=new THREE.MeshStandardMaterial({
-    color:0xcfd6dc,
-    metalness:.3,
-    roughness:.4,
-    emissive:0x222a30,
-    emissiveIntensity:.4
+  satAdd(g,
+    new THREE.Mesh(
+      new THREE.BoxGeometry(2.7,.05,.62),
+      antennaMat
+    ),0,-.55,0);
+
+  [-.8,.8].forEach(function(x){
+
+    satAdd(g,
+      new THREE.Mesh(
+        new THREE.CylinderGeometry(.02,.02,.25,6),
+        m.dark
+      ),x,-.4,0);
   });
 
-  g.add(
-    new THREE.Mesh(
-      new THREE.BoxGeometry(.5,.5,.7),
-      foil
-    )
-  );
-
-  var left=new THREE.Mesh(
-    new THREE.BoxGeometry(1.3,.03,.55),
-    panelMat
-  );
-
-  left.position.set(-.98,0,0);
-  g.add(left);
-
-  var right=left.clone();
-
-  right.position.set(.98,0,0);
-  g.add(right);
-
-  var dish=new THREE.Mesh(
-    new THREE.SphereGeometry(
-      .24,16,8,
-      0,Math.PI*2,
-      0,Math.PI/2
-    ),
-    steel
-  );
-
-  dish.rotation.x=Math.PI/2;
-  dish.position.set(0,0,.46);
-  g.add(dish);
-
+  /* solar panel on a mast */
   var mast=new THREE.Mesh(
-    new THREE.CylinderGeometry(.012,.012,.38,6),
-    steel
+    new THREE.CylinderGeometry(.025,.025,.5,6),
+    m.white
   );
 
-  mast.position.set(0,.42,-.1);
-  g.add(mast);
+  mast.rotation.z=Math.PI/2;
 
-  var beacon=new THREE.Mesh(
-    new THREE.SphereGeometry(.06,10,10),
-    new THREE.MeshBasicMaterial({color:accent})
+  satAdd(g,mast,-1.3,0,0);
+
+  var array=new THREE.Mesh(
+    new THREE.BoxGeometry(1.0,.03,2.0),
+    m.panel
   );
 
-  beacon.position.set(0,.64,-.1);
-  g.add(beacon);
+  array.rotation.x=.35;
 
-  /* generous invisible tap target */
-  var hit=new THREE.Mesh(
-    new THREE.SphereGeometry(1.5,8,8),
-    new THREE.MeshBasicMaterial({
-      visible:false
-    })
+  satAdd(g,array,-1.85,0,0);
+
+  /* nose altimeter dish */
+  var feed=new THREE.Mesh(
+    new THREE.CylinderGeometry(.015,.015,.25,6),
+    m.white
   );
 
-  g.add(hit);
+  feed.rotation.z=Math.PI/2;
 
-  g.scale.setScalar(1.1);
+  satAdd(g,feed,.9,0,0);
 
-  g.userData.beacon=beacon;
+  var nose=new THREE.Mesh(
+    new THREE.SphereGeometry(.26,16,8,0,Math.PI*2,0,Math.PI/2),
+    m.white
+  );
+
+  nose.rotation.z=-Math.PI/2;
+
+  satAdd(g,nose,.78,0,0);
+
+  /* scatterometer whip antennas */
+  [1,-1].forEach(function(side){
+
+    var whip=new THREE.Mesh(
+      new THREE.BoxGeometry(1.0,.02,.1),
+      m.dark
+    );
+
+    whip.rotation.y=.6*side;
+
+    satAdd(g,whip,-.2,.42,.45*side);
+  });
+
+  satBeacon(g,0xffc56a,.2,.4,0);
+
+  satHitSphere(g,2.4,-.5,0,0);
+
+  g.userData.pulse=antennaMat;
+
+  g.scale.setScalar(1.2);
 
   return g;
 }
@@ -4129,65 +4368,42 @@ var satellites=[
   {
     name:'UI/UX Design',
     modal:'modal-uiux',
-    radius:10,
-    tiltX:.55,
+    home:new THREE.Vector3(-30,14,44),
+    spin:.22,
+    tiltX:.35,
     tiltZ:.25,
-    speed:.14,
-    angle:.8,
-    accent:0x7be0ff
+    phase:0,
+    build:buildKepler
   },
 
   {
     name:'Web Development',
     modal:'modal-webdev',
-    radius:11.2,
-    tiltX:-.6,
-    tiltZ:-.3,
-    speed:-.11,
-    angle:3.9,
-    accent:0xffc56a
+    home:new THREE.Vector3(48,-12,-20),
+    spin:-.18,
+    tiltX:-.3,
+    tiltZ:-.35,
+    phase:2.1,
+    build:buildSeasat
   }
 
 ];
 
-var satTmp=new THREE.Vector3();
 var satFollow=new THREE.Vector3();
-
-function placeSatellite(sat){
-
-  satTmp
-    .set(
-      Math.cos(sat.angle)*sat.radius,
-      0,
-      Math.sin(sat.angle)*sat.radius
-    )
-    .applyEuler(sat.euler);
-
-  sat.mesh.position.copy(satTmp);
-}
 
 satellites.forEach(
   function(sat){
 
-    sat.euler=
-      new THREE.Euler(
-        sat.tiltX,
-        0,
-        sat.tiltZ
-      );
+    sat.mesh=sat.build();
 
-    sat.mesh=buildSatellite(sat.accent);
+    /* yaw spin plus a fixed tilt makes it precess as it turns */
+    sat.mesh.rotation.order='YXZ';
+    sat.mesh.rotation.x=sat.tiltX;
+    sat.mesh.rotation.z=sat.tiltZ;
+
+    sat.mesh.position.copy(sat.home);
 
     scene.add(sat.mesh);
-
-    createOrbitRing(
-      sat.radius,
-      .1,
-      sat.tiltX,
-      sat.tiltZ
-    );
-
-    placeSatellite(sat);
 
     sat.group={
       position:sat.mesh.position
@@ -4715,6 +4931,20 @@ function getPointerPosition(event){
     rect.height)*2+1;
 }
 
+function isInside(node,root){
+
+  while(node){
+
+    if(node===root){
+      return true;
+    }
+
+    node=node.parent;
+  }
+
+  return false;
+}
+
 function findObject(){
 
   raycaster.setFromCamera(
@@ -4777,8 +5007,7 @@ function findObject(){
   for(var i=0;i<interactive.length;i++){
 
     if(
-      interactive[i].mesh===hit ||
-      interactive[i].mesh.children.indexOf(hit)!==-1
+      isInside(hit,interactive[i].mesh)
     ){
 
       return interactive[i];
@@ -5143,6 +5372,11 @@ var frameCounter=0;
 var lastFpsTime=
   performance.now();
 
+/* Orbiting pauses (with a soft ease) while something is being
+   viewed: a locked planet/skill/satellite or any open modal. */
+var orbitMotion=1;
+var satClock=0;
+
 function animate(){
 
   requestAnimationFrame(
@@ -5151,6 +5385,21 @@ function animate(){
 
   var delta=
     clock.getDelta();
+
+  var viewing=
+    !!selectedObject||
+    !!document.querySelector('.modal.active');
+
+  orbitMotion+=
+    ((viewing?0:1)-orbitMotion)*
+    Math.min(1,delta*4);
+
+  if(orbitMotion<.002){
+    orbitMotion=0;
+  }
+
+  var orbitDelta=
+    delta*orbitMotion;
 
 
   /* STAR FIELD */
@@ -5205,7 +5454,7 @@ function animate(){
   /* ASTEROID BELT */
 
   asteroidBelt.rotation.y+=
-    delta*.004;
+    orbitDelta*.004;
 
 
   /* SUN */
@@ -5232,7 +5481,7 @@ function animate(){
     function(project){
 
       project.angle+=
-        delta*
+        orbitDelta*
         project.speed;
 
       project.group.position.x=
@@ -5254,33 +5503,45 @@ function animate(){
   );
 
 
-  /* SATELLITES */
+  /* SATELLITES (free-floating: gentle drift + slow tumble) */
+
+  satClock+=orbitDelta;
+
+  var satTime=performance.now()*.001;
 
   satellites.forEach(
     function(sat){
 
-      sat.angle+=
-        delta*sat.speed;
-
-      placeSatellite(sat);
+      sat.mesh.position.set(
+        sat.home.x+Math.sin(satClock*.21+sat.phase)*1.1,
+        sat.home.y+Math.sin(satClock*.33+sat.phase)*.8,
+        sat.home.z+Math.cos(satClock*.17+sat.phase)*1.1
+      );
 
       sat.mesh.rotation.y+=
-        delta*.45;
+        orbitDelta*sat.spin;
 
       sat.mesh.userData.beacon.scale.setScalar(
         .7+
         Math.max(
           0,
-          Math.sin(
-            performance.now()*.004+
-            sat.angle*3
-          )
+          Math.sin(satTime*4+sat.phase*3)
         )*.9
       );
+
+      if(sat.mesh.userData.pulse){
+
+        sat.mesh.userData.pulse.emissiveIntensity=
+          .1+
+          Math.max(
+            0,
+            Math.sin(satTime*2.2)
+          )*.4;
+      }
     }
   );
 
-  /* keep a locked satellite in view as it orbits */
+  /* keep a locked satellite in view as it drifts */
 
   if(
     selectedObject&&
