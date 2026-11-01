@@ -302,24 +302,22 @@ button,a{font-family:inherit}
   position:absolute;
   left:0;
   top:0;
-  padding:3px 7px;
-  font-size:9px;
-  letter-spacing:1.6px;
+  padding:0;
+  font-size:7px;
+  letter-spacing:1.4px;
   text-transform:uppercase;
   white-space:nowrap;
-  color:rgba(196,230,246,.82);
-  background:rgba(3,12,22,.55);
-  border:1px solid rgba(99,180,220,.2);
-  border-radius:3px;
+  color:rgba(190,222,240,.9);
   opacity:0;
-  transition:opacity .35s ease;
+  transition:opacity .4s ease;
   will-change:transform;
 }
-.planet-label.show{opacity:1}
+.planet-label.show{opacity:.5}
 .planet-label.skill{
-  color:rgba(180,215,235,.62);
-  font-size:8px;
+  font-size:6px;
+  color:rgba(180,212,232,.8);
 }
+.planet-label.skill.show{opacity:.38}
 
 #target-reticle{
   position:absolute;
@@ -4346,7 +4344,7 @@ function updateLabels(){
         labelVec.z<1 &&
         Math.abs(labelVec.x)<1.05 &&
         Math.abs(labelVec.y)<1.05 &&
-        dist>16 &&
+        dist>26 &&
         dist<150 &&
         selectedObject!==item.obj;
 
@@ -4362,7 +4360,7 @@ function updateLabels(){
         var y=
           (-labelVec.y*.5+.5)*
           window.innerHeight+
-          r+12;
+          r+7;
 
         item.el.style.transform=
           'translate3d('+
