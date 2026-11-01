@@ -1559,6 +1559,39 @@ var homeOffset=new THREE.Vector3(0,27,70);
 var homeDistance=homeOffset.length();
 var resetOffset=new THREE.Vector3();
 
+/* Home view = fully zoomed out so every planet, the skills,
+   the belt and the layout are all visible, on any screen. */
+function computeHomeDistance(){
+
+  var tanV=
+    Math.tan(
+      THREE.MathUtils.degToRad(
+        camera.fov/2
+      )
+    );
+
+  var fit=
+    74/(tanV*camera.aspect)*1.04;
+
+  return Math.min(
+    Math.max(fit,88),
+    380
+  );
+}
+
+function applyHomeDistance(){
+
+  homeDistance=computeHomeDistance();
+
+  controls.maxDistance=homeDistance;
+}
+
+applyHomeDistance();
+
+camera.position
+  .copy(homeOffset)
+  .setLength(homeDistance);
+
 function updateResetGlow(){
 
   if(!resetViewBtn){
@@ -1572,7 +1605,7 @@ function updateResetGlow(){
   var zoomedAway=
     Math.abs(
       resetOffset.length()-homeDistance
-    )>18;
+    )>homeDistance*.2;
 
   var orbitedAway=
     resetOffset.angleTo(homeOffset)>.55;
@@ -2008,7 +2041,20 @@ function makeTexture(type){
   ctx.clearRect(0,0,w,h);
 
   if(paintRealPlanet(type,ctx,w,h)){
-    return new THREE.CanvasTexture(canvasTexture);
+
+    var painted=new THREE.CanvasTexture(canvasTexture);
+
+    /* planet colour maps are sRGB, so colours come out true
+       instead of pale on both desktop and phone screens */
+    if(
+      type!=='sun' &&
+      type!=='nebula'
+    ){
+      painted.encoding=THREE.sRGBEncoding;
+      painted.anisotropy=4;
+    }
+
+    return painted;
   }
 
 
@@ -2959,7 +3005,7 @@ var galaxyDust=createGalaxyDust();
 
 var nebula=new THREE.Mesh(
   new THREE.SphereGeometry(
-    310,
+    700,
     64,
     64
   ),
@@ -3354,11 +3400,11 @@ projects.forEach(
           ? .10
           : .015,
 
-        emissive:
-          project.emissive,
+        emissive:0xffffff,
 
-        emissiveIntensity:
-          project.emissiveIntensity
+        emissiveMap:planetTexture,
+
+        emissiveIntensity:.2
       });
 
 
@@ -3844,7 +3890,7 @@ skills.forEach(
         emissiveMap:makeTexture(
           index===0?'jupiter':'uranus'
         ),
-        emissiveIntensity:.08,
+        emissiveIntensity:.16,
         roughness:1,
         metalness:0
       })
@@ -4261,11 +4307,9 @@ function resetView(){
   clearTarget();
 
   var homePos=
-    new THREE.Vector3(
-      0,
-      27,
-      70
-    );
+    homeOffset
+      .clone()
+      .setLength(homeDistance);
 
   var homeTarget=
     new THREE.Vector3(
@@ -4345,7 +4389,7 @@ function updateLabels(){
         Math.abs(labelVec.x)<1.05 &&
         Math.abs(labelVec.y)<1.05 &&
         dist>26 &&
-        dist<150 &&
+        dist<homeDistance*1.6 &&
         selectedObject!==item.obj;
 
       if(visible){
@@ -4431,7 +4475,39 @@ function findObject(){
     );
 
   if(!hits.length){
-    return null;
+
+    /* forgiving tap: nearest object within ~30px of the touch */
+    var best=null;
+    var bestDist=30;
+    var tapX=
+      (pointer.x*.5+.5)*window.innerWidth;
+    var tapY=
+      (-pointer.y*.5+.5)*window.innerHeight;
+    var tmp=new THREE.Vector3();
+
+    interactive.forEach(
+      function(item){
+
+        item.mesh.getWorldPosition(tmp);
+        tmp.project(camera);
+
+        if(tmp.z>1){
+          return;
+        }
+
+        var d=Math.hypot(
+          (tmp.x*.5+.5)*window.innerWidth-tapX,
+          (-tmp.y*.5+.5)*window.innerHeight-tapY
+        );
+
+        if(d<bestDist){
+          bestDist=d;
+          best=item;
+        }
+      }
+    );
+
+    return best;
   }
 
   var hit=
@@ -4761,6 +4837,32 @@ window.addEventListener(
       window.innerWidth,
       window.innerHeight
     );
+
+    var prevMax=controls.maxDistance;
+
+    var offNow=
+      camera.position
+        .clone()
+        .sub(controls.target);
+
+    var wasHome=
+      !selectedObject &&
+      offNow.length()>=prevMax-1;
+
+    applyHomeDistance();
+
+    if(wasHome){
+
+      camera.position
+        .copy(controls.target)
+        .add(
+          offNow.setLength(
+            homeDistance
+          )
+        );
+
+      controls.update();
+    }
 
     positionTargetReticle();
 
