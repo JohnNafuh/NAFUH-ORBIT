@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>NAFUH ORBIT — Digital Exploration System</title>
+<meta name="description" content="Interactive 3D portfolio of John Nafuh: web design, UI/UX and graphic design. Explore each project as a planet.">
+<meta name="theme-color" content="#000208">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NAFUH ORBIT">
+<meta property="og:title" content="NAFUH ORBIT — Digital Exploration System">
+<meta property="og:description" content="Interactive 3D portfolio of John Nafuh. Fly through the system and explore each project as a planet.">
+<meta property="og:url" content="https://johnnafuh.github.io/NAFUH-ORBIT/">
+<meta property="og:image" content="https://johnnafuh.github.io/NAFUH-ORBIT/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NAFUH ORBIT — Digital Exploration System">
+<meta name="twitter:description" content="Interactive 3D portfolio of John Nafuh. Fly through the system and explore each project as a planet.">
+<meta name="twitter:image" content="https://johnnafuh.github.io/NAFUH-ORBIT/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -273,6 +287,38 @@ button,a{font-family:inherit}
     animation:none;
     opacity:.6;
   }
+}
+
+
+/* floating planet labels */
+#planet-labels{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  overflow:hidden;
+}
+.planet-label{
+  position:absolute;
+  left:0;
+  top:0;
+  padding:3px 7px;
+  font-size:9px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  white-space:nowrap;
+  color:rgba(196,230,246,.82);
+  background:rgba(3,12,22,.55);
+  border:1px solid rgba(99,180,220,.2);
+  border-radius:3px;
+  opacity:0;
+  transition:opacity .35s ease;
+  will-change:transform;
+}
+.planet-label.show{opacity:1}
+.planet-label.skill{
+  color:rgba(180,215,235,.62);
+  font-size:8px;
 }
 
 #target-reticle{
@@ -797,6 +843,8 @@ button,a{font-family:inherit}
 
   <button id="reset-view">Reset View</button>
 
+  <div id="planet-labels"></div>
+
   <div id="target-reticle">
     <div class="reticle-corner tl"></div>
     <div class="reticle-corner tr"></div>
@@ -1096,9 +1144,9 @@ button,a{font-family:inherit}
   </div>
 </div>
 
-<!-- SPLITPOT -->
+<!-- CHA-CHA -->
 
-<div class="modal" id="modal-splitpot">
+<div class="modal" id="modal-cha-cha">
   <div class="modal-card">
 
     <button class="close-modal">×</button>
@@ -1107,10 +1155,10 @@ button,a{font-family:inherit}
       Project Planet / Social Gaming
     </div>
 
-    <div class="modal-title">SplitPot</div>
+    <div class="modal-title">CHA-CHA</div>
 
     <div class="modal-copy">
-      SplitPot is a mobile-first platform for friendly competition. Two or
+      CHA-CHA is a mobile-first platform for friendly competition. Two or
       more players stake equal amounts into a shared pot, play their game
       on-site or off, and the winner takes the pot. Simple, fair, and built
       for players who back their skill.
@@ -1143,7 +1191,7 @@ button,a{font-family:inherit}
     <div class="modal-actions">
 
       <a class="modal-btn"
-         href="https://johnnafuh.github.io/splitpot/"
+         href="https://johnnafuh.github.io/CHA-CHA/"
          target="_blank"
          rel="noopener noreferrer">
         View Site
@@ -1258,9 +1306,9 @@ button,a{font-family:inherit}
         <div class="project-arrow">→</div>
       </div>
 
-      <div class="project-item" data-fly="splitpot">
+      <div class="project-item" data-fly="cha-cha">
         <div>
-          <div class="project-item-name">SplitPot</div>
+          <div class="project-item-name">CHA-CHA</div>
           <div class="project-item-type">
             Social Gaming / Mobile Web
           </div>
@@ -2382,7 +2430,7 @@ function makeTexture(type){
 
 
   /* =====================================================
-     SPLITPOT — EMERALD PLANET
+     CHA-CHA — EMERALD PLANET
   ===================================================== */
 
   else if(type==='emerald'){
@@ -3174,12 +3222,12 @@ var projects=[
   },
 
   {
-    name:'SplitPot',
+    name:'CHA-CHA',
     distance:52,
     radius:2.1,
     speed:.03,
     texture:'emerald',
-    modal:'modal-splitpot',
+    modal:'modal-cha-cha',
     type:'SOCIAL GAMING SYSTEM',
     emissive:0x06124a,
     emissiveIntensity:.05
@@ -3352,7 +3400,7 @@ projects.forEach(
 
 
     /* =====================================================
-       SPLITPOT ATMOSPHERE
+       CHA-CHA ATMOSPHERE
     ===================================================== */
 
     if(project.texture==='emerald'){
@@ -4244,6 +4292,95 @@ function resetView(){
 
 
 /* =========================================================
+   FLOATING PLANET LABELS
+========================================================= */
+
+var labelLayer=document.getElementById('planet-labels');
+var labelItems=[];
+
+projects.concat(skills).forEach(
+  function(obj){
+
+    var el=document.createElement('div');
+
+    el.className=
+      'planet-label'+
+      (obj.isStatic?' skill':'');
+
+    el.textContent=obj.name;
+
+    labelLayer.appendChild(el);
+
+    labelItems.push({
+      obj:obj,
+      el:el
+    });
+  }
+);
+
+var labelVec=new THREE.Vector3();
+
+function updateLabels(){
+
+  var halfH=window.innerHeight/2;
+
+  var focal=
+    halfH/
+    Math.tan(
+      THREE.MathUtils.degToRad(
+        camera.fov/2
+      )
+    );
+
+  labelItems.forEach(
+    function(item){
+
+      var pos=objectPosition(item.obj);
+
+      var dist=
+        camera.position.distanceTo(pos);
+
+      labelVec.copy(pos).project(camera);
+
+      var visible=
+        labelVec.z<1 &&
+        Math.abs(labelVec.x)<1.05 &&
+        Math.abs(labelVec.y)<1.05 &&
+        dist>16 &&
+        dist<150 &&
+        selectedObject!==item.obj;
+
+      if(visible){
+
+        var r=
+          (item.obj.radius||.55)/dist*focal;
+
+        var x=
+          (labelVec.x*.5+.5)*
+          window.innerWidth;
+
+        var y=
+          (-labelVec.y*.5+.5)*
+          window.innerHeight+
+          r+12;
+
+        item.el.style.transform=
+          'translate3d('+
+          x.toFixed(1)+'px,'+
+          y.toFixed(1)+'px,0) '+
+          'translate(-50%,0)';
+      }
+
+      item.el.classList.toggle(
+        'show',
+        visible
+      );
+    }
+  );
+}
+
+
+/* =========================================================
    RAYCASTING
 ========================================================= */
 
@@ -4502,7 +4639,7 @@ document.querySelectorAll(
           flyTo(projects[2]);
         }
 
-        if(target==='splitpot'){
+        if(target==='cha-cha'){
           flyTo(projects[3]);
         }
 
@@ -4769,6 +4906,9 @@ function animate(){
 
 
   controls.update();
+
+
+  updateLabels();
 
 
   /* TARGET HUD */
